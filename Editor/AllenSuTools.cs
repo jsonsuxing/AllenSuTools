@@ -360,30 +360,65 @@ public class AllenSuTools : EditorWindow
 
                 #region 三：自定义倾斜环形碰撞盒
 
-                GUILayout.Label("三：自定义倾斜环形碰撞盒", TitleStyle());
-                GUILayout.Space(8);
+                // ********************* 旋转 *********************
+                GUILayout.Label("三：自定义操作碰撞盒", TitleStyle());
+                GUILayout.Space(3);
+                GUILayout.Label("1：旋转", SetGUIStyle(Color.red, 16));
+
+                // ------------ 一：开始垂直画盒子 ------------
+                GUILayout.BeginVertical("box");
+                GUILayout.Space(3);
 
                 // 第一组水平排版开始
                 EditorGUILayout.BeginHorizontal();
-                GUILayout.Label("选中碰撞盒，设置克隆个数：", SetGUIStyle(Color.black, 14));
+                GUILayout.Label("选中已做好物体，设置克隆个数：", SetGUIStyle(Color.black, 14));
                 SelfCollider.Instance().CustomBoxCollNum = int.Parse(GUILayout.TextField(SelfCollider.Instance().CustomBoxCollNum.ToString()));
                 EditorGUILayout.EndHorizontal();
                 // 第一组水平排版结束
 
-                // ------------ 一：开始垂直画盒子 ------------
-                GUILayout.BeginVertical("box");
-
                 // 第一组垂直排版开始
                 EditorGUILayout.BeginVertical();
-                if (GUILayout.Button("选中碰撞盒，开始克隆"))
-                {
-                    SelfCollider.Instance().CustomizeBoxCollider();
-                }
+                if (GUILayout.Button("开始克隆")) SelfCollider.Instance().RotateBoxCollider();
                 EditorGUILayout.EndVertical();
                 // 第一组垂直排版结束
 
                 GUILayout.EndVertical();
                 // ------------ 一：结束垂直画盒子 ------------
+                GUILayout.Space(3);
+
+                // ********************* 平移 *********************
+                GUILayout.Label("2：平移", SetGUIStyle(Color.red, 16));
+
+                // ------------ 二：开始垂直画盒子 ------------
+                GUILayout.BeginVertical("box");
+                
+                // 第一组垂直排版开始
+                EditorGUILayout.BeginVertical();
+                SelfCollider.Instance().SelfPivotAxis = (SelfPivotAxis)EditorGUILayout.EnumPopup("选择克隆方向", SelfCollider.Instance().SelfPivotAxis);
+                EditorGUILayout.EndVertical();
+                // 第一组垂直排版结束
+                GUILayout.Space(3);
+
+                // 第二组水平排版开始
+                EditorGUILayout.BeginHorizontal();
+                GUILayout.Label("设置克隆个数：", SetGUIStyle(Color.black, 14));
+                SelfCollider.Instance().CloneObjNum = int.Parse(EditorGUILayout.TextField(SelfCollider.Instance().CloneObjNum.ToString()));
+                EditorGUILayout.EndHorizontal();
+                // 第二组水平排版结束
+                GUILayout.Space(3);
+
+                // 第三组水平排版开始
+                EditorGUILayout.BeginHorizontal();
+                GUILayout.Label("设置克隆间隔：", SetGUIStyle(Color.black, 14));
+                SelfCollider.Instance().CloneSpace = float.Parse(EditorGUILayout.TextField(SelfCollider.Instance().CloneSpace.ToString()));
+                EditorGUILayout.EndHorizontal();
+                // 第三组水平排版结束
+                GUILayout.Space(3);
+
+                if (GUILayout.Button("开始克隆"))SelfCollider.Instance().PanBoxCollider();
+
+                GUILayout.EndVertical();
+                // ------------ 二：结束垂直画盒子 ------------
 
                 #endregion
                 GUILayout.Space(8);

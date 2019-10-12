@@ -27,7 +27,6 @@ public enum PivotAxis
     Z
 };
 
-
 /// <summary>
 /// 环形碰撞盒编辑状态
 /// </summary>
@@ -37,6 +36,19 @@ public enum EditorStatus
     编辑,
     非均匀尺度,
     无效的选择
+}
+
+/// <summary>
+/// 自定义操作碰撞盒
+/// </summary>
+public enum SelfPivotAxis
+{
+    X轴正方向,
+    X轴负方向,
+    Y轴正方向,
+    Y轴负方向,
+    Z轴正方向,
+    Z轴负方向,
 }
 
 #endregion
@@ -94,7 +106,12 @@ public class SelfCollider : CommonFun
     public string choseQuickData = string.Empty; // 当前所选的快捷数据
 
     // 自定义倾斜环形碰撞盒
-    public int CustomBoxCollNum = 6; // 生成多少个碰撞盒，默认为6个
+    // 旋转
+    public int CustomBoxCollNum = 0; // 生成多少个碰撞盒，默认为0个
+    // 平移
+    public SelfPivotAxis SelfPivotAxis = SelfPivotAxis.X轴正方向; // 选择轴向
+    public int CloneObjNum = 0; // 克隆的个数
+    public float CloneSpace = 0; // 克隆的间隔
 
     // 显示模型的长宽高
     public double ModelLength = 0; // 模型长度
@@ -223,7 +240,7 @@ public class SelfCollider : CommonFun
         // ------------ 一：开始垂直画盒子 ------------
         GUILayout.BeginVertical("box");
     
-        GUILayout.Label("快捷设置数据", style);
+        GUILayout.Label("快捷设置数据", SetGUIStyle(Color.red, 16));
      
         // 第一组水平排版开始
         EditorGUILayout.BeginHorizontal();
@@ -492,9 +509,9 @@ public class SelfCollider : CommonFun
     #region 三：自定义倾斜环形碰撞盒
 
     /// <summary>
-    /// 自定义倾斜环形碰撞盒
+    /// 旋转
     /// </summary>
-    public void CustomizeBoxCollider()
+    public void RotateBoxCollider()
     {
         var selectObj = Selection.activeGameObject;
         if (selectObj == null)
@@ -517,6 +534,54 @@ public class SelfCollider : CommonFun
         }
         Undo.RegisterCreatedObjectUndo(tempParent,"tempParent");
         DestroyImmediate(selectObj);
+    }
+
+    /// <summary>
+    /// 平移
+    /// </summary>
+    public void PanBoxCollider()
+    {
+        var selectObj = Selection.activeGameObject;
+        if (selectObj == null)
+        {
+            WindowTips("所选物体不能为空");
+            return;
+        }
+
+        // 记录被克隆物体的x,y,z
+        float selectObjX = selectObj.transform.localPosition.x;
+        float selectObjY = selectObj.transform.localPosition.y;
+        float selectObjZ = selectObj.transform.localPosition.z;
+
+        for (int i = 1; i <= CloneObjNum; i++)
+        {
+            var cloneObj = Instantiate(selectObj);
+            cloneObj.name = "Normal Box " + "(" + i + ")";
+
+            switch (SelfPivotAxis)
+            {
+                case SelfPivotAxis.X轴正方向:
+                    cloneObj.transform.localPosition += new Vector3(selectObjX + i * CloneSpace,selectObjY,selectObjZ);
+                    break;
+                case SelfPivotAxis.X轴负方向:
+                    cloneObj.transform.localPosition -= new Vector3(selectObjX + i * CloneSpace, selectObjY, selectObjZ);
+                    break;
+                case SelfPivotAxis.Y轴正方向:
+                    cloneObj.transform.localPosition += new Vector3(selectObjX, selectObjY + i * CloneSpace, selectObjZ);
+                    break;
+                case SelfPivotAxis.Y轴负方向:
+                    cloneObj.transform.localPosition -= new Vector3(selectObjX, selectObjY + i * CloneSpace, selectObjZ);
+                    break;
+                case SelfPivotAxis.Z轴正方向:
+                    cloneObj.transform.localPosition += new Vector3(selectObjX, selectObjY, selectObjZ + i * CloneSpace);
+                    break;
+                case SelfPivotAxis.Z轴负方向:
+                    cloneObj.transform.localPosition -= new Vector3(selectObjX, selectObjY, selectObjZ + i * CloneSpace);
+                    break;
+            }
+
+            cloneObj.transform.SetParent(selectObj.transform.parent);
+        }
     }
 
     #endregion
