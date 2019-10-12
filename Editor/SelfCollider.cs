@@ -510,6 +510,8 @@ public class SelfCollider : CommonFun
             return;
         }
 
+        var tempParent = new GameObject("拖出子物体，删除该父物体");
+        tempParent.transform.SetParent(selectObj.transform.parent);
         for (var i = 0; i < CustomBoxCollNum; i++)
         {
             var cloneObj = Instantiate(selectObj);
@@ -518,8 +520,9 @@ public class SelfCollider : CommonFun
             // 克隆的角度
             var cloneAngle = i * (360f / CustomBoxCollNum);
             cloneObj.transform.RotateAround(Vector3.zero, Vector3.up,cloneAngle);
-            cloneObj.transform.SetParent(selectObj.transform.parent,true);
+            cloneObj.transform.SetParent(tempParent.transform, true);
         }
+        Undo.RegisterCreatedObjectUndo(tempParent,"tempParent");
         DestroyImmediate(selectObj);
     }
 
