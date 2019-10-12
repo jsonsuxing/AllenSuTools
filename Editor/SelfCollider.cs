@@ -503,13 +503,6 @@ public class SelfCollider : CommonFun
             return;
         }
 
-        var boxCollider = selectObj.GetComponent<BoxCollider>();
-        if (!boxCollider)
-        {
-            WindowTips("所选物体没有碰撞盒");
-            return;
-        }
-
         var tempParent = new GameObject("拖出子物体，删除该父物体");
         tempParent.transform.SetParent(selectObj.transform.parent);
         for (var i = 0; i < CustomBoxCollNum; i++)
