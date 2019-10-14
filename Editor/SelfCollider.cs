@@ -561,22 +561,22 @@ public class SelfCollider : CommonFun
             switch (SelfPivotAxis)
             {
                 case SelfPivotAxis.X轴正方向:
-                    cloneObj.transform.localPosition += new Vector3(selectObjX + i * CloneSpace,selectObjY,selectObjZ);
+                    cloneObj.transform.localPosition = new Vector3(selectObjX + i * CloneSpace,selectObjY,selectObjZ);
                     break;
                 case SelfPivotAxis.X轴负方向:
-                    cloneObj.transform.localPosition -= new Vector3(selectObjX + i * CloneSpace, selectObjY, selectObjZ);
+                    cloneObj.transform.localPosition = new Vector3(selectObjX - i * CloneSpace, selectObjY, selectObjZ);
                     break;
                 case SelfPivotAxis.Y轴正方向:
-                    cloneObj.transform.localPosition += new Vector3(selectObjX, selectObjY + i * CloneSpace, selectObjZ);
+                    cloneObj.transform.localPosition = new Vector3(selectObjX, selectObjY + i * CloneSpace, selectObjZ);
                     break;
                 case SelfPivotAxis.Y轴负方向:
-                    cloneObj.transform.localPosition -= new Vector3(selectObjX, selectObjY + i * CloneSpace, selectObjZ);
+                    cloneObj.transform.localPosition = new Vector3(selectObjX, selectObjY - i * CloneSpace, selectObjZ);
                     break;
                 case SelfPivotAxis.Z轴正方向:
-                    cloneObj.transform.localPosition += new Vector3(selectObjX, selectObjY, selectObjZ + i * CloneSpace);
+                    cloneObj.transform.localPosition = new Vector3(selectObjX, selectObjY, selectObjZ + i * CloneSpace);
                     break;
                 case SelfPivotAxis.Z轴负方向:
-                    cloneObj.transform.localPosition -= new Vector3(selectObjX, selectObjY, selectObjZ + i * CloneSpace);
+                    cloneObj.transform.localPosition = new Vector3(selectObjX, selectObjY, selectObjZ - i * CloneSpace);
                     break;
             }
 
