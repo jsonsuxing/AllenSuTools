@@ -25,7 +25,7 @@ public class SelfTools : CommonFun
     public double FirstValue;             // 当前坐标(第一个坐标)
     public double SecondValue;            // 第二个坐标
     public double Length;                 // length的值(两坐标的差值)
-    public string SetAxis = string.Empty; // 为轴向赋值
+    public string SetAxis = "y"; // 为轴向赋值，默认为y轴
 
     // 批量修改“-”为“&”
     public string ChangeFileNamePath = string.Empty; // 要修改的文件路径
@@ -39,25 +39,6 @@ public class SelfTools : CommonFun
     public string OldModelPath = string.Empty;    // 原来的模型文件夹路径
     public string NewModelPath = string.Empty;    // 指定的模型文件夹路径
     public string NeedMoveFileName = string.Empty;// 待移动的文件名
-
-    #endregion
-
-    #region 一：点击物体名字，打开预设
-
-    /// <summary>
-    /// 点击物体名字，打开预设
-    /// </summary>
-    public void OpenPrefab()
-    {
-        IfSelectionIsNull("没有选中颗粒");
-        if (!Resources.Load("Prefab/ModelPrefabs/" + Selection.activeGameObject.name))
-        {
-            WindowTips("不存在的预设名：" + Selection.activeGameObject.name);
-            return;
-        }
-
-        AssetDatabase.OpenAsset(Resources.Load("Prefab/ModelPrefabs/" + Selection.activeGameObject.name));
-    }
 
     #endregion
 
@@ -82,12 +63,6 @@ public class SelfTools : CommonFun
     public void GetLength()
     {
         IfSelectionIsNull("没有选中关键部位");
-        if (SetAxis == string.Empty)
-        {
-            WindowTips("轴向不能为空");
-            return;
-        }
-
         GetLengthValue(Selection.activeGameObject, SetAxis);
     }
 
@@ -157,10 +132,7 @@ public class SelfTools : CommonFun
         }
 
         ClickTime++;
-        if (ClickTime > 2)
-        {
-            ClearValue();
-        }
+        if (ClickTime > 2) ClearValue();
     }
 
 
@@ -170,7 +142,6 @@ public class SelfTools : CommonFun
         FirstValue  = 0;
         SecondValue = 0;
         ClickTime   = 1;
-        SetAxis     = string.Empty;
     }
 
     #endregion

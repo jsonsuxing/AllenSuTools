@@ -27,6 +27,7 @@ public enum PivotAxis
     Z
 };
 
+
 /// <summary>
 /// 环形碰撞盒编辑状态
 /// </summary>
@@ -37,6 +38,7 @@ public enum EditorStatus
     非均匀尺度,
     无效的选择
 }
+
 
 /// <summary>
 /// 自定义操作碰撞盒
@@ -94,27 +96,27 @@ public class SelfCollider : CommonFun
     // 添加轮胎类的碰撞盒
     public PivotAxis    PivotAxis          = PivotAxis.Y;        // 碰撞盒以哪个轴生成，默认以Y轴
     public EditorStatus EditorStatus       = EditorStatus.无效的选择; // 默认编辑状态
-    public int          BoxCollNumGenerate = 8;                 // 生成多少个碰撞盒，默认为8个
-    public float        OuterRadius        = 0.3f;                 // 碰撞盒外半径
+    public int          BoxCollNumGenerate = 8;                  // 生成多少个碰撞盒，默认为8个
+    public float        OuterRadius        = 0.3f;               // 碰撞盒外半径
     public float        InnerRadius        = 0.2f;               // 碰撞盒内半径
-    public float        height             = 0.5f;                 // 碰撞盒高度
+    public float        Height             = 0.5f;               // 碰撞盒高度
     public float        RotationOffset     = 0f;                 // 旋转角度
     public float        DiffValue          = 0.004f;             // 自动生成的碰撞盒与实际模型尺寸的差值(尺寸完全一致不会吸合)
     public bool         IsLockInnerRadius;                       // 是否禁用内半径，默认关闭
     public bool         IsMatchHeightToWidth;                    // 是否开启高宽度匹配，默认开启
-    public GameObject   WorkingCollider      = null;             // 接收生成的环形碰撞盒
-    public string choseQuickData = string.Empty; // 当前所选的快捷数据
+    public GameObject   WorkingCollider = null;                  // 接收生成的环形碰撞盒
+    public string       ChoseQuickData  = string.Empty;          // 当前所选的快捷数据
 
     // 自定义倾斜环形碰撞盒
     // 旋转
-    public int CustomBoxCollNum = 0; // 生成多少个碰撞盒，默认为0个
-    public float SelfPivotAxisX = 0; // 自定义轴心x，y，z
-    public float SelfPivotAxisY = 0;
-    public float SelfPivotAxisZ = 0;
+    public int   CustomBoxCollNum = 0; // 生成多少个碰撞盒，默认为0个
+    public float SelfPivotAxisX   = 0; // 自定义轴心x，y，z
+    public float SelfPivotAxisY   = 0;
+    public float SelfPivotAxisZ   = 0;
     // 平移
     public SelfPivotAxis SelfPivotAxis = SelfPivotAxis.X轴正方向; // 选择轴向
-    public int CloneObjNum = 0; // 克隆的个数
-    public float CloneSpace = 0; // 克隆的间隔
+    public int           CloneObjNum   = 0;                   // 克隆的个数
+    public float         CloneSpace    = 0;                   // 克隆的间隔
 
     // 显示模型的长宽高
     public double ModelLength = 0; // 模型长度
@@ -122,15 +124,15 @@ public class SelfCollider : CommonFun
     public double ModelHeight = 0; // 模型高度
     public double AoCaoY      = 0; // 正方体类型颗粒底部凹槽Y轴坐标
     public double TuQiY       = 0; // 正方体类型颗粒凸起下方Y轴坐标
-    public double MinY = 0;        // Y轴最小坐标
-    public double MaxY = 0;        // Y轴最大坐标
-    public double MinX = 0;        // X轴最小坐标
-    public double MaxX = 0;        // X轴最大坐标
-    public double MinZ = 0;        // Z轴最小坐标
-    public double MaxZ = 0;        // Z轴最大坐标
+    public double MinY        = 0; // Y轴最小坐标
+    public double MaxY        = 0; // Y轴最大坐标
+    public double MinX        = 0; // X轴最小坐标
+    public double MaxX        = 0; // X轴最大坐标
+    public double MinZ        = 0; // Z轴最小坐标
+    public double MaxZ        = 0; // Z轴最大坐标
 
     // 显示有几个碰撞盒
-    public int ChildBoxCollNum     = 0; // 所有子物体下有几个碰撞盒
+    public int ChildBoxCollNum = 0; // 所有子物体下有几个碰撞盒
 
     #endregion
 
@@ -161,8 +163,8 @@ public class SelfCollider : CommonFun
 
         // 添加碰撞盒，并设置大小及中心点
         var boxCollider = cloneObj.AddComponent<BoxCollider>();
-        boxCollider.size   = new Vector3(sizeX, sizeY, scaleZ);
-        boxCollider.center = new Vector3(0, -(TuQiHeight / 2), 0);
+        boxCollider.size   = new Vector3(sizeX, sizeY,             scaleZ);
+        boxCollider.center = new Vector3(0,     -(TuQiHeight / 2), 0);
 
         // 替换模型
         PrefabUtility.SaveAsPrefabAsset(cloneObj, prefabPath);
@@ -234,35 +236,35 @@ public class SelfCollider : CommonFun
         if (IsMatchHeightToWidth) GUI.enabled = false;
 
         // 碰撞盒高度从0.01到无穷大
-        height      = Mathf.Max(EditorGUILayout.FloatField("手动调整碰撞盒高度", height), 0.01f);
+        Height      = Mathf.Max(EditorGUILayout.FloatField("手动调整碰撞盒高度", Height), 0.01f);
         GUI.enabled = true;
-
         GUILayout.EndVertical();
         //------------一：结束垂直画盒子------------
 
         // ------------ 一：开始垂直画盒子 ------------
         GUILayout.BeginVertical("box");
-    
         GUILayout.Label("快捷设置数据", SetGUIStyle(Color.red, 16));
-     
+
         // 第一组水平排版开始
         EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button("一：轮架"))
         {
             // 轮架数据 length=0.8，limit勾选
             // 小圆洞的 length=0.8-0.18=0.72，limit不勾选
-            OuterRadius = 0.208f;  // 丰满数据：0.24f
-            InnerRadius = 0.16f;
-            height      = 0.71f;
-            choseQuickData = "轮架";
+            OuterRadius    = 0.208f; // 丰满数据：0.24f
+            InnerRadius    = 0.16f;
+            Height         = 0.71f;
+            ChoseQuickData = "轮架";
         }
+
         if (GUILayout.Button("二：小轮架"))
         {
             OuterRadius    = 0.15f; // 丰满数据：0.16f
             InnerRadius    = 0.11f;
-            height         = 0.49f;
-            choseQuickData = "小轮架";
+            Height         = 0.49f;
+            ChoseQuickData = "小轮架";
         }
+
         EditorGUILayout.EndHorizontal();
         // 第一组水平排版结束
 
@@ -272,16 +274,18 @@ public class SelfCollider : CommonFun
         {
             OuterRadius    = 0.27f; // 丰满数据：0.28f
             InnerRadius    = 0.01f;
-            height         = 0.15f;
-            choseQuickData = "厚轮架格挡";
+            Height         = 0.15f;
+            ChoseQuickData = "厚轮架格挡";
         }
+
         if (GUILayout.Button("四：薄轮架格挡"))
         {
             OuterRadius    = 0.27f; // 丰满数据：0.28f
             InnerRadius    = 0.01f;
-            height         = 0.075f;
-            choseQuickData = "薄轮架格挡";
+            Height         = 0.075f;
+            ChoseQuickData = "薄轮架格挡";
         }
+
         EditorGUILayout.EndHorizontal();
         // 第二组水平排版结束
 
@@ -291,15 +295,16 @@ public class SelfCollider : CommonFun
         {
             OuterRadius    = 0.14f;
             InnerRadius    = 0.01f;
-            height         = 0.79f;  // 1.58
-            choseQuickData = "小圆棍";
+            Height         = 0.79f; // 1.58
+            ChoseQuickData = "小圆棍";
         }
+
         if (GUILayout.Button("六：圆洞"))
         {
             OuterRadius    = 0.35f;
             InnerRadius    = 0.31f;
-            height         = 0.79f;
-            choseQuickData = "圆洞";
+            Height         = 0.79f;
+            ChoseQuickData = "圆洞";
 
             // 其它匹配数据
             //一：0.29  0.23  二：0.37  0.23
@@ -315,19 +320,19 @@ public class SelfCollider : CommonFun
             // 如果是给凸起加碰撞盒，则是 0.22 0.15 0.165
             OuterRadius    = 0.26f;
             InnerRadius    = 0.15f;
-            height         = 0.215f;
-            choseQuickData = "凸起";
+            Height         = 0.215f;
+            ChoseQuickData = "凸起";
         }
+
         EditorGUILayout.EndHorizontal();
         // 第四组水平排版结束
 
         // 第N组水平排版开始
         EditorGUILayout.BeginHorizontal();
         GUILayout.Label("提示：当前所选快捷数据是：", SetGUIStyle(Color.black, 14));
-        GUILayout.TextField(choseQuickData);
+        GUILayout.TextField(ChoseQuickData);
         EditorGUILayout.EndHorizontal();
         // 第N组水平排版结束
-      
         GUILayout.EndVertical();
         // ------------ 一：结束垂直画盒子 ------------
     }
@@ -339,7 +344,7 @@ public class SelfCollider : CommonFun
     public void SetEditorStatus()
     {
         // 如果已经有了碰撞盒 
-        if (WorkingCollider != null) EditorStatus = EditorStatus.编辑;
+        if (WorkingCollider                 != null) EditorStatus = EditorStatus.编辑;
         else if (Selection.activeGameObject != null)
         {
             var selectTrans = Selection.activeGameObject.transform;
@@ -354,8 +359,10 @@ public class SelfCollider : CommonFun
                     EditorStatus = EditorStatus.非均匀尺度;
                     return;
                 }
+
                 selectTrans = selectTrans.parent;
             }
+
             EditorStatus = EditorStatus.准备;
         }
         else
@@ -379,7 +386,7 @@ public class SelfCollider : CommonFun
         }
 
         // 根据是否开启高宽度自适应来决定环形碰撞盒的高度
-        var ringHeight = IsMatchHeightToWidth ? (OuterRadius - InnerRadius) : height;
+        var ringHeight = IsMatchHeightToWidth ? (OuterRadius - InnerRadius) : Height;
 
         // 这里调用创建环形碰撞盒的方法
         var compoundCollider = CreateRing(PivotAxis, BoxCollNumGenerate, OuterRadius, InnerRadius, ringHeight, RotationOffset);
@@ -423,7 +430,7 @@ public class SelfCollider : CommonFun
             segment.transform.localScale = Vector3.one;
 
             //注释该行，让 Box 的 localScale 和 BoxCollider 的 size 交换，保证与项目规定统一，要不加完环形碰撞盒后，在Scene场景里会看到碰撞盒被放大
-            //segment.transform.localScale= new Vector3(Length, height, width);
+            //segment.transform.localScale= new Vector3(Length, Height, width);
 
             // 应用纵向旋转
             segment.transform.Rotate(Vector3.right, rotationOffset);
@@ -537,12 +544,14 @@ public class SelfCollider : CommonFun
 
             // 克隆的角度
             var cloneAngle = i * (360f / CustomBoxCollNum);
-            cloneObj.transform.RotateAround(new Vector3(SelfPivotAxisX,SelfPivotAxisY,SelfPivotAxisZ), Vector3.up,cloneAngle);
+            cloneObj.transform.RotateAround(new Vector3(SelfPivotAxisX, SelfPivotAxisY, SelfPivotAxisZ), Vector3.up, cloneAngle);
             cloneObj.transform.SetParent(tempParent.transform, true);
         }
-        Undo.RegisterCreatedObjectUndo(tempParent,"tempParent");
+
+        Undo.RegisterCreatedObjectUndo(tempParent, "tempParent");
         DestroyImmediate(selectObj);
     }
+
 
     /// <summary>
     /// 自定义旋转中心
@@ -556,10 +565,12 @@ public class SelfCollider : CommonFun
             return;
         }
 
-        SelfPivotAxisX = selectObj.transform.localPosition.x;
-        SelfPivotAxisY = selectObj.transform.localPosition.y;
-        SelfPivotAxisZ = selectObj.transform.localPosition.z;
+        var localPosition = selectObj.transform.localPosition;
+        SelfPivotAxisX = localPosition.x;
+        SelfPivotAxisY = localPosition.y;
+        SelfPivotAxisZ = localPosition.z;
     }
+
 
     /// <summary>
     /// 平移
@@ -572,6 +583,7 @@ public class SelfCollider : CommonFun
             WindowTips("所选物体不能为空");
             return;
         }
+
         if (CloneObjNum == 0)
         {
             WindowTips("克隆个数不能为0");
@@ -582,16 +594,14 @@ public class SelfCollider : CommonFun
         float selectObjX = selectObj.transform.localPosition.x;
         float selectObjY = selectObj.transform.localPosition.y;
         float selectObjZ = selectObj.transform.localPosition.z;
-
         for (int i = 1; i <= CloneObjNum; i++)
         {
             var cloneObj = Instantiate(selectObj);
             cloneObj.name = "Normal Box " + "(" + i + ")";
-
             switch (SelfPivotAxis)
             {
                 case SelfPivotAxis.X轴正方向:
-                    cloneObj.transform.localPosition = new Vector3(selectObjX + i * CloneSpace,selectObjY,selectObjZ);
+                    cloneObj.transform.localPosition = new Vector3(selectObjX + i * CloneSpace, selectObjY, selectObjZ);
                     break;
                 case SelfPivotAxis.X轴负方向:
                     cloneObj.transform.localPosition = new Vector3(selectObjX - i * CloneSpace, selectObjY, selectObjZ);
@@ -633,6 +643,7 @@ public class SelfCollider : CommonFun
             WindowTips("没有选中颗粒");
             return;
         }
+
         // 获得所选物体上所有的碰撞盒
         var allBoxCollider = selectObj.GetComponentsInChildren<BoxCollider>();
         if (allBoxCollider.Length == 0)
@@ -651,6 +662,7 @@ public class SelfCollider : CommonFun
             }
             IsClickHideBtn = false;
         }
+
         // 如果点了移除所有碰撞盒按钮
         if (IsClickRemoveBtn)
         {
@@ -677,7 +689,6 @@ public class SelfCollider : CommonFun
             WindowTips("没有选中模型");
             return;
         }
-
         if (selectObj.transform.childCount == 0)
         {
             WindowTips("不能选择关键部位，要选中颗粒");
@@ -697,54 +708,22 @@ public class SelfCollider : CommonFun
         // 获取到所有的顶点坐标
         var mesh     = selectObj.transform.GetChild(0).GetComponent<MeshFilter>().sharedMesh;
         var vertices = mesh.vertices;
-
-        // 最小Y轴坐标
-        var arrayMinY = new float[vertices.Length];
+        
+        var arrayX = new float[vertices.Length];
+        var arrayY = new float[vertices.Length];
+        var arrayZ = new float[vertices.Length];
         for (var i = 0; i < vertices.Length; i++)
         {
-            arrayMinY[i] = vertices[i].y;
+            arrayX[i] = vertices[i].x;
+            arrayY[i] = vertices[i].y;
+            arrayZ[i] = vertices[i].z;
         }
-        MinY = Math.Round(arrayMinY.Min(),4);
-
-        // 最大Y轴坐标
-        var arrayMaxY = new float[vertices.Length];
-        for (var i = 0; i < vertices.Length; i++)
-        {
-            arrayMaxY[i] = vertices[i].y;
-        }
-        MaxY = Math.Round(arrayMinY.Max(),4);
-
-        // 最小X轴坐标
-        var arrayMinX = new float[vertices.Length];
-        for (var i = 0; i < vertices.Length; i++)
-        {
-            arrayMinX[i] = vertices[i].x;
-        }
-        MinX = Math.Round(arrayMinX.Min(), 4);
-
-        // 最大X轴坐标
-        var arrayMaxX = new float[vertices.Length];
-        for (var i = 0; i < vertices.Length; i++)
-        {
-            arrayMaxX[i] = vertices[i].x;
-        }
-        MaxX = Math.Round(arrayMaxX.Max(), 4);
-
-        // 最小Z轴坐标
-        var arrayMinZ = new float[vertices.Length];
-        for (var i = 0; i < vertices.Length; i++)
-        {
-            arrayMinZ[i] = vertices[i].z;
-        }
-        MinZ = Math.Round(arrayMinZ.Min(), 4);
-
-        // 最大Z轴坐标
-        var arrayMaxZ = new float[vertices.Length];
-        for (var i = 0; i < vertices.Length; i++)
-        {
-            arrayMaxZ[i] = vertices[i].z;
-        }
-        MaxZ = Math.Round(arrayMaxZ.Max(), 4);
+        MinY = Math.Round(arrayY.Min(), 4); // 最小Y轴坐标
+        MaxY = Math.Round(arrayY.Max(), 4); // 最大Y轴坐标
+        MinX = Math.Round(arrayX.Min(), 4); // 最小X轴坐标
+        MaxX = Math.Round(arrayX.Max(), 4); // 最大X轴坐标
+        MinZ = Math.Round(arrayZ.Min(), 4); // 最小Z轴坐标
+        MaxZ = Math.Round(arrayZ.Max(), 4); // 最大Z轴坐标
 
         //碰撞盒总个数
         ShowBoxCollNum();
@@ -756,7 +735,7 @@ public class SelfCollider : CommonFun
     /// </summary>
     public void ClearModelData()
     {
-        ModelLength = ModelWidth = ModelHeight = AoCaoY = TuQiY = MinX = MaxX = 
+        ModelLength = ModelWidth = ModelHeight = AoCaoY = TuQiY = MinX = MaxX =
             MinY = MaxY = MinZ = MaxZ = ChildBoxCollNum = 0;
     }
 
@@ -771,16 +750,13 @@ public class SelfCollider : CommonFun
     {
         var acePath = "D:/Works/testFileFormat/Assets/Resources/Prefab/";
         var qdPath  = Application.dataPath + "/A-SuXing/selfPrefab/";
-
         try
         {
             // 如果指定路径不存在，则创建
             CreateNewDirectory(acePath);
             CreateNewDirectory(qdPath);
-
             var aceFiles = Directory.GetFiles(acePath, "*", SearchOption.AllDirectories);
             if (aceFiles.Length == 0) WindowTips("D:/Works/testFileFormat/Assets/Resources/Prefab/文件夹下没有预设");
-
             foreach (var str in aceFiles)
             {
                 if (Path.GetExtension(str) == ".prefab")
@@ -791,6 +767,7 @@ public class SelfCollider : CommonFun
 
                 if (Path.GetExtension(str) == ".meta") File.Delete(str);
             }
+
             AssetDatabase.Refresh();
         }
         catch (Exception e)
@@ -825,13 +802,13 @@ public class SelfCollider : CommonFun
     {
         // 先清空上一个碰撞盒数据
         ClearBoxCollNum();
-
         var selectObj = Selection.activeGameObject;
         if (selectObj == null)
         {
             WindowTips("没有选中颗粒");
             return;
         }
+
         // 父物体上不能存在碰撞盒
         ParentBoxNumGroup = selectObj.GetComponents<BoxCollider>();
         if (ParentBoxNumGroup.Length != 0)
@@ -847,6 +824,7 @@ public class SelfCollider : CommonFun
         {
             if (!coll.name.Contains("Align")) i++;
         }
+
         ChildBoxCollNum = i;
     }
 
@@ -876,60 +854,6 @@ public class SelfCollider : CommonFun
                 Debug.Log("这是BoxCollider，在第 " + i + " 个");
             }
         }
-    }
-
-    #endregion
-
-    #region N：一键验证颗粒规范性
-
-    /// <summary>
-    /// 一键验证颗粒规范性
-    /// </summary>
-    public void VerifyGranule()
-    {
-        var selectObj = Selection.activeGameObject;
-        if (selectObj == null)
-        {
-            WindowTips("没有选中模型");
-            return;
-        }
-
-        var selectTrans = selectObj.GetComponent<Transform>();
-
-        // 模型的初始坐标，角度都为0，尺寸为1
-        if (selectTrans.localPosition                       != Vector3.zero) selectTrans.localPosition                              = new Vector3(0, 0, 0);
-        if (selectTrans.localRotation                       != Quaternion.identity) selectTrans.localRotation                       = Quaternion.identity;
-        if (selectTrans.localScale                          != Vector3.one) selectTrans.localScale                                  = new Vector3(1, 1, 1);
-        // if (selectTrans.transform.GetChild(0).localPosition != Vector3.zero) selectTrans.transform.GetChild(0).localPosition        = new Vector3(0, 0, 0);
-        // if (selectTrans.transform.GetChild(0).localRotation != Quaternion.identity) selectTrans.transform.GetChild(0).localRotation = Quaternion.identity;
-        // if (selectTrans.transform.GetChild(0).localScale    != Vector3.one) selectTrans.transform.GetChild(0).localScale            = new Vector3(1, 1, 1);
-
-        
-        for (var i = 0; i < selectObj.transform.childCount; i++)
-        {
-            var render = selectObj.transform.GetChild(i).GetComponent<MeshRenderer>();
-            var filter = selectObj.transform.GetChild(i).GetComponent<MeshFilter>();
-            // 移除掉关键部位上已经存在的mesh
-            if (!Equals(selectObj.transform.GetChild(i).name, "物件_1"))
-            {
-                // 如果子物体上有MeshRenderer和MeshFilter组件再移除
-                if ( render && filter)
-                {
-                    DestroyImmediate(render);
-                    DestroyImmediate(filter);
-                }
-            }
-
-            //把关键部位上的初始坐标，角度，尺寸也要为0(除了Box外)
-            // if (!selectObj.transform.GetChild(i).gameObject.name.Contains("Box"))
-            // {
-            //     if (selectObj.transform.GetChild(i).transform.localRotation != Quaternion.identity) selectObj.transform.GetChild(i).transform.localRotation = Quaternion.identity;
-            //     if (selectObj.transform.GetChild(i).transform.localScale    != Vector3.one) selectObj.transform.GetChild(i).transform.localScale            = Vector3.one;
-            // }
-        }
-
-        //这里直接调用显示多少个碰撞盒的方法
-        ShowBoxCollNum();
     }
 
     #endregion

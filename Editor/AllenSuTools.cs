@@ -572,7 +572,7 @@ public class AllenSuTools : EditorWindow
 
                 #region 三：从ACE项目移动预设
 
-                GUILayout.Label("三：self预设", TitleStyle());
+                GUILayout.Label("三：导出ACE预设", TitleStyle());
 
                 // ------------ 一：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
@@ -596,22 +596,6 @@ public class AllenSuTools : EditorWindow
                 //{
                 //    SelfCollider.Instance().TestInspector();
                 //}
-
-                #endregion
-
-                #region N：一键验证颗粒规范性
-
-                GUILayout.Label("功能N：一键验证颗粒规范性", TitleStyle());
-
-                //------------一：开始垂直画盒子------------
-                GUILayout.BeginVertical("box");
-                if (GUILayout.Button("一键验证颗粒规范性"))
-                {
-                    SelfCollider.Instance().VerifyGranule();
-                }
-
-                GUILayout.EndVertical();
-                //------------一：结束垂直画盒子------------
 
                 #endregion
                 GUILayout.Space(8);
@@ -918,29 +902,10 @@ public class AllenSuTools : EditorWindow
                 break;
             case 4:
                 #region 其它小工具
-             
-                #region 1：点击物体名字，打开预设
 
-                GUILayout.Label("一：点击打开预设", TitleStyle());
+                #region 1：所选物体坐标归0
 
-                // ------------ 一：开始垂直画盒子 ------------
-                GUILayout.BeginVertical("box");
-
-                // 第一组垂直排版开始
-                EditorGUILayout.BeginVertical();
-                if (GUILayout.Button("点击场景颗粒名称打开预设")) SelfTools.Instance().OpenPrefab();
-                EditorGUILayout.EndVertical();
-                // 第一组垂直排版结束
-
-                GUILayout.EndVertical();
-                // ------------ 一：结束垂直画盒子 ------------
-
-                #endregion
-                GUILayout.Space(2);
-
-                #region 2：所选物体坐标归0
-
-                GUILayout.Label("二：坐标归0", TitleStyle());
+                GUILayout.Label("一：坐标归0", TitleStyle());
 
                 // ------------ 一：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
@@ -951,9 +916,9 @@ public class AllenSuTools : EditorWindow
                 #endregion
                 GUILayout.Space(2);
 
-                #region 3:计算 Length 的值
+                #region 2:计算 Length 的值
 
-                GUILayout.Label("三：计算 Length 的值", TitleStyle());
+                GUILayout.Label("二：计算 Length 的值", TitleStyle());
 
                 // ------------ 一：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
@@ -976,15 +941,20 @@ public class AllenSuTools : EditorWindow
                 GUILayout.Label("3、Length的值等于", SetGUIStyle(Color.black, 14));
                 GUILayout.TextField(SelfTools.Instance().Length.ToString());
 
+                // 第一组水平排版开始
+                EditorGUILayout.BeginHorizontal();
                 if (GUILayout.Button("点击两次获取 Length 的值")) SelfTools.Instance().GetLength();
-               
-                GUILayout.Space(2);
-
                 if (GUILayout.Button("清空按钮"))
                 {
                     SelfTools.Instance().ClearValue();
-                    SelfTools.Instance().Length = 0;
+                    SelfTools.Instance().Length = 0; // 单独重置长度，写到ClearValue函数里，在编辑器里看不到长度，因为已经 被重置
                 }
+                EditorGUILayout.EndHorizontal();
+                // 第一组水平排版结束
+
+                GUILayout.Space(2);
+
+               
 
                 // 第一组垂直排版结束
                 EditorGUILayout.EndVertical();
@@ -995,9 +965,9 @@ public class AllenSuTools : EditorWindow
                 #endregion
                 GUILayout.Space(2);
 
-                #region 4:批量修改“-”为“&”
+                #region 3:批量修改“-”为“&”
 
-                GUILayout.Label("四：批量修改“-”为“&”", TitleStyle());
+                GUILayout.Label("三：批量修改“-”为“&”", TitleStyle());
 
                 // ------------ 一：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
@@ -1017,9 +987,9 @@ public class AllenSuTools : EditorWindow
                 #endregion
                 GUILayout.Space(2);
 
-                #region 5：添加，删除 MeshRenderer,MeshFilter
+                #region 4：添加，删除 MeshRenderer,MeshFilter
 
-                GUILayout.Label("五：添加，移除紫色 Mesh", TitleStyle());
+                GUILayout.Label("四：添加，移除紫色 Mesh", TitleStyle());
 
                 // ------------ 一：开始水平画盒子 ------------
                 GUILayout.BeginVertical("box");
@@ -1037,9 +1007,9 @@ public class AllenSuTools : EditorWindow
                 #endregion
                 GUILayout.Space(2);
 
-                #region 6：删除指定后缀名的文件
+                #region 5：删除指定后缀名的文件
 
-                GUILayout.Label("六：删除指定后缀名的文件", TitleStyle());
+                GUILayout.Label("五：删除指定后缀名的文件", TitleStyle());
 
                 // ------------ 一：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
@@ -1072,9 +1042,9 @@ public class AllenSuTools : EditorWindow
                 #endregion
                 GUILayout.Space(2);
 
-                #region 7：从模型文件移动到指定文件夹(边框)
+                #region 6：从模型文件移动到指定文件夹(边框)
 
-                GUILayout.Label("七：移动模型文件(边框)", TitleStyle());
+                GUILayout.Label("六：移动模型文件(边框)", TitleStyle());
 
                 // ------------ 一：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
