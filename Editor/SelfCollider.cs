@@ -251,14 +251,14 @@ public class SelfCollider : CommonFun
         {
             // 轮架数据 length=0.8，limit勾选
             // 小圆洞的 length=0.8-0.18=0.72，limit不勾选
-            OuterRadius = 0.24f;
+            OuterRadius = 0.208f;  // 丰满数据：0.24f
             InnerRadius = 0.16f;
             height      = 0.71f;
-            choseQuickData = "0.8长度轮架";
+            choseQuickData = "轮架";
         }
         if (GUILayout.Button("二：小轮架"))
         {
-            OuterRadius    = 0.16f;
+            OuterRadius    = 0.15f; // 丰满数据：0.16f
             InnerRadius    = 0.11f;
             height         = 0.49f;
             choseQuickData = "小轮架";
@@ -270,14 +270,14 @@ public class SelfCollider : CommonFun
         EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button("三：厚轮架格挡"))
         {
-            OuterRadius    = 0.28f;
+            OuterRadius    = 0.27f; // 丰满数据：0.28f
             InnerRadius    = 0.01f;
             height         = 0.15f;
             choseQuickData = "厚轮架格挡";
         }
         if (GUILayout.Button("四：薄轮架格挡"))
         {
-            OuterRadius    = 0.28f;
+            OuterRadius    = 0.27f; // 丰满数据：0.28f
             InnerRadius    = 0.01f;
             height         = 0.075f;
             choseQuickData = "薄轮架格挡";
