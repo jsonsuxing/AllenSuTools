@@ -108,6 +108,9 @@ public class SelfCollider : CommonFun
     // 自定义倾斜环形碰撞盒
     // 旋转
     public int CustomBoxCollNum = 0; // 生成多少个碰撞盒，默认为0个
+    public float SelfPivotAxisX = 0; // 自定义轴心x，y，z
+    public float SelfPivotAxisY = 0;
+    public float SelfPivotAxisZ = 0;
     // 平移
     public SelfPivotAxis SelfPivotAxis = SelfPivotAxis.X轴正方向; // 选择轴向
     public int CloneObjNum = 0; // 克隆的个数
@@ -519,6 +522,11 @@ public class SelfCollider : CommonFun
             WindowTips("所选物体不能为空");
             return;
         }
+        if (CustomBoxCollNum == 0)
+        {
+            WindowTips("克隆个数不能为0");
+            return;
+        }
 
         var tempParent = new GameObject("拖出子物体，删除该父物体");
         tempParent.transform.SetParent(selectObj.transform.parent);
@@ -529,11 +537,28 @@ public class SelfCollider : CommonFun
 
             // 克隆的角度
             var cloneAngle = i * (360f / CustomBoxCollNum);
-            cloneObj.transform.RotateAround(Vector3.zero, Vector3.up,cloneAngle);
+            cloneObj.transform.RotateAround(new Vector3(SelfPivotAxisX,SelfPivotAxisY,SelfPivotAxisZ), Vector3.up,cloneAngle);
             cloneObj.transform.SetParent(tempParent.transform, true);
         }
         Undo.RegisterCreatedObjectUndo(tempParent,"tempParent");
         DestroyImmediate(selectObj);
+    }
+
+    /// <summary>
+    /// 自定义旋转中心
+    /// </summary>
+    public void SetMyPivot()
+    {
+        var selectObj = Selection.activeGameObject;
+        if (selectObj == null)
+        {
+            WindowTips("所选物体不能为空");
+            return;
+        }
+
+        SelfPivotAxisX = selectObj.transform.localPosition.x;
+        SelfPivotAxisY = selectObj.transform.localPosition.y;
+        SelfPivotAxisZ = selectObj.transform.localPosition.z;
     }
 
     /// <summary>
@@ -545,6 +570,11 @@ public class SelfCollider : CommonFun
         if (selectObj == null)
         {
             WindowTips("所选物体不能为空");
+            return;
+        }
+        if (CloneObjNum == 0)
+        {
+            WindowTips("克隆个数不能为0");
             return;
         }
 
