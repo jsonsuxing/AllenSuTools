@@ -373,7 +373,7 @@ public class AllenSuTools : EditorWindow
 
                 // 第一组水平排版开始
                 EditorGUILayout.BeginHorizontal();
-                GUILayout.Label("1:自定义轴心(默认为原点)", SetGUIStyle(Color.black, 14));
+                GUILayout.Label("1:旋转中心(默认为原点)", SetGUIStyle(Color.black, 14));
                 if(GUILayout.Button("可点击物体，自动传值")) SelfCollider.Instance().SetMyPivot();
                 EditorGUILayout.EndHorizontal();
                 // 第一组水平排版结束

@@ -209,6 +209,7 @@ public class SelfCollider : CommonFun
         EditorGUILayout.BeginVertical();
         // 选择轴心
         PivotAxis = (PivotAxis) EditorGUILayout.EnumPopup("轴心", PivotAxis);
+        GUILayout.Label("提示：可自定义旋转中心，同《自定义操作碰撞盒》的旋转");
         // 设置边数，最小3，最大64
         BoxCollNumGenerate = EditorGUILayout.IntSlider("设置边数", BoxCollNumGenerate, 3, 64);
         // 外半径（从指定外半径的值到无穷大。0.011f,无穷大）
@@ -392,7 +393,9 @@ public class SelfCollider : CommonFun
         var compoundCollider = CreateRing(PivotAxis, BoxCollNumGenerate, OuterRadius, InnerRadius, ringHeight, RotationOffset);
 
         // 移动对撞机，使其位置相对于选定的游戏对象
-        compoundCollider.transform.position += selectedGameObject.transform.position;
+        // 修改前：compoundCollider.transform.position += selectedGameObject.transform.position;
+        // 修改后：将生成位置设置为自定义的位置
+        compoundCollider.transform.position += new Vector3(SelfPivotAxisX,SelfPivotAxisY,SelfPivotAxisZ);
         // 暂时将所选游戏对象的旋转设置为零，以避免对撞机的父级设置时对撞机被扭曲
         var originalRotation = selectedGameObject.transform.rotation;
         selectedGameObject.transform.rotation = Quaternion.identity;
@@ -414,6 +417,7 @@ public class SelfCollider : CommonFun
     {
         // 空的游戏对象，将作为环形碰撞盒的根
         var compoundCollider = new GameObject("环形碰撞盒");
+       
         var length           = 2 * outerRadius * Mathf.Tan(Mathf.PI / sides);
         var width            = outerRadius - innerRadius;
         for (var i = 1; i <= sides; i++)
