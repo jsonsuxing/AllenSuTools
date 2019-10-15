@@ -523,35 +523,36 @@ public class SelfCollider : CommonFun
     /// </summary>
     public void DeleteAndArrangeRing()
     {
-        var selectedGameObject = Selection.activeGameObject;
-        if (selectedGameObject == null)
+        var selectedGameObjects = Selection.gameObjects;
+        if (selectedGameObjects.Length == 0)
         {
-            WindowTips("没有选中颗粒预设！");
+            WindowTips("至少选中一个环形碰撞盒");
             return;
         }
-        if (!selectedGameObject.name.Contains("&"))
+        if (!selectedGameObjects[0].name.Contains("环形碰撞盒"))
         {
-            WindowTips("选中的不是颗粒预设！");
+            WindowTips("选中的不是环形碰撞盒！");
             return;
         }
 
-        var childLength = selectedGameObject.transform.childCount;
-        for (var i = 0; i < childLength; i++)
+        foreach (var ringBox in selectedGameObjects)
         {
-            if (!selectedGameObject.transform.GetChild(i).name.Contains("环形碰撞盒")) continue;
-            // 获得名称是环形碰撞盒的子物体
-            var ringBoxObj = selectedGameObject.transform.GetChild(i);
-            var ringBoxObjArr = new GameObject[ringBoxObj.childCount];
-            for (var j = 0; j < ringBoxObj.childCount; j++)
-            {
-                ringBoxObjArr[j] = ringBoxObj.GetChild(j).gameObject;
-            }
+            var childLength = ringBox.transform.childCount;
+            // 存储每个环形碰撞盒下所有子物体的数组
+            var ringBoxObjArray = new GameObject[childLength];
 
-            foreach (var obj in ringBoxObjArr)
+            // 为每个数组赋值obj对象
+            for (var i = 0; i < childLength; i++)
             {
-                obj.transform.SetParent(selectedGameObject.transform);
+                ringBoxObjArray[i] = ringBox.transform.GetChild(i).gameObject;
             }
-            // DestroyImmediate(ringBoxObj,true);
+            // 设置颗粒预设为父物体
+            foreach (var bevelBox in ringBoxObjArray)
+            {
+                bevelBox.transform.SetParent(ringBox.transform.parent);
+            }
+            // 删除"环形碰撞盒"
+            DestroyImmediate(ringBox);
         }
     }
 
