@@ -316,13 +316,13 @@ public class SelfCollider : CommonFun
 
         // 第四组水平排版开始
         EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("七：凸起"))
+        if (GUILayout.Button("七：支撑凸起(圆)"))
         {
             // 如果是给凸起加碰撞盒，则是 0.22 0.15 0.165
-            OuterRadius    = 0.26f;
-            InnerRadius    = 0.15f;
-            Height         = 0.215f;
-            ChoseQuickData = "凸起";
+            OuterRadius    = 0.295f;
+            InnerRadius    = 0.16f;
+            Height         = 0.31f;
+            ChoseQuickData = "支撑凸起(圆)";
         }
 
         EditorGUILayout.EndHorizontal();
