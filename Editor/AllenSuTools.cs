@@ -302,11 +302,11 @@ public class AllenSuTools : EditorWindow
 
                 #region 一：一键添加长方体类型的碰撞盒(如高一粒)
 
-                GUILayout.Label("一：添加正方类碰撞盒", TitleStyle());
+                GUILayout.Label("一：克隆正方类碰撞盒", TitleStyle());
 
                 // ------------ 一：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
-                if (GUILayout.Button("一键添加高一粒类碰撞盒")) SelfCollider.Instance().AddBoxCollider();
+                if (GUILayout.Button("点击克隆碰撞盒")) SelfCollider.Instance().AddBoxCollider();
                 GUILayout.EndVertical();
                 //------------一：结束垂直画盒子------------
 
@@ -346,13 +346,14 @@ public class AllenSuTools : EditorWindow
                 }
                 else
                 {
+                    // 第一组水平排版开始
+                    EditorGUILayout.BeginHorizontal();
+                    // 第一组水平排版结束
                     if (SelfCollider.Instance().EditorStatus != EditorStatus.准备) GUI.enabled = false;
-                    if (GUILayout.Button("点击颗粒预设父物体开始创建"))
-                    {
-                        SelfCollider.Instance().CreateRingBoxColl();
-                    }
-
+                    if (GUILayout.Button("1：点击颗粒预设，开始克隆")) SelfCollider.Instance().CreateRingBoxColl();
                     GUI.enabled = true;
+                    if (GUILayout.Button("2：整理、删除环形碰撞盒")) SelfCollider.Instance().DeleteAndArrangeRing();
+                    EditorGUILayout.EndHorizontal();
                 }
 
                 #endregion

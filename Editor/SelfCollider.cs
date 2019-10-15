@@ -200,7 +200,7 @@ public class SelfCollider : CommonFun
         };
         // 如果启用，将内半径与外半径的距离存储到锁定距离
         var radiusDiff = OuterRadius - InnerRadius;
-        GUILayout.Label("二：添加环形类的碰撞盒", style);
+        GUILayout.Label("二：克隆环形类的碰撞盒", style);
 
         //------------一：开始垂直画盒子------------
         GUILayout.BeginVertical("box");
@@ -512,6 +512,43 @@ public class SelfCollider : CommonFun
         GUI.color = statusColor;
         GUILayout.Box(statusText, GUILayout.ExpandWidth(true));
         GUI.color = Color.white;
+    }
+
+    /// <summary>
+    /// 整理、删除环形碰撞盒
+    /// </summary>
+    public void DeleteAndArrangeRing()
+    {
+        var selectedGameObject = Selection.activeGameObject;
+        if (selectedGameObject == null)
+        {
+            WindowTips("没有选中颗粒预设！");
+            return;
+        }
+        if (!selectedGameObject.name.Contains("&"))
+        {
+            WindowTips("选中的不是颗粒预设！");
+            return;
+        }
+
+        var childLength = selectedGameObject.transform.childCount;
+        for (var i = 0; i < childLength; i++)
+        {
+            if (!selectedGameObject.transform.GetChild(i).name.Contains("环形碰撞盒")) continue;
+            // 获得名称是环形碰撞盒的子物体
+            var ringBoxObj = selectedGameObject.transform.GetChild(i);
+            var ringBoxObjArr = new GameObject[ringBoxObj.childCount];
+            for (var j = 0; j < ringBoxObj.childCount; j++)
+            {
+                ringBoxObjArr[j] = ringBoxObj.GetChild(j).gameObject;
+            }
+
+            foreach (var obj in ringBoxObjArr)
+            {
+                obj.transform.SetParent(selectedGameObject.transform);
+            }
+            // DestroyImmediate(ringBoxObj,true);
+        }
     }
 
     #endregion
