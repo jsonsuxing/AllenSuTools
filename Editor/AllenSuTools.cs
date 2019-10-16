@@ -182,29 +182,9 @@ public class AllenSuTools : EditorWindow
                 #endregion
                 GUILayout.Space(8); //设置上下间隔
 
-                #region 二：跳转视野
+                #region 二：对称克隆关键部位
 
-                GUILayout.Label("二：跳转视野", TitleStyle());
-
-                // ------------ 一：开始水平画盒子 ------------
-                GUILayout.BeginVertical("box");
-
-                // 第一组水平排版开始
-                EditorGUILayout.BeginHorizontal();
-                if (GUILayout.Button("1：跳转至颗粒末尾")) SelfBuWei.Instance().JumpToEnd();
-                if (GUILayout.Button("2：点击跳回颗粒")) SelfBuWei.Instance().JumpToStart();
-                EditorGUILayout.EndHorizontal();
-                // 第一组水平排版结束
-
-                GUILayout.EndVertical();
-                // ------------ 一：结束水平画盒子 ------------
-
-                #endregion
-                GUILayout.Space(8);
-
-                #region 三：对称克隆关键部位
-
-                GUILayout.Label("三：对称克隆关键部位", TitleStyle());
+                GUILayout.Label("二：对称克隆关键部位", TitleStyle());
 
                 // ------------ 一：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
@@ -221,9 +201,9 @@ public class AllenSuTools : EditorWindow
                 #endregion
                 GUILayout.Space(8);
 
-                #region 四：生成默认关键部位、Box
+                #region 三：生成默认关键部位、Box
 
-                GUILayout.Label("四：默认关键部位、Box", TitleStyle());
+                GUILayout.Label("三：默认关键部位、Box", TitleStyle());
 
                 // ------------ 一：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
@@ -241,9 +221,9 @@ public class AllenSuTools : EditorWindow
                 #endregion
                 GUILayout.Space(8);
 
-                #region 五：特殊部位坐标的计算(+-0.4类型)
+                #region 四：特殊部位坐标的计算(+-0.4类型)
 
-                GUILayout.Label("五：特殊部位坐标的计算", TitleStyle());
+                GUILayout.Label("四：特殊部位坐标的计算", TitleStyle());
 
                 // ------------ 一：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");

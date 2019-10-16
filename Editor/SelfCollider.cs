@@ -64,7 +64,6 @@ public class SelfCollider : CommonFun
     // 碰撞盒管理类
     private static SelfCollider instance;
 
-
     #region MenuItem
 
     // 1--复制粘贴当前碰撞盒

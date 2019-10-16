@@ -17,6 +17,42 @@ public class SelfBuWei : CommonFun
     // 碰撞盒管理类
     private static SelfBuWei instance;
 
+    #region MenuItem
+
+    // 热键：Shift + B 跳回颗粒本身
+    [MenuItem("GameObject/JumpToStart #B")]
+    static void JumpToStart()
+    {
+        if (Selection.activeGameObject == null)
+        {
+            WindowTips("没有选中关键部位");
+            return;
+        }
+        //跳到自身
+        EditorGUIUtility.PingObject(Selection.activeGameObject.transform.parent);
+    }
+
+    // 热键：Shift + V  跳转到颗粒最下方
+    [MenuItem("GameObject/JumpToEnd #V")]
+    static void JumpToEnd()
+    {
+        var selectTrans = Selection.activeGameObject.transform;
+        if (Selection.activeGameObject == null)
+        {
+            WindowTips("没有选中颗粒");
+            return;
+        }
+        if (selectTrans.childCount == 0)
+        {
+            WindowTips("该功能要选中颗粒，不能是关键部位");
+            return;
+        }
+        // 跳到最后
+        EditorGUIUtility.PingObject(selectTrans.GetChild(selectTrans.childCount - 1));
+    }
+
+    #endregion
+
     #region 字段声明
 
     // 一：逐个克隆关键部位
@@ -392,48 +428,7 @@ public class SelfBuWei : CommonFun
 
     #endregion
 
-    #region 二：跳转视野
-
-    /// <summary>
-    /// 跳转到颗粒最下方
-    /// </summary>
-    public void JumpToEnd()
-    {
-        var selectTrans = Selection.activeGameObject.transform;
-        if (Selection.activeGameObject == null)
-        {
-            WindowTips("没有选中颗粒");
-            return;
-        }
-        if (selectTrans.childCount == 0)
-        {
-            WindowTips("该功能要选中颗粒，不能是关键部位");
-            return;
-        }
-        // 跳到最后
-        EditorGUIUtility.PingObject(selectTrans.GetChild(selectTrans.childCount - 1));
-    }
-
-
-    /// <summary>
-    /// 跳回颗粒本身
-    /// </summary>
-    public void JumpToStart()
-    {
-        GameObject go = Selection.activeGameObject;
-        if (Selection.activeGameObject == null)
-        {
-            WindowTips("没有选中关键部位");
-            return;
-        }
-
-        //跳到自身
-        EditorGUIUtility.PingObject(go.transform.parent);
-    }
-
-    #endregion
-
-    #region 三：对称克隆关键部位
+    #region 二：对称克隆关键部位
 
     /// <summary>
     /// 对称克隆关键部位
@@ -485,7 +480,7 @@ public class SelfBuWei : CommonFun
 
     #endregion
 
-    #region 四：生成默认的关键部位
+    #region 三：生成默认的关键部位
 
     /// <summary>
     /// 生成默认的关键部位
@@ -500,7 +495,7 @@ public class SelfBuWei : CommonFun
 
     #endregion
 
-    #region 五：生成空物体 NormalBox (1)
+    #region 四：生成空物体 NormalBox (1)
 
     public void CreateEmptyBox()
     {
@@ -514,7 +509,7 @@ public class SelfBuWei : CommonFun
 
     #endregion
 
-    #region 六：特殊部位坐标的计算(+-0.4类型)
+    #region 五：特殊部位坐标的计算(+-0.4类型)
 
     /// <summary>
     /// 复制凸起的坐标+ - 0.4后改成管道槽的坐标
