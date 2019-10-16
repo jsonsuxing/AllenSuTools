@@ -684,7 +684,6 @@ public class SelfCollider : CommonFun
             WindowTips("没有选中颗粒");
             return;
         }
-
         // 获得所选物体上所有的碰撞盒
         var allBoxCollider = selectObj.GetComponentsInChildren<BoxCollider>();
         if (allBoxCollider.Length == 0)
@@ -759,10 +758,10 @@ public class SelfCollider : CommonFun
             arrayY[i] = vertices[i].y;
             arrayZ[i] = vertices[i].z;
         }
-        MinY = Math.Round(arrayY.Min(), 4); // 最小Y轴坐标
-        MaxY = Math.Round(arrayY.Max(), 4); // 最大Y轴坐标
         MinX = Math.Round(arrayX.Min(), 4); // 最小X轴坐标
         MaxX = Math.Round(arrayX.Max(), 4); // 最大X轴坐标
+        MinY = Math.Round(arrayY.Min(), 4); // 最小Y轴坐标
+        MaxY = Math.Round(arrayY.Max(), 4); // 最大Y轴坐标
         MinZ = Math.Round(arrayZ.Min(), 4); // 最小Z轴坐标
         MaxZ = Math.Round(arrayZ.Max(), 4); // 最大Z轴坐标
 

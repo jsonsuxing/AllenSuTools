@@ -47,7 +47,7 @@ public class AllenSuTools : EditorWindow
                 #region 关键部位
 
                 // 设置《火影忍者》标题语
-                EditorGUILayout.HelpBox("版本号：2019年8月30日16:44:15", MessageType.Info, true);
+                EditorGUILayout.HelpBox("版本号：2019年10月16日17:51:45", MessageType.Info, true);
 
                 #region 一：逐个克隆关键部位
 
@@ -63,8 +63,8 @@ public class AllenSuTools : EditorWindow
                 // 第一组水平排版开始
                 EditorGUILayout.BeginHorizontal();
                 // 指定间隔的值
-                if (GUILayout.Button("正常颗粒间隔值=0.8")) SelfBuWei.Instance().IsClickChangeSpace = false;
-                else if (GUILayout.Button("中颗粒间隔值=1.6")) SelfBuWei.Instance().IsClickChangeSpace = true;
+                if (GUILayout.Button("1：正常颗粒间隔值=0.8")) SelfBuWei.Instance().IsClickChangeSpace = false;
+                else if (GUILayout.Button("2：中颗粒间隔值=1.6")) SelfBuWei.Instance().IsClickChangeSpace = true;
                 EditorGUILayout.EndHorizontal();
                 // 第一组水平排版结束
 
@@ -94,12 +94,12 @@ public class AllenSuTools : EditorWindow
                 // 第一组水平排版开始
                 EditorGUILayout.BeginHorizontal();
                 // 指定间隔的值
-                if (GUILayout.Button("单行克隆"))
+                if (GUILayout.Button("1：单行克隆"))
                 {
                     SelfBuWei.Instance().IsMoreLine = false;
                     SelfBuWei.Instance().ShowCloneWay = "单行克隆";
                 }
-                else if (GUILayout.Button("多行克隆"))
+                else if (GUILayout.Button("2：多行克隆"))
                 {
                     SelfBuWei.Instance().IsMoreLine = true;
                     SelfBuWei.Instance().ShowCloneWay = "多行克隆";
@@ -164,7 +164,7 @@ public class AllenSuTools : EditorWindow
                 GUILayout.EndVertical();
                 // ------------ 五：结束垂直画盒子 ------------
 
-                if (GUILayout.Button("逐个克隆关键部位")) SelfBuWei.Instance().CloneBuWeiOneByOne();
+                if (GUILayout.Button("点击按钮，开始克隆关键部位")) SelfBuWei.Instance().CloneBuWeiOneByOne();
 
                 // ------------ 六：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
@@ -210,8 +210,8 @@ public class AllenSuTools : EditorWindow
 
                 // 第一组垂直排版开始
                 EditorGUILayout.BeginHorizontal();
-                if (GUILayout.Button("生成默认的关键部位")) SelfBuWei.Instance().CreateDefaultBuWei();
-                if (GUILayout.Button("生成空物体 Box (1)")) SelfBuWei.Instance().CreateEmptyBox();
+                if (GUILayout.Button("1：生成默认的关键部位")) SelfBuWei.Instance().CreateDefaultBuWei();
+                if (GUILayout.Button("2：生成空物体 Box (1)")) SelfBuWei.Instance().CreateEmptyBox();
                 EditorGUILayout.EndHorizontal();
                 // 第一组垂直排版结束
 
@@ -441,14 +441,14 @@ public class AllenSuTools : EditorWindow
 
                 // 第一组水平排版开始
                 EditorGUILayout.BeginHorizontal();
-                SelfCollider.Instance().HideOrShowTips = !SelfCollider.Instance().IsHideAllBoxColl ? "隐藏全部碰撞盒" : "显示全部碰撞盒";
+                SelfCollider.Instance().HideOrShowTips = !SelfCollider.Instance().IsHideAllBoxColl ? "1：隐藏全部碰撞盒" : "1：显示全部碰撞盒";
                 if (GUILayout.Button(SelfCollider.Instance().HideOrShowTips))
                 {
                     SelfCollider.Instance().IsClickHideBtn = true;
                     SelfCollider.Instance().CollBtn();
                 }
 
-                if (GUILayout.Button("移除所有碰撞盒"))
+                if (GUILayout.Button("2：移除所有碰撞盒"))
                 {
                     SelfCollider.Instance().IsClickRemoveBtn = true;
                     SelfCollider.Instance().CollBtn();
@@ -543,8 +543,8 @@ public class AllenSuTools : EditorWindow
 
                 // 第四组水平排版开始
                 EditorGUILayout.BeginHorizontal();
-                if (GUILayout.Button("点击颗粒名称获取")) SelfCollider.Instance().ShowModelLengthWidthHeight();
-                if (GUILayout.Button("清空以上所有数据")) SelfCollider.Instance().ClearModelData();
+                if (GUILayout.Button("1：点击颗粒名称获取")) SelfCollider.Instance().ShowModelLengthWidthHeight();
+                if (GUILayout.Button("2：清空以上所有数据")) SelfCollider.Instance().ClearModelData();
                 EditorGUILayout.EndHorizontal();
                 // 第四组水平排版结束
              
@@ -560,8 +560,8 @@ public class AllenSuTools : EditorWindow
 
                 // 第一组水平排版开始
                 EditorGUILayout.BeginHorizontal();
-                if (GUILayout.Button("从ACE项目移动self预设")) SelfCollider.Instance().MovePrefabFromAce();
-                if (GUILayout.Button("删除QD下的self预设")) SelfCollider.Instance().DeletePrefab();
+                if (GUILayout.Button("1：从ACE项目移动预设")) SelfCollider.Instance().MovePrefabFromAce();
+                if (GUILayout.Button("2：删除QD下的预设")) SelfCollider.Instance().DeletePrefab();
                 EditorGUILayout.EndHorizontal();
                 // 第一组水平排版结束
 
@@ -670,7 +670,7 @@ public class AllenSuTools : EditorWindow
 
                 // 第二组水平排版开始
                 EditorGUILayout.BeginHorizontal();
-                if (GUILayout.Button("记住模型路径"))
+                if (GUILayout.Button("1：记住模型路径"))
                 {
                     SelfModel.Instance().IsRememberOutModelPath = true;
                     // 记住模型路径前确保路径不为空
@@ -683,7 +683,7 @@ public class AllenSuTools : EditorWindow
                     // 存储颗粒大类名称
                     PlayerPrefs.SetString("外部模型路径", SelfModel.Instance().ModelFolderPath);
                 }
-                if (GUILayout.Button("取消记住路径"))
+                if (GUILayout.Button("2：取消记住路径"))
                 {
                     if (PlayerPrefs.HasKey("外部模型路径")) PlayerPrefs.DeleteKey("外部模型路径");
                 }
@@ -924,8 +924,8 @@ public class AllenSuTools : EditorWindow
 
                 // 第一组水平排版开始
                 EditorGUILayout.BeginHorizontal();
-                if (GUILayout.Button("点击两次获取 Length 的值")) SelfTools.Instance().GetLength();
-                if (GUILayout.Button("清空按钮"))
+                if (GUILayout.Button("1：点击两次获取 Length 的值")) SelfTools.Instance().GetLength();
+                if (GUILayout.Button("2：清空按钮"))
                 {
                     SelfTools.Instance().ClearValue();
                     SelfTools.Instance().Length = 0; // 单独重置长度，写到ClearValue函数里，在编辑器里看不到长度，因为已经 被重置
@@ -961,61 +961,6 @@ public class AllenSuTools : EditorWindow
                 // 第一组垂直排版结束
 
                 if (GUILayout.Button("点击批量修改“-”为“&”")) SelfTools.Instance().ChangeFileName();
-
-                GUILayout.EndVertical();
-                // ------------ 一：结束垂直画盒子 ------------
-
-                #endregion
-                GUILayout.Space(2);
-
-                #region 4：添加，删除 MeshRenderer,MeshFilter
-
-                GUILayout.Label("四：添加，移除紫色 Mesh", TitleStyle());
-
-                // ------------ 一：开始水平画盒子 ------------
-                GUILayout.BeginVertical("box");
-
-                // 第一组水平排版开始
-                EditorGUILayout.BeginHorizontal();
-                if (GUILayout.Button("添加紫色 Mesh")) SelfTools.Instance().AddMesh();
-                if (GUILayout.Button("移除紫色 Mesh")) SelfTools.Instance().RemoveMesh();
-                EditorGUILayout.EndHorizontal();
-                // 第一组水平排版结束
-
-                GUILayout.EndVertical();
-                // ------------ 一：结束水平画盒子 ------------
-
-                #endregion
-                GUILayout.Space(2);
-
-                #region 5：删除指定后缀名的文件
-
-                GUILayout.Label("五：删除指定后缀名的文件", TitleStyle());
-
-                // ------------ 一：开始垂直画盒子 ------------
-                GUILayout.BeginVertical("box");
-
-                // 第一组垂直排版开始
-                EditorGUILayout.BeginVertical();
-                GUILayout.Label("1、要修改的文件路径", SetGUIStyle(Color.black, 14));
-                SelfTools.Instance().DeleteFilePath = GUILayout.TextField(SelfTools.Instance().DeleteFilePath);
-                GUILayout.Label("2、选择要删除的文件后缀名", SetGUIStyle(Color.black, 14));
-
-                // 第一组水平排版开始
-                EditorGUILayout.BeginHorizontal();
-                if (GUILayout.Button(".meta")) SelfTools.Instance().SelectExtension = ".meta";
-                if (GUILayout.Button(".fbx")) SelfTools.Instance().SelectExtension = ".fbx";
-                if (GUILayout.Button(".jpg")) SelfTools.Instance().SelectExtension = ".jpg";
-                if (GUILayout.Button(".png")) SelfTools.Instance().SelectExtension = ".png";
-                EditorGUILayout.EndHorizontal();
-                // 第一组水平排版结束
-
-                SelfTools.Instance().SelectExtension = GUILayout.TextField(SelfTools.Instance().SelectExtension);
-
-                if (GUILayout.Button("点击删除指定后缀名的文件")) SelfTools.Instance().DeleteSelectExtension();
-
-                EditorGUILayout.EndVertical();
-                // 第一组垂直排版结束
 
                 GUILayout.EndVertical();
                 // ------------ 一：结束垂直画盒子 ------------
