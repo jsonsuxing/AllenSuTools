@@ -968,6 +968,62 @@ public class AllenSuTools : EditorWindow
                 #endregion
                 GUILayout.Space(2);
 
+                #region 4：添加，删除 MeshRenderer,MeshFilter
+
+                GUILayout.Label("四：添加，移除紫色 Mesh", TitleStyle());
+
+                // ------------ 一：开始水平画盒子 ------------
+                GUILayout.BeginVertical("box");
+
+                // 第一组水平排版开始
+                EditorGUILayout.BeginHorizontal();
+                if (GUILayout.Button("添加紫色 Mesh")) SelfTools.Instance().AddMesh();
+                if (GUILayout.Button("移除紫色 Mesh")) SelfTools.Instance().RemoveMesh();
+                EditorGUILayout.EndHorizontal();
+                // 第一组水平排版结束
+
+                GUILayout.EndVertical();
+                // ------------ 一：结束水平画盒子 ------------
+
+                #endregion
+                GUILayout.Space(2);
+
+                #region 5：删除指定后缀名的文件
+
+                GUILayout.Label("五：删除指定后缀名的文件", TitleStyle());
+
+                // ------------ 一：开始垂直画盒子 ------------
+                GUILayout.BeginVertical("box");
+
+                // 第一组垂直排版开始
+                EditorGUILayout.BeginVertical();
+                GUILayout.Label("1、要修改的文件路径", SetGUIStyle(Color.black, 14));
+                SelfTools.Instance().DeleteFilePath = GUILayout.TextField(SelfTools.Instance().DeleteFilePath);
+                GUILayout.Label("2、选择要删除的文件后缀名", SetGUIStyle(Color.black, 14));
+
+                // 第一组水平排版开始
+                EditorGUILayout.BeginHorizontal();
+                if (GUILayout.Button(".meta")) SelfTools.Instance().SelectExtension = ".meta";
+                if (GUILayout.Button(".fbx")) SelfTools.Instance().SelectExtension = ".fbx";
+                if (GUILayout.Button(".jpg")) SelfTools.Instance().SelectExtension = ".jpg";
+                if (GUILayout.Button(".png")) SelfTools.Instance().SelectExtension = ".png";
+                EditorGUILayout.EndHorizontal();
+                // 第一组水平排版结束
+
+                SelfTools.Instance().SelectExtension = GUILayout.TextField(SelfTools.Instance().SelectExtension);
+
+                if (GUILayout.Button("点击删除指定后缀名的文件")) SelfTools.Instance().DeleteSelectExtension();
+
+                EditorGUILayout.EndVertical();
+                // 第一组垂直排版结束
+
+                GUILayout.EndVertical();
+                // ------------ 一：结束垂直画盒子 ------------
+
+                #endregion
+                GUILayout.Space(2);
+
+
                 #region 6：从模型文件移动到指定文件夹(边框)
 
                 GUILayout.Label("六：移动模型文件(边框)", TitleStyle());
