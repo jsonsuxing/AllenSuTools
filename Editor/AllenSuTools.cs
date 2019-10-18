@@ -56,7 +56,7 @@ public class AllenSuTools : EditorWindow
 
                 // 默认间隔
                 SelfBuWei.Instance().ModelSpace = SelfBuWei.Instance().GeneralSpace;
-                GUILayout.Label("            A：选择关键部位间隔", SetGUIStyle(Color.gray, 14));
+                GUILayout.Label("            A：选择关键部位间隔", SetGuiStyle(Color.gray, 14));
 
                 // ------------ 一：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
@@ -78,7 +78,7 @@ public class AllenSuTools : EditorWindow
 
                 // 第一组水平排版开始
                 EditorGUILayout.BeginHorizontal();
-                GUILayout.Label("提示：当前关键部位间隔的值是", SetGUIStyle(Color.black, 14));
+                GUILayout.Label("提示：当前关键部位间隔的值是", SetGuiStyle(Color.black, 14));
                 SelfBuWei.Instance().ModelSpace = SelfBuWei.Instance().IsClickChangeSpace ? SelfBuWei.Instance().MediumSpace : SelfBuWei.Instance().GeneralSpace;
                 GUILayout.TextField(SelfBuWei.Instance().ModelSpace.ToString());
                 EditorGUILayout.EndHorizontal();
@@ -87,7 +87,7 @@ public class AllenSuTools : EditorWindow
                 GUILayout.EndVertical();
                 // ------------ 二：结束垂直画盒子 ------------
 
-                GUILayout.Label("            B：选择克隆关键部位方式", SetGUIStyle(Color.gray, 14));
+                GUILayout.Label("            B：选择克隆关键部位方式", SetGuiStyle(Color.gray, 14));
 
                 // ------------ 三：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
@@ -117,7 +117,7 @@ public class AllenSuTools : EditorWindow
 
                 // 第一组水平排版开始
                 EditorGUILayout.BeginHorizontal();
-                GUILayout.Label("提示：当前的克隆方式为", SetGUIStyle(Color.black, 14));
+                GUILayout.Label("提示：当前的克隆方式为", SetGuiStyle(Color.black, 14));
                 GUILayout.TextField(SelfBuWei.Instance().ShowCloneWay);
                 EditorGUILayout.EndHorizontal();
                 // 第一组水平排版结束
@@ -125,14 +125,14 @@ public class AllenSuTools : EditorWindow
                 GUILayout.EndVertical();
                 // ------------ 四：结束垂直画盒子 ------------
 
-                GUILayout.Label("一：沿着 坐标轴正方向 克隆多少个", SetGUIStyle(Color.red, 14));
+                GUILayout.Label("一：沿着 坐标轴正方向 克隆多少个", SetGuiStyle(Color.red, 14));
 
                 // ------------ 五：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
 
                 // 第一组垂直排版开始
                 EditorGUILayout.BeginVertical();
-                GUILayout.Label("1、x 轴正方向", SetGUIStyle(Color.black, 14));
+                GUILayout.Label("1、x 轴正方向", SetGuiStyle(Color.black, 14));
                 GUILayout.Space(5);
                 SelfBuWei.Instance().CloneNumByAxisX = int.Parse(GUILayout.TextField(SelfBuWei.Instance().CloneNumByAxisX.ToString()));
                 EditorGUILayout.EndVertical();
@@ -140,24 +140,24 @@ public class AllenSuTools : EditorWindow
 
                 // 第二组垂直排版开始
                 EditorGUILayout.BeginVertical();
-                GUILayout.Label("2、z 轴正方向", SetGUIStyle(Color.black, 14));
+                GUILayout.Label("2、z 轴正方向", SetGuiStyle(Color.black, 14));
                 SelfBuWei.Instance().CloneNumByAxisZ = int.Parse(GUILayout.TextField(SelfBuWei.Instance().CloneNumByAxisZ.ToString()));
                 EditorGUILayout.EndVertical();
                 // 第二组垂直排版结束
 
-                GUILayout.Label("二：沿着 坐标轴负方向 克隆多少个", SetGUIStyle(Color.red, 14));
+                GUILayout.Label("二：沿着 坐标轴负方向 克隆多少个", SetGuiStyle(Color.red, 14));
                 GUILayout.Space(5);
 
                 // 第三组垂直排版开始
                 EditorGUILayout.BeginVertical();
-                GUILayout.Label("3、x 轴负方向", SetGUIStyle(Color.black, 14));
+                GUILayout.Label("3、x 轴负方向", SetGuiStyle(Color.black, 14));
                 SelfBuWei.Instance().CloneNumByAxisXFu = int.Parse(GUILayout.TextField(SelfBuWei.Instance().CloneNumByAxisXFu.ToString()));
                 EditorGUILayout.EndVertical();
                 // 第三组垂直排版结束
 
                 // 第四组垂直排版开始
                 EditorGUILayout.BeginVertical();
-                GUILayout.Label("4、z 轴负方向", SetGUIStyle(Color.black, 14));
+                GUILayout.Label("4、z 轴负方向", SetGuiStyle(Color.black, 14));
                 SelfBuWei.Instance().CloneNumByAxisZFu = int.Parse(GUILayout.TextField(SelfBuWei.Instance().CloneNumByAxisZFu.ToString()));
                 EditorGUILayout.EndVertical();
                 // 第四组垂直排版结束
@@ -172,7 +172,7 @@ public class AllenSuTools : EditorWindow
 
                 // 第一组水平排版开始
                 EditorGUILayout.BeginHorizontal();
-                GUILayout.Label("注：可以手动改变 i 的值", SetGUIStyle(Color.black, 14));
+                GUILayout.Label("注：可以手动改变 i 的值", SetGuiStyle(Color.black, 14));
                 CommonFun.CurrentIndexNum = int.Parse(GUILayout.TextField(CommonFun.CurrentIndexNum.ToString()));
                 EditorGUILayout.EndHorizontal();
                 // 第一组水平排版结束
@@ -349,7 +349,7 @@ public class AllenSuTools : EditorWindow
 
                 GUILayout.Label("三：自定义操作碰撞盒", TitleStyle());
                 GUILayout.Space(3);
-                GUILayout.Label("A：旋转", SetGUIStyle(Color.red, 16));
+                GUILayout.Label("A：旋转", SetGuiStyle(Color.red, 16));
 
                 // ------------ 一：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
@@ -357,7 +357,7 @@ public class AllenSuTools : EditorWindow
 
                 // 第一组水平排版开始
                 EditorGUILayout.BeginHorizontal();
-                GUILayout.Label("1:旋转中心(默认为原点)", SetGUIStyle(Color.black, 14));
+                GUILayout.Label("1:旋转中心(默认为原点)", SetGuiStyle(Color.black, 14));
                 if(GUILayout.Button("可点击物体，自动传值")) SelfCollider.Instance().SetMyPivot();
                 EditorGUILayout.EndHorizontal();
                 // 第一组水平排版结束
@@ -365,11 +365,11 @@ public class AllenSuTools : EditorWindow
 
                 // 第二组水平排版开始
                 EditorGUILayout.BeginHorizontal();
-                GUILayout.Label("x:", SetGUIStyle(Color.black, 14));
+                GUILayout.Label("x:", SetGuiStyle(Color.black, 14));
                 SelfCollider.Instance().SelfPivotAxisX = float.Parse(EditorGUILayout.TextField(SelfCollider.Instance().SelfPivotAxisX.ToString()));
-                GUILayout.Label("y:", SetGUIStyle(Color.black, 14));
+                GUILayout.Label("y:", SetGuiStyle(Color.black, 14));
                 SelfCollider.Instance().SelfPivotAxisY = float.Parse(EditorGUILayout.TextField(SelfCollider.Instance().SelfPivotAxisY.ToString()));
-                GUILayout.Label("z:", SetGUIStyle(Color.black, 14));
+                GUILayout.Label("z:", SetGuiStyle(Color.black, 14));
                 SelfCollider.Instance().SelfPivotAxisZ = float.Parse(EditorGUILayout.TextField(SelfCollider.Instance().SelfPivotAxisZ.ToString()));
                 EditorGUILayout.EndHorizontal();
                 // 第二组水平排版结束
@@ -377,7 +377,7 @@ public class AllenSuTools : EditorWindow
 
                 // 第三组水平排版开始
                 EditorGUILayout.BeginHorizontal();
-                GUILayout.Label("2:选中已做好物体，设置克隆个数：", SetGUIStyle(Color.black, 14));
+                GUILayout.Label("2:选中已做好物体，设置克隆个数：", SetGuiStyle(Color.black, 14));
                 SelfCollider.Instance().CustomBoxCollNum = int.Parse(GUILayout.TextField(SelfCollider.Instance().CustomBoxCollNum.ToString()));
                 EditorGUILayout.EndHorizontal();
                 // 第三组水平排版结束
@@ -393,7 +393,7 @@ public class AllenSuTools : EditorWindow
 
                 #region 二：平移
 
-                GUILayout.Label("B：平移", SetGUIStyle(Color.red, 16));
+                GUILayout.Label("B：平移", SetGuiStyle(Color.red, 16));
 
                 // ------------ 二：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
@@ -407,7 +407,7 @@ public class AllenSuTools : EditorWindow
 
                 // 第二组水平排版开始
                 EditorGUILayout.BeginHorizontal();
-                GUILayout.Label("设置克隆个数：", SetGUIStyle(Color.black, 14));
+                GUILayout.Label("设置克隆个数：", SetGuiStyle(Color.black, 14));
                 SelfCollider.Instance().CloneObjNum = int.Parse(EditorGUILayout.TextField(SelfCollider.Instance().CloneObjNum.ToString()));
                 EditorGUILayout.EndHorizontal();
                 // 第二组水平排版结束
@@ -415,7 +415,7 @@ public class AllenSuTools : EditorWindow
 
                 // 第三组水平排版开始
                 EditorGUILayout.BeginHorizontal();
-                GUILayout.Label("设置克隆间隔：", SetGUIStyle(Color.black, 14));
+                GUILayout.Label("设置克隆间隔：", SetGuiStyle(Color.black, 14));
                 SelfCollider.Instance().CloneSpace = float.Parse(EditorGUILayout.TextField(SelfCollider.Instance().CloneSpace.ToString()));
                 EditorGUILayout.EndHorizontal();
                 // 第三组水平排版结束
@@ -471,7 +471,7 @@ public class AllenSuTools : EditorWindow
                 GUILayout.Label("二：显示模型数据", TitleStyle());
 
                 GUILayout.Space(3);
-                GUILayout.Label("1：模型基础数据", SetGUIStyle(Color.red, 14));
+                GUILayout.Label("1：模型基础数据", SetGuiStyle(Color.red, 14));
 
                 // ------------ 一：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
@@ -497,7 +497,7 @@ public class AllenSuTools : EditorWindow
                 GUILayout.EndVertical();
                 // ------------一：结束垂直画盒子------------
 
-                GUILayout.Label("2：模型最坐标", SetGUIStyle(Color.red, 14));
+                GUILayout.Label("2：模型最坐标", SetGuiStyle(Color.red, 14));
 
                 // ------------ 二：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
@@ -529,7 +529,7 @@ public class AllenSuTools : EditorWindow
                 GUILayout.EndVertical();
                 // ------------ 二：结束垂直画盒子 ------------
 
-                GUILayout.Label("3：碰撞盒总个数", SetGUIStyle(Color.red, 14));
+                GUILayout.Label("3：碰撞盒总个数", SetGuiStyle(Color.red, 14));
 
                 // ------------ 三：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
@@ -573,7 +573,92 @@ public class AllenSuTools : EditorWindow
                 #endregion
                 GUILayout.Space(8);
 
-                #region 四：测试
+                #region 四：带角度模型的计算
+
+                GUILayout.Label("四：带角度模型的计算", TitleStyle());
+                GUILayout.Space(3);
+
+                #region 1：角度
+
+                GUILayout.Label("A：角度", SetGuiStyle(Color.red, 16));
+
+                // ------------ 一：开始垂直画盒子 ------------
+                GUILayout.BeginVertical("box");
+
+                // 第一组水平排版开始  显示点击的第一个点的位置信息
+                EditorGUILayout.BeginHorizontal();
+                GUILayout.Label("点一 position：", SetGuiStyle(Color.black, 14));
+                // 这里只把显示结果保留三位小数，但计算时仍然用的原数据
+                GUILayout.TextField("(" + (Math.Round(SelfCollider.Instance().FirstAnglePos.x, 3) + "，" + (Math.Round(SelfCollider.Instance().FirstAnglePos.y, 3)) +
+                                          "，" + (Math.Round(SelfCollider.Instance().FirstAnglePos.z, 3))) + ")");
+                EditorGUILayout.EndHorizontal();
+                // 第一组水平排版结束
+                GUILayout.Space(3);
+
+                // 第二组水平排版开始  显示点击的第二个点的位置信息
+                EditorGUILayout.BeginHorizontal();
+                GUILayout.Label("点二 position：", SetGuiStyle(Color.black, 14));
+                GUILayout.TextField("(" + ((Math.Round(SelfCollider.Instance().SecondAnglePos.x, 3)) + "，" + Math.Round(SelfCollider.Instance().SecondAnglePos.y, 3) +
+                                           "，" + (Math.Round(SelfCollider.Instance().SecondAnglePos.z, 3))) + ")");
+                EditorGUILayout.EndHorizontal();
+                // 第二组水平排版结束
+                GUILayout.Space(3);
+
+                // 第三组水平排版开始  显示结果的单位向量
+                EditorGUILayout.BeginHorizontal();
+                GUILayout.Label("输出向量结果：", SetGuiStyle(Color.black, 14));
+                GUILayout.TextField("(" + ((Math.Round(SelfCollider.Instance().AngleResult.x, 3)) + "，" + (Math.Round(SelfCollider.Instance().AngleResult.y, 3)) +
+                                           "，" + (Math.Round(SelfCollider.Instance().AngleResult.z, 3))) + ")");
+                EditorGUILayout.EndHorizontal();
+                // 第三组水平排版结束
+                GUILayout.Space(3);
+
+                GUILayout.EndVertical();
+                // ------------ 一：结束垂直画盒子 ------------
+
+                // 第四组水平排版开始
+                EditorGUILayout.BeginHorizontal();
+                if (GUILayout.Button("1：点击两次按钮，计算单位向量")) SelfCollider.Instance().AngleModel();
+                if (GUILayout.Button("2：清空数据")) SelfCollider.Instance().ClearAngleModel();
+                EditorGUILayout.EndHorizontal();
+                // 第四组水平排版结束
+
+
+                #endregion
+                GUILayout.Space(8);
+
+                #region 2：位置
+
+                GUILayout.Label("B：位置", SetGuiStyle(Color.red, 16));
+                // ------------ 一：开始垂直画盒子 ------------
+                GUILayout.BeginVertical("box");
+
+                // 第一组水平排版开始
+                EditorGUILayout.BeginHorizontal();
+                if (GUILayout.Button("点击添加脚本")) SelfCollider.Instance().AddTestDrawLine();
+
+                EditorGUILayout.EndHorizontal();
+                // 第一组水平排版结束
+                GUILayout.Space(3);
+
+                // 第一组水平排版开始
+                EditorGUILayout.BeginHorizontal();
+                if (GUILayout.Button("点击绘制线框")) SelfCollider.Instance().DrawLineAndGetCenterPos();
+                if (GUILayout.Button("清空数据")) SelfCollider.Instance().ClearPosValue();
+                EditorGUILayout.EndHorizontal();
+                // 第一组水平排版结束
+                GUILayout.Space(3);
+              
+                GUILayout.EndVertical();
+                // ------------ 一：结束垂直画盒子 ------------
+
+
+                #endregion
+
+                #endregion
+                GUILayout.Space(8);
+
+                #region 临时测试
 
                 //if (GUILayout.Button("测试"))
                 //{
@@ -644,7 +729,7 @@ public class AllenSuTools : EditorWindow
                     SelfModel.Instance().ClearGranuleData();
                     SelfModel.Instance().IsOpenGranuleToggle = false;
                 }
-                GUILayout.Label("1、当前颗粒类别", SetGUIStyle(Color.black, 14));
+                GUILayout.Label("1、当前颗粒类别", SetGuiStyle(Color.black, 14));
                 CommonFun.ShowGranuleType = PlayerPrefs.HasKey("颗粒大类名称") ? GUILayout.TextField(PlayerPrefs.GetString("颗粒大类名称")) : GUILayout.TextField(CommonFun.ShowGranuleType);
                 EditorGUILayout.EndVertical();
                 // 第二组垂直排版结束
@@ -664,7 +749,7 @@ public class AllenSuTools : EditorWindow
 
                 // 第一组垂直排版开始
                 EditorGUILayout.BeginVertical();
-                GUILayout.Label("1、外部模型路径", SetGUIStyle(Color.black, 14));
+                GUILayout.Label("1、外部模型路径", SetGuiStyle(Color.black, 14));
                 // SelfModel.Instance().IsRememberOutModelPath = EditorGUILayout.Toggle("记住模型路径", SelfModel.Instance().IsRememberOutModelPath);
                 
                 SelfModel.Instance().ModelFolderPath = PlayerPrefs.HasKey("外部模型路径") ? 
@@ -770,7 +855,7 @@ public class AllenSuTools : EditorWindow
 
                 // 第一组水平排版开始
                 EditorGUILayout.BeginHorizontal();
-                GUILayout.Label("提示：当前修改方式为：", SetGUIStyle(Color.black, 14));
+                GUILayout.Label("提示：当前修改方式为：", SetGuiStyle(Color.black, 14));
                 SelfModel.Instance().ShowTips = SelfModel.Instance().IsClickHierarchy ? "批量从Hierarchy修改" : "单选Prefab修改";
                 GUILayout.TextField(SelfModel.Instance().ShowTips);
                 EditorGUILayout.EndHorizontal();
@@ -812,7 +897,7 @@ public class AllenSuTools : EditorWindow
 
                 // 第一组水平排版开始
                 EditorGUILayout.BeginHorizontal();
-                GUILayout.Label("提示：当前修改方式为：", SetGUIStyle(Color.black, 14));
+                GUILayout.Label("提示：当前修改方式为：", SetGuiStyle(Color.black, 14));
                 SelfModel.Instance().ShowCenterTips = SelfModel.Instance().IsCenterHierarchy ? "批量从Hierarchy修改" : "单选Prefab修改";
                 GUILayout.TextField(SelfModel.Instance().ShowCenterTips);
                 EditorGUILayout.EndHorizontal();
@@ -908,7 +993,7 @@ public class AllenSuTools : EditorWindow
 
                 // 第一组垂直排版开始
                 EditorGUILayout.BeginVertical();
-                GUILayout.Label("1、获取当前哪个轴的坐标值", SetGUIStyle(Color.black, 14));
+                GUILayout.Label("1、获取当前哪个轴的坐标值", SetGuiStyle(Color.black, 14));
                 SelfTools.Instance().SetAxis = GUILayout.TextField(SelfTools.Instance().SetAxis);
 
                 // 第二组水平排版开始
@@ -919,9 +1004,9 @@ public class AllenSuTools : EditorWindow
                 EditorGUILayout.EndHorizontal();
                 // 第二组水平排版结束
 
-                GUILayout.Label("2、第一个坐标值", SetGUIStyle(Color.black, 14));
+                GUILayout.Label("2、第一个坐标值", SetGuiStyle(Color.black, 14));
                 GUILayout.TextField(SelfTools.Instance().FirstValue.ToString());
-                GUILayout.Label("3、Length的值等于", SetGUIStyle(Color.black, 14));
+                GUILayout.Label("3、Length的值等于", SetGuiStyle(Color.black, 14));
                 GUILayout.TextField(SelfTools.Instance().Length.ToString());
 
                 // 第一组水平排版开始
@@ -957,7 +1042,7 @@ public class AllenSuTools : EditorWindow
 
                 // 第一组垂直排版开始
                 EditorGUILayout.BeginVertical();
-                GUILayout.Label("1、要修改的文件路径", SetGUIStyle(Color.black, 14));
+                GUILayout.Label("1、要修改的文件路径", SetGuiStyle(Color.black, 14));
                 SelfTools.Instance().ChangeFileNamePath = GUILayout.TextField(SelfTools.Instance().ChangeFileNamePath);
                 EditorGUILayout.EndVertical();
                 // 第一组垂直排版结束
@@ -999,9 +1084,9 @@ public class AllenSuTools : EditorWindow
 
                 // 第一组垂直排版开始
                 EditorGUILayout.BeginVertical();
-                GUILayout.Label("1、要修改的文件路径", SetGUIStyle(Color.black, 14));
+                GUILayout.Label("1、要修改的文件路径", SetGuiStyle(Color.black, 14));
                 SelfTools.Instance().DeleteFilePath = GUILayout.TextField(SelfTools.Instance().DeleteFilePath);
-                GUILayout.Label("2、选择要删除的文件后缀名", SetGUIStyle(Color.black, 14));
+                GUILayout.Label("2、选择要删除的文件后缀名", SetGuiStyle(Color.black, 14));
 
                 // 第一组水平排版开始
                 EditorGUILayout.BeginHorizontal();
@@ -1035,13 +1120,13 @@ public class AllenSuTools : EditorWindow
 
                 // 第一组垂直排版开始
                 EditorGUILayout.BeginVertical();
-                GUILayout.Label("1、原模型的文件夹路径", SetGUIStyle(Color.black, 14));
+                GUILayout.Label("1、原模型的文件夹路径", SetGuiStyle(Color.black, 14));
                 SelfTools.Instance().OldModelPath = GUILayout.TextField(SelfTools.Instance().OldModelPath);
                 GUILayout.Space(2);
-                GUILayout.Label("2、移动至的文件夹路径", SetGUIStyle(Color.black, 14));
+                GUILayout.Label("2、移动至的文件夹路径", SetGuiStyle(Color.black, 14));
                 SelfTools.Instance().NewModelPath = GUILayout.TextField(SelfTools.Instance().NewModelPath);
                 GUILayout.Space(2);
-                GUILayout.Label("3、待移动的文件名", SetGUIStyle(Color.black, 14));
+                GUILayout.Label("3、待移动的文件名", SetGuiStyle(Color.black, 14));
                 SelfTools.Instance().NeedMoveFileName = GUILayout.TextField(SelfTools.Instance().NeedMoveFileName);
                 GUILayout.Space(2);
                 if (GUILayout.Button("点击移动模型"))SelfTools.Instance().MoveModel();
@@ -1071,7 +1156,7 @@ public class AllenSuTools : EditorWindow
     /// </summary>
     public void DrawAddNewGranuleWayGui()
     {
-        GUILayout.Label("             新上架颗粒", SetGUIStyle(Color.red, 23));
+        GUILayout.Label("             新上架颗粒", SetGuiStyle(Color.red, 23));
         GUILayout.Space(8);
 
         #region 一：点击导入新模型
@@ -1132,7 +1217,7 @@ public class AllenSuTools : EditorWindow
     /// </summary>
     public void DrawReplaceOldGranuleWayGui()
     {
-        GUILayout.Label("             更换旧模型", SetGUIStyle(Color.red, 23));
+        GUILayout.Label("             更换旧模型", SetGuiStyle(Color.red, 23));
         GUILayout.Space(8);
 
         #region 一：导入单个模型
@@ -1144,7 +1229,7 @@ public class AllenSuTools : EditorWindow
 
         // 第一组垂直排版开始
         EditorGUILayout.BeginVertical();
-        GUILayout.Label("请输入导入颗粒名字", SetGUIStyle(Color.black, 14));
+        GUILayout.Label("请输入导入颗粒名字", SetGuiStyle(Color.black, 14));
         GUILayout.Space(5);
         SelfModel.Instance().ImportGranuleName = GUILayout.TextField(SelfModel.Instance().ImportGranuleName);
         if (GUILayout.Button("点击导入单个模型")) SelfModel.Instance().ImportNewModel();
@@ -1219,9 +1304,9 @@ public class AllenSuTools : EditorWindow
     /// <param name="color">字体颜色</param>
     /// <param name="fontSize">字体大小</param>
     /// <returns></returns>
-    public GUIStyle SetGUIStyle(Color color, int fontSize)
+    public GUIStyle SetGuiStyle(Color color, int fontSize)
     {
-        GUIStyle style = new GUIStyle
+        var style = new GUIStyle
         {
             normal =
             {

@@ -131,6 +131,18 @@ public class SelfCollider : CommonFun
     // 显示有几个碰撞盒
     public int ChildBoxCollNum = 0; // 所有子物体下有几个碰撞盒
 
+    // 计算带角度模型
+    // 1：角度
+    public Vector3 FirstAnglePos = Vector3.zero;  // 点击的第一个点的坐标
+    public Vector3 SecondAnglePos = Vector3.zero; // 点击的第二个点的坐标
+    public Vector3 AngleResult = Vector3.zero;    // 输出结果
+    public int AngleClickTime = 1;                // 第几次点击
+    // 2：位置
+    public Vector3 FirstPos = Vector3.zero;       // 点击的第一个点的坐标
+    public Vector3 SecondPos = Vector3.zero;      // 点击的第二个点的坐标
+    public int PosClickTime = 1;                  // 第几次点击
+
+
     #endregion
 
     #region 一：克隆碰撞盒
@@ -830,7 +842,106 @@ public class SelfCollider : CommonFun
 
     #endregion
 
-    #region 四：显示有几个碰撞盒
+    #region 四：计算带角度方向
+
+    /// <summary>
+    /// 带角度方向的计算
+    /// </summary>
+    public void AngleModel()
+    {
+        var selectObj = Selection.activeGameObject;
+        if (selectObj == null)
+        {
+            WindowTips("没有选中关键部位");
+            return;
+        }
+
+        if (AngleClickTime == 1)
+        {
+            ClearAngleModel();
+            FirstAnglePos = selectObj.transform.position;
+        }
+        else if (AngleClickTime == 2)
+        {
+            SecondAnglePos = selectObj.transform.position;
+            AngleResult = (FirstAnglePos - SecondAnglePos).normalized;
+            selectObj.GetComponent<GuanJianBuWei>().dirVector = AngleResult;
+        }
+        AngleClickTime++;
+        if (AngleClickTime > 2) AngleClickTime = 1;
+    }
+
+    /// <summary>
+    /// 清空获得到的数据
+    /// </summary>
+    public void ClearAngleModel()
+    {
+        FirstAnglePos=Vector3.zero;
+        SecondAnglePos=Vector3.zero;
+        AngleResult=Vector3.zero;
+    }
+
+
+    /// <summary>
+    /// 绘制线框，并且获得中心位置
+    /// </summary>
+    public void DrawLineAndGetCenterPos()
+    {
+        var selectObj = Selection.activeGameObject;
+        if (selectObj == null)
+        {
+            WindowTips("没有选中关键部位");
+            return;
+        }
+
+        if (PosClickTime == 1)
+        {
+            FirstPos = selectObj.transform.position;
+        }
+        else if (PosClickTime == 2)
+        {
+            SecondAnglePos = selectObj.transform.position;
+            var td = selectObj.GetComponent<TestDrawLine>();
+            td.StartVector = FirstPos;
+            td.EndVector = SecondPos;
+        }
+
+        PosClickTime++;
+        if (PosClickTime > 2)
+        {
+            PosClickTime = 1;
+        }
+    }
+
+
+    /// <summary>
+    ///  清空获得到的数据
+    /// </summary>
+    public void ClearPosValue()
+    {
+        FirstPos = Vector3.zero;
+        SecondPos = Vector3.zero;
+        var td = Selection.activeGameObject.GetComponent<TestDrawLine>();
+        td.StartVector = Vector3.zero;
+        td.EndVector   = Vector3.zero;
+        PosClickTime = 1;
+    }
+
+
+    public void AddTestDrawLine()
+    {
+        var selectObj = Selection.activeGameObject;
+        if (selectObj == null)
+        {
+            WindowTips("没有选中关键部位");
+            return;
+        }
+        selectObj.AddComponent<TestDrawLine>();
+    }
+
+    #endregion
+
+    #region 显示有几个碰撞盒
 
     /// <summary>
     /// 显示父物体，子物体碰撞盒的个数
@@ -896,7 +1007,6 @@ public class SelfCollider : CommonFun
     #endregion
 
     #endregion
-
 
     public static SelfCollider Instance()
     {
