@@ -281,8 +281,8 @@ public class SelfBuWei : CommonFun
     /// <param name="length">长度</param>
     public static void ChangeKeyName(string name, GuanJianType type, int size, Director director, float length)
     {
-        //调用该函数，说明在切换类型，所以先让 currentNum 恢复默认值
-        currentNum = 1;
+        //调用该函数，说明在切换类型，所以先让 CurrentIndexNum 恢复默认值
+        CurrentIndexNum = 1;
         var i = 1;
         foreach (GameObject go in Selection.gameObjects)
         {
@@ -410,7 +410,7 @@ public class SelfBuWei : CommonFun
     /// <param name="v">关键部位新坐标</param>
     public void CloneMethod(GameObject go, string buWeiName, Vector3 v)
     {
-        currentNum++;
+        CurrentIndexNum++;
         GuanJianBuWei buWei = go.GetComponent<GuanJianBuWei>();
 
         //克隆关键部位,设置父物体，重新命名
@@ -422,7 +422,7 @@ public class SelfBuWei : CommonFun
         objGuanJian.size            =  buWei.size;
         objGuanJian.director        =  buWei.director;
         objGuanJian.length          =  buWei.length;
-        obj.name                    =  buWeiName + " (" + (currentNum) + ")";
+        obj.name                    =  buWeiName + " (" + (CurrentIndexNum) + ")";
         obj.transform.localPosition += new Vector3(v.x, v.y, v.z);
     }
 

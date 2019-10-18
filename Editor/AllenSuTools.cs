@@ -4,6 +4,7 @@
 // 版 本：1.0
 // ========================================================
 
+using System;
 using UnityEditor;
 using UnityEngine;
 
@@ -47,7 +48,7 @@ public class AllenSuTools : EditorWindow
                 #region 关键部位
 
                 // 设置《火影忍者》标题语
-                EditorGUILayout.HelpBox("版本号：2019年10月16日17:51:45", MessageType.Info, true);
+                EditorGUILayout.HelpBox("版本号：2019年10月17日17:31:37", MessageType.Info, true);
 
                 #region 一：逐个克隆关键部位
 
@@ -172,7 +173,7 @@ public class AllenSuTools : EditorWindow
                 // 第一组水平排版开始
                 EditorGUILayout.BeginHorizontal();
                 GUILayout.Label("注：可以手动改变 i 的值", SetGUIStyle(Color.black, 14));
-                CommonFun.currentNum = int.Parse(GUILayout.TextField(CommonFun.currentNum.ToString()));
+                CommonFun.CurrentIndexNum = int.Parse(GUILayout.TextField(CommonFun.CurrentIndexNum.ToString()));
                 EditorGUILayout.EndHorizontal();
                 // 第一组水平排版结束
 
@@ -208,12 +209,12 @@ public class AllenSuTools : EditorWindow
                 // ------------ 一：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
 
-                // 第一组垂直排版开始
+                // 第一组水平排版开始
                 EditorGUILayout.BeginHorizontal();
                 if (GUILayout.Button("1：生成默认的关键部位")) SelfBuWei.Instance().CreateDefaultBuWei();
                 if (GUILayout.Button("2：生成空物体 Box (1)")) SelfBuWei.Instance().CreateEmptyBox();
                 EditorGUILayout.EndHorizontal();
-                // 第一组垂直排版结束
+                // 第一组水平排版结束
 
                 GUILayout.EndVertical();
                 // ------------ 一：结束垂直画盒子 ------------
@@ -304,7 +305,9 @@ public class AllenSuTools : EditorWindow
                 SelfCollider.Instance().DrawStatusText();
                 if (SelfCollider.Instance().EditorStatus == EditorStatus.编辑)
                 {
+                    // 第一组水平排版开始
                     EditorGUILayout.BeginHorizontal();
+
                     //完成创建碰撞盒
                     if (GUILayout.Button("确认"))
                     {
@@ -323,17 +326,18 @@ public class AllenSuTools : EditorWindow
                     }
 
                     EditorGUILayout.EndHorizontal();
+                    // 第一组水平排版结束
                 }
                 else
                 {
                     // 第一组水平排版开始
                     EditorGUILayout.BeginHorizontal();
-                    // 第一组水平排版结束
                     if (SelfCollider.Instance().EditorStatus != EditorStatus.准备) GUI.enabled = false;
                     if (GUILayout.Button("1：点击颗粒预设，开始克隆")) SelfCollider.Instance().CreateRingBoxColl();
                     GUI.enabled = true;
                     if (GUILayout.Button("2：整理、删除环形碰撞盒")) SelfCollider.Instance().DeleteAndArrangeRing();
                     EditorGUILayout.EndHorizontal();
+                    // 第一组水平排版结束
                 }
 
                 #endregion
@@ -447,7 +451,6 @@ public class AllenSuTools : EditorWindow
                     SelfCollider.Instance().IsClickHideBtn = true;
                     SelfCollider.Instance().CollBtn();
                 }
-
                 if (GUILayout.Button("2：移除所有碰撞盒"))
                 {
                     SelfCollider.Instance().IsClickRemoveBtn = true;
@@ -480,7 +483,6 @@ public class AllenSuTools : EditorWindow
                 GUILayout.TextField("高度：" + SelfCollider.Instance().ModelHeight);
                 EditorGUILayout.EndHorizontal();
                 // ------------ 第一组水平排版结束 ------------
-
                 GUILayout.Space(3);
 
                 // ------------ 第二组水平排版开始 ------------
@@ -1054,6 +1056,8 @@ public class AllenSuTools : EditorWindow
 
                 #endregion
                 break;
+            default:
+                throw new ArgumentOutOfRangeException();
         }
     }
 

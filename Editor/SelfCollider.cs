@@ -67,13 +67,11 @@ public class SelfCollider : CommonFun
     #region MenuItem
 
     // 1--复制粘贴当前碰撞盒
-    [UnityEditor.MenuItem("CONTEXT/BoxCollider/一键复制，粘贴当前碰撞盒")]
+    [MenuItem("CONTEXT/BoxCollider/一键复制，粘贴当前碰撞盒")]
     static void CopyAndPaste(MenuCommand command)
     {
-        // 复制
-        ComponentUtility.CopyComponent((BoxCollider) command.context);
-        // 粘贴
-        ComponentUtility.PasteComponentAsNew(Selection.activeGameObject);
+        ComponentUtility.CopyComponent((BoxCollider) command.context);    // 复制
+        ComponentUtility.PasteComponentAsNew(Selection.activeGameObject); // 粘贴
     }
 
     #endregion
@@ -185,7 +183,7 @@ public class SelfCollider : CommonFun
 
 
     /// <summary>
-    /// 环形碰撞盒GUI
+    /// 绘制环形碰撞盒GUI
     /// </summary>
     public void DrawRingBoxCollGui()
     {
@@ -243,7 +241,7 @@ public class SelfCollider : CommonFun
 
         // ------------ 一：开始垂直画盒子 ------------
         GUILayout.BeginVertical("box");
-        GUILayout.Label("快捷设置数据", SetGUIStyle(Color.red, 16));
+        GUILayout.Label("快捷设置数据", SetGuiStyle(Color.red, 16));
 
         // 第一组水平排版开始
         EditorGUILayout.BeginHorizontal();
@@ -256,7 +254,6 @@ public class SelfCollider : CommonFun
             Height         = 0.71f;
             ChoseQuickData = "轮架";
         }
-
         if (GUILayout.Button("二：小轮架"))
         {
             OuterRadius    = 0.15f; // 丰满数据：0.16f
@@ -264,7 +261,6 @@ public class SelfCollider : CommonFun
             Height         = 0.49f;
             ChoseQuickData = "小轮架";
         }
-
         EditorGUILayout.EndHorizontal();
         // 第一组水平排版结束
 
@@ -277,7 +273,6 @@ public class SelfCollider : CommonFun
             Height         = 0.15f;
             ChoseQuickData = "厚轮架格挡";
         }
-
         if (GUILayout.Button("四：薄轮架格挡"))
         {
             OuterRadius    = 0.27f; // 丰满数据：0.28f
@@ -285,7 +280,6 @@ public class SelfCollider : CommonFun
             Height         = 0.075f;
             ChoseQuickData = "薄轮架格挡";
         }
-
         EditorGUILayout.EndHorizontal();
         // 第二组水平排版结束
 
@@ -298,18 +292,15 @@ public class SelfCollider : CommonFun
             Height         = 0.79f; // 1.58
             ChoseQuickData = "小圆棍";
         }
-
         if (GUILayout.Button("六：圆洞"))
         {
             OuterRadius    = 0.35f;
             InnerRadius    = 0.31f;
             Height         = 0.79f;
             ChoseQuickData = "圆洞";
-
             // 其它匹配数据
             //一：0.29  0.23  二：0.37  0.23
         }
-
         EditorGUILayout.EndHorizontal();
         // 第三组水平排版结束
 
@@ -323,16 +314,16 @@ public class SelfCollider : CommonFun
             Height         = 0.31f;
             ChoseQuickData = "支撑凸起(圆)";
         }
-
         EditorGUILayout.EndHorizontal();
         // 第四组水平排版结束
 
         // 第N组水平排版开始
         EditorGUILayout.BeginHorizontal();
-        GUILayout.Label("提示：当前所选快捷数据是：", SetGUIStyle(Color.black, 14));
+        GUILayout.Label("提示：当前所选快捷数据是：", SetGuiStyle(Color.black, 14));
         GUILayout.TextField(ChoseQuickData);
         EditorGUILayout.EndHorizontal();
         // 第N组水平排版结束
+
         GUILayout.EndVertical();
         // ------------ 一：结束垂直画盒子 ------------
     }
@@ -388,22 +379,27 @@ public class SelfCollider : CommonFun
         // 根据是否开启高宽度自适应来决定环形碰撞盒的高度
         var ringHeight = IsMatchHeightToWidth ? (OuterRadius - InnerRadius) : Height;
 
-        // 这里调用创建环形碰撞盒的方法
+        // 调用创建环形碰撞盒
         var compoundCollider = CreateRing(PivotAxis, BoxCollNumGenerate, OuterRadius, InnerRadius, ringHeight, RotationOffset);
 
         // 移动对撞机，使其位置相对于选定的游戏对象
         // 修改前：compoundCollider.transform.position += selectedGameObject.transform.position;
         // 修改后：将生成位置设置为自定义的位置
         compoundCollider.transform.position += new Vector3(SelfPivotAxisX,SelfPivotAxisY,SelfPivotAxisZ);
+
         // 暂时将所选游戏对象的旋转设置为零，以避免对撞机的父级设置时对撞机被扭曲
         var originalRotation = selectedGameObject.transform.rotation;
         selectedGameObject.transform.rotation = Quaternion.identity;
+
         // 将碰撞盒的父对象设置为所选的游戏对象
         compoundCollider.transform.SetParent(selectedGameObject.transform);
+
         // 恢复选择游戏对象的原始旋转
         selectedGameObject.transform.rotation = originalRotation;
+
         // 将创建的对撞机设置为工作对撞机
         WorkingCollider = compoundCollider;
+
         // 订阅撤消事件，以便我们知道何时清除对工作对撞机的引用
         Undo.undoRedoPerformed += OnUndoRedo;
     }
@@ -624,7 +620,6 @@ public class SelfCollider : CommonFun
             WindowTips("所选物体不能为空");
             return;
         }
-
         if (CloneObjNum == 0)
         {
             WindowTips("克隆个数不能为0");
@@ -632,10 +627,10 @@ public class SelfCollider : CommonFun
         }
 
         // 记录被克隆物体的x,y,z
-        float selectObjX = selectObj.transform.localPosition.x;
-        float selectObjY = selectObj.transform.localPosition.y;
-        float selectObjZ = selectObj.transform.localPosition.z;
-        for (int i = 1; i <= CloneObjNum; i++)
+        var selectObjX = selectObj.transform.localPosition.x;
+        var selectObjY = selectObj.transform.localPosition.y;
+        var selectObjZ = selectObj.transform.localPosition.z;
+        for (var i = 1; i <= CloneObjNum; i++)
         {
             var cloneObj = Instantiate(selectObj);
             cloneObj.name = "Normal Box " + "(" + i + ")";
@@ -659,6 +654,8 @@ public class SelfCollider : CommonFun
                 case SelfPivotAxis.Z轴负方向:
                     cloneObj.transform.localPosition = new Vector3(selectObjX, selectObjY, selectObjZ - i * CloneSpace);
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
 
             cloneObj.transform.SetParent(selectObj.transform.parent);

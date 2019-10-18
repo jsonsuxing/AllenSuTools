@@ -5,7 +5,6 @@
 // 版 本：1.0
 // ========================================================
 
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -44,17 +43,17 @@ public class SelfModel : CommonFun
     public bool   IsWrongDirectory;                 // 模型是否分配错了文件夹
 
     // 碰撞盒改名，移动子物体到空物体
-    public bool IsClickHierarchy = false;  //默认
-    public string ShowTips = string.Empty;  //提示修改方式
+    public bool   IsClickHierarchy = false;        //默认
+    public string ShowTips         = string.Empty; //提示修改方式
 
     // 碰撞盒center
     public bool   IsCenterHierarchy = false;        //默认
-    public string ShowCenterTips         = string.Empty; //提示修改方式
+    public string ShowCenterTips    = string.Empty; //提示修改方式
 
     // 其它
-    public bool IsOpenGranuleToggle = false; // 颗粒种类按钮是否打开
-    public bool IsRememberGranuleType = false; //是否记住颗粒大类路径
-    public bool IsRememberOutModelPath = false;  // 是否记住外部模型路径
+    public bool IsOpenGranuleToggle    = false; // 颗粒种类按钮是否打开
+    public bool IsRememberGranuleType  = false; //是否记住颗粒大类路径
+    public bool IsRememberOutModelPath = false; // 是否记住外部模型路径
 
     #endregion
 
@@ -351,7 +350,6 @@ public class SelfModel : CommonFun
         int errorBuWeiNum           = 0; //关键部位上有碰撞盒的个数
         int count                   = 0; // 进度表示
         int wrongNum                = 0; //不规整颗粒名字
-
         for (var i = 0; i < Selection.gameObjects.Length; i++)
         {
             var       selectTransform = Selection.gameObjects[i].transform;
@@ -508,12 +506,10 @@ public class SelfModel : CommonFun
             }
 
             count++;
-            PrefabUtility.SaveAsPrefabAsset(newPrefab, IsClickHierarchy ? "Assets/Resources/Prefab/ModelPrefabs/" + Selection.gameObjects[i].name + ".prefab" : 
-                AssetDatabase.GetAssetPath(Selection.gameObjects[i]));
+            PrefabUtility.SaveAsPrefabAsset(newPrefab, IsClickHierarchy ? "Assets/Resources/Prefab/ModelPrefabs/" + Selection.gameObjects[i].name + ".prefab" : AssetDatabase.GetAssetPath(Selection.gameObjects[i]));
             // 操作方式为单点预设时执行删除操作，批量从Hierarchy删除会有模型未被改到的问题
             // if (IsClickHierarchy)
             DestroyImmediate(newPrefab);
-
             var floatProgress = (float) count / Selection.gameObjects.Length;
             EditorUtility.DisplayProgressBar("修改进度", count + "/" + Selection.gameObjects.Length + "完成修改", floatProgress);
         }
@@ -538,7 +534,6 @@ public class SelfModel : CommonFun
         }
 
         var count = 0;
-
         foreach (var granuleModel in Selection.gameObjects)
         {
             // 操作方式
@@ -560,7 +555,7 @@ public class SelfModel : CommonFun
                     var childTrans = newPrefab.transform.GetChild(i);
                     if (childTrans.name != "物件_1" && childTrans.localScale != Vector3.one)
                     {
-                       childTrans.localScale = Vector3.one;
+                        childTrans.localScale = Vector3.one;
                     }
                 }
 
@@ -569,16 +564,16 @@ public class SelfModel : CommonFun
                 if (newPrefab.GetComponent<GranuleModel>()) DestroyImmediate(newPrefab.GetComponent<GranuleModel>());
                 if (newPrefab.GetComponent<Rigidbody>()) DestroyImmediate(newPrefab.GetComponent<Rigidbody>());
             }
+
             count++;
-            PrefabUtility.SaveAsPrefabAsset(newPrefab, IsCenterHierarchy ? "Assets/Resources/Prefab/ModelPrefabs/" + granuleModel.name + ".prefab" :
-                AssetDatabase.GetAssetPath(granuleModel));
+            PrefabUtility.SaveAsPrefabAsset(newPrefab, IsCenterHierarchy ? "Assets/Resources/Prefab/ModelPrefabs/" + granuleModel.name + ".prefab" : AssetDatabase.GetAssetPath(granuleModel));
             // 操作方式为单点预设时执行删除操作，批量从Hierarchy删除会有模型未被改到的问题
             // if (IsCenterHierarchy)
             DestroyImmediate(newPrefab);
-            
-            var floatProgress = (float)count / Selection.gameObjects.Length;
+            var floatProgress = (float) count / Selection.gameObjects.Length;
             EditorUtility.DisplayProgressBar("修改进度", count + "/" + Selection.gameObjects.Length + "完成修改", floatProgress);
         }
+
         EditorUtility.ClearProgressBar();
     }
 
@@ -808,6 +803,7 @@ public class SelfModel : CommonFun
                     }
                 }
             }
+
             EditorGUILayout.EndHorizontal();
 
             // 第一组水平排版结束
@@ -835,15 +831,4 @@ public class SelfModel : CommonFun
     {
         return instance ?? (instance = new SelfModel());
     }
-
-
-    #region banner部分
-
-    // <!--banner start-->
-    // <div class="banner">
-    //
-    //     </div>
-    // <!--banner emd-->
-
-    #endregion
 }

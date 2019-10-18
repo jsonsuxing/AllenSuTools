@@ -19,7 +19,7 @@ public class CommonFun : MonoBehaviour
 {
     #region 通用字段声明
 
-    public static int    currentNum      = 1;            // 当前序号
+    public static int    CurrentIndexNum = 1;            // 当前序号
     public static string ShowGranuleType = string.Empty; // 颗粒所属类别
     public const  int    INDEXNUM        = -100;         // 暂时定右击鼠标面板的下标是100
 
@@ -56,11 +56,9 @@ public class CommonFun : MonoBehaviour
     /// <param name="tips">提示信息</param>
     public static void IfSelectionIsNull(string tips)
     {
-        if (Selection.activeGameObject == null)
-        {
-            WindowTips(tips);
-            return;
-        }
+        if (Selection.activeGameObject != null) return;
+        WindowTips(tips);
+        return;
     }
 
 
@@ -70,19 +68,17 @@ public class CommonFun : MonoBehaviour
     public void JudgeGranuleType()
     {
         //颗粒名字，种类为空
-        if (string.Equals(ShowGranuleType, string.Empty))
+        if (Equals(ShowGranuleType, string.Empty))
         {
             WindowTips("颗粒类别不能为空");
             return;
         }
 
         //输入的颗粒类别是否存在
-        if (!AllGranuleTypeGroup.Contains(ShowGranuleType))
-        {
-            WindowTips("不存在的颗粒类别:" + "《" + ShowGranuleType + "》" + ",请重新输入");
-            ShowGranuleType = string.Empty;
-            return;
-        }
+        if (AllGranuleTypeGroup.Contains(ShowGranuleType)) return;
+        WindowTips("不存在的颗粒类别:" + "《" + ShowGranuleType + "》" + ",请重新输入");
+        ShowGranuleType = string.Empty;
+        return;
     }
 
 
@@ -98,10 +94,10 @@ public class CommonFun : MonoBehaviour
         CreateNewFile(dirPath + txtFileName + ".txt");
 
         //初始化文件流
-        using (FileStream fs = new FileStream(dirPath + txtFileName + ".txt", FileMode.Append))
+        using (var fs = new FileStream(dirPath + txtFileName + ".txt", FileMode.Append))
         {
             //将字符串转换为字节数组
-            byte[] arr = Encoding.UTF8.GetBytes(writeContent + "\r\n");
+            var arr = Encoding.UTF8.GetBytes(writeContent + "\r\n");
             //将字节数组写入文件流
             fs.Write(arr, 0, arr.Length);
             fs.Close();
@@ -115,10 +111,7 @@ public class CommonFun : MonoBehaviour
     /// <param name="dirPath">文件夹路径</param>
     public void CreateNewDirectory(string dirPath)
     {
-        if (!Directory.Exists(dirPath))
-        {
-            Directory.CreateDirectory(dirPath);
-        }
+        if (!Directory.Exists(dirPath)) Directory.CreateDirectory(dirPath);
     }
 
 
@@ -128,10 +121,7 @@ public class CommonFun : MonoBehaviour
     /// <param name="filePath">文件路径</param>
     public void CreateNewFile(string filePath)
     {
-        if (!File.Exists(filePath))
-        {
-            File.Create(filePath).Dispose();
-        }
+        if (!File.Exists(filePath)) File.Create(filePath).Dispose();
     }
 
 
@@ -141,9 +131,9 @@ public class CommonFun : MonoBehaviour
     /// <param name="color">字体颜色</param>
     /// <param name="fontSize">字体大小</param>
     /// <returns></returns>
-    public GUIStyle SetGUIStyle(Color color, int fontSize)
+    public GUIStyle SetGuiStyle(Color color, int fontSize)
     {
-        GUIStyle style = new GUIStyle
+        var style = new GUIStyle
         {
             normal =
             {
