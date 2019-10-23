@@ -986,49 +986,58 @@ public class AllenSuTools : EditorWindow
 
                 #region 2:计算 Length 的值
 
-                GUILayout.Label("二：计算 Length 的值", TitleStyle());
+                GUILayout.Label("二：计算长度的值", TitleStyle());
 
                 // ------------ 一：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
 
-                // 第一组垂直排版开始
-                EditorGUILayout.BeginVertical();
                 GUILayout.Label("1、获取当前哪个轴的坐标值", SetGuiStyle(Color.black, 14));
                 SelfTools.Instance().SetAxis = GUILayout.TextField(SelfTools.Instance().SetAxis);
 
-                // 第二组水平排版开始
+                // 第一组水平排版开始
                 EditorGUILayout.BeginHorizontal();
                 if (GUILayout.Button("x")) SelfTools.Instance().SetAxis = "x";
                 else if (GUILayout.Button("y")) SelfTools.Instance().SetAxis = "y";
                 else if (GUILayout.Button("z")) SelfTools.Instance().SetAxis = "z";
                 EditorGUILayout.EndHorizontal();
-                // 第二组水平排版结束
-
-                GUILayout.Label("2、第一个坐标值", SetGuiStyle(Color.black, 14));
-                GUILayout.TextField(SelfTools.Instance().FirstValue.ToString());
-                GUILayout.Label("3、Length的值等于", SetGuiStyle(Color.black, 14));
-                GUILayout.TextField(SelfTools.Instance().Length.ToString());
-
-                // 第一组水平排版开始
-                EditorGUILayout.BeginHorizontal();
-                if (GUILayout.Button("1：点击两次获取 Length 的值")) SelfTools.Instance().GetLength();
-                if (GUILayout.Button("2：清空按钮"))
-                {
-                    SelfTools.Instance().ClearValue();
-                    SelfTools.Instance().Length = 0; // 单独重置长度，写到ClearValue函数里，在编辑器里看不到长度，因为已经 被重置
-                }
-                EditorGUILayout.EndHorizontal();
                 // 第一组水平排版结束
 
-                GUILayout.Space(2);
-
-               
-
-                // 第一组垂直排版结束
+                // 第二组垂直排版开始
+                EditorGUILayout.BeginVertical();
+                GUILayout.Label("2、第一个坐标值是", SetGuiStyle(Color.black, 14));
+                GUILayout.TextField(SelfTools.Instance().FirstValue.ToString());
                 EditorGUILayout.EndVertical();
+                // 第二组垂直排版结束
+
+                // 第三组垂直排版开始
+                EditorGUILayout.BeginVertical();
+                GUILayout.Label("3、长度的值等于", SetGuiStyle(Color.black, 14));
+                GUILayout.TextField(SelfTools.Instance().Length.ToString());
+                EditorGUILayout.EndVertical();
+                // 第三组垂直排版结束
+
+                // 第四组垂直排版开始
+                EditorGUILayout.BeginVertical();
+                GUILayout.Label("4、中点的值等于", SetGuiStyle(Color.black, 14));
+                GUILayout.TextField(SelfTools.Instance().MidPoint.ToString());
+                EditorGUILayout.EndVertical();
+                // 第四组垂直排版结束
 
                 // ------------ 一：结束垂直画盒子 ------------
                 GUILayout.EndVertical();
+
+                // 第三组水平排版开始
+                EditorGUILayout.BeginHorizontal();
+                if (GUILayout.Button("1：点击两次求长度及中点的值")) SelfTools.Instance().GetLength();
+                if (GUILayout.Button("2：清空按钮"))
+                {
+                    SelfTools.Instance().ClearValue();
+                    // 单独重置长度和中点值，如果直接写到ClearValue函数里，在编辑器里回看不到长度，因为已经被重置
+                    SelfTools.Instance().Length = 0; 
+                    SelfTools.Instance().MidPoint = 0;
+                }
+                EditorGUILayout.EndHorizontal();
+                // 第三组水平排版结束
 
                 #endregion
                 GUILayout.Space(2);

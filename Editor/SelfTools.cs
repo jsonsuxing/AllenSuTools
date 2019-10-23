@@ -25,6 +25,7 @@ public class SelfTools : CommonFun
     public double FirstValue;             // 当前坐标(第一个坐标)
     public double SecondValue;            // 第二个坐标
     public double Length;                 // length的值(两坐标的差值)
+    public double MidPoint;               // 同轴时，两个坐标x或y或z的中点值
     public string SetAxis = "y"; // 为轴向赋值，默认为y轴
 
     // 批量修改“-”为“&”
@@ -83,6 +84,8 @@ public class SelfTools : CommonFun
 
         if (ClickTime == 1)
         {
+            // 多次点击时清空之前获取到的长度以及中点值
+            Length = MidPoint = 0;
             switch (axle)
             {
                 case "x":
@@ -128,7 +131,11 @@ public class SelfTools : CommonFun
                 Length = Math.Round(Math.Abs(FirstValue) + Math.Abs(SecondValue), 2);
             }
 
+            // 关键部位的长度
             buWei.length = (float) Length;
+            // 两点的中点值
+            MidPoint = Math.Round((FirstValue + SecondValue)/2 , 4);
+            // if (MidPoint < 0.0000001f) MidPoint = 0;
 
             // 这里不管是否下面两项会用到，直接传值
             SelfCollider.Instance().Height= (float)Length - 0.05f; // 环形碰撞盒的高度要比实际值小
