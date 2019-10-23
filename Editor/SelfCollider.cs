@@ -106,7 +106,7 @@ public class SelfCollider : CommonFun
 
     // 自定义倾斜环形碰撞盒
     // 旋转
-    public int   CustomBoxCollNum = 0; // 生成多少个碰撞盒，默认为0个
+    public int   CustomBoxCollNum = 8; // 生成多少个碰撞盒，默认为8个
     public float SelfPivotAxisX   = 0; // 自定义轴心x，y，z
     public float SelfPivotAxisY   = 0;
     public float SelfPivotAxisZ   = 0;
@@ -266,13 +266,14 @@ public class SelfCollider : CommonFun
             Height         = 0.71f;
             ChoseQuickData = "轮架";
         }
-        if (GUILayout.Button("二：小轮架"))
+        if (GUILayout.Button("二：小圆棍"))
         {
-            OuterRadius    = 0.15f; // 丰满数据：0.16f
-            InnerRadius    = 0.11f;
-            Height         = 0.49f;
-            ChoseQuickData = "小轮架";
+            OuterRadius    = 0.14f;
+            InnerRadius    = 0.01f;
+            Height         = 0.79f; // 1.58
+            ChoseQuickData = "小圆棍";
         }
+
         EditorGUILayout.EndHorizontal();
         // 第一组水平排版结束
 
@@ -297,12 +298,12 @@ public class SelfCollider : CommonFun
 
         // 第三组水平排版开始
         EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("五：小圆棍"))
+        if (GUILayout.Button("五：插槽"))
         {
-            OuterRadius    = 0.14f;
-            InnerRadius    = 0.01f;
-            Height         = 0.79f; // 1.58
-            ChoseQuickData = "小圆棍";
+            OuterRadius    = 0.3f;
+            InnerRadius    = 0.245f;
+            Height         = 0.79f;
+            ChoseQuickData = "插槽";
         }
         if (GUILayout.Button("六：圆洞"))
         {
@@ -317,16 +318,16 @@ public class SelfCollider : CommonFun
         // 第三组水平排版结束
 
         // 第四组水平排版开始
-        EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("七：支撑凸起(圆)"))
-        {
-            // 如果是给凸起加碰撞盒，则是 0.22 0.15 0.165
-            OuterRadius    = 0.295f;
-            InnerRadius    = 0.16f;
-            Height         = 0.31f;
-            ChoseQuickData = "支撑凸起(圆)";
-        }
-        EditorGUILayout.EndHorizontal();
+        // EditorGUILayout.BeginHorizontal();
+        // if (GUILayout.Button("七：支撑凸起(圆)"))
+        // {
+        //     // 如果是给凸起加碰撞盒，则是 0.22 0.15 0.165
+        //     OuterRadius    = 0.295f;
+        //     InnerRadius    = 0.16f;
+        //     Height         = 0.31f;
+        //     ChoseQuickData = "支撑凸起(圆)";
+        // }
+        // EditorGUILayout.EndHorizontal();
         // 第四组水平排版结束
 
         // 第N组水平排版开始
