@@ -335,7 +335,7 @@ public class AllenSuTools : EditorWindow
                     if (SelfCollider.Instance().EditorStatus != EditorStatus.准备) GUI.enabled = false;
                     if (GUILayout.Button("1：点击颗粒预设，开始克隆")) SelfCollider.Instance().CreateRingBoxColl();
                     GUI.enabled = true;
-                    if (GUILayout.Button("2：整理、删除环形碰撞盒")) SelfCollider.Instance().DeleteAndArrangeRing();
+                    if (GUILayout.Button("2：整理、拆分碰撞盒")) SelfCollider.Instance().DeleteAndArrangeRing();
                     EditorGUILayout.EndHorizontal();
                     // 第一组水平排版结束
                 }

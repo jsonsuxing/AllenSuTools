@@ -131,7 +131,7 @@ public class SelfTools : CommonFun
             buWei.length = (float) Length;
 
             // 这里不管是否下面两项会用到，直接传值
-            SelfCollider.Instance().Height= (float)Length; // 环形碰撞盒的高度
+            SelfCollider.Instance().Height= (float)Length - 0.05f; // 环形碰撞盒的高度要比实际值小
             SelfCollider.Instance().CloneSpace = (float)Length; // 自定义平移碰撞盒的间隔
         }
 

@@ -526,26 +526,21 @@ public class SelfCollider : CommonFun
     }
 
     /// <summary>
-    /// 整理、删除环形碰撞盒
+    /// 整理、拆分碰撞盒
     /// </summary>
     public void DeleteAndArrangeRing()
     {
         var selectedGameObjects = Selection.gameObjects;
         if (selectedGameObjects.Length == 0)
         {
-            WindowTips("至少选中一个环形碰撞盒");
-            return;
-        }
-        if (!selectedGameObjects[0].name.Contains("环形碰撞盒"))
-        {
-            WindowTips("选中的不是环形碰撞盒！");
+            WindowTips("所选物体没有子物体，不能拆分");
             return;
         }
 
         foreach (var ringBox in selectedGameObjects)
         {
             var childLength = ringBox.transform.childCount;
-            // 存储每个环形碰撞盒下所有子物体的数组
+            // 存储每个父物体下所有子物体的数组
             var ringBoxObjArray = new GameObject[childLength];
 
             // 为每个数组赋值obj对象
@@ -558,7 +553,7 @@ public class SelfCollider : CommonFun
             {
                 bevelBox.transform.SetParent(ringBox.transform.parent);
             }
-            // 删除"环形碰撞盒"
+            // 删除每个父物体
             DestroyImmediate(ringBox);
         }
     }
