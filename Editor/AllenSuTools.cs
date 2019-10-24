@@ -375,18 +375,31 @@ public class AllenSuTools : EditorWindow
                 // 第二组水平排版结束
                 GUILayout.Space(5);
 
+                GUILayout.Label("2:快捷设置克隆个数", SetGuiStyle(Color.black, 14));
+                // 第四组水平排版开始
+                EditorGUILayout.BeginHorizontal();
+                if (GUILayout.Button("4")) { SelfCollider.Instance().CustomBoxCollNum= 4; }
+                if (GUILayout.Button("8")) { SelfCollider.Instance().CustomBoxCollNum = 8; }
+                if (GUILayout.Button("12")) { SelfCollider.Instance().CustomBoxCollNum = 12; }
+                if (GUILayout.Button("16")) { SelfCollider.Instance().CustomBoxCollNum = 16; }
+                if (GUILayout.Button("x2")) { SelfCollider.Instance().CustomBoxCollNum = SelfCollider.Instance().CustomBoxCollNum*2; }
+                EditorGUILayout.EndHorizontal();
+                // 第四组水平排版结束
+                GUILayout.Space(3);
+
                 // 第三组水平排版开始
                 EditorGUILayout.BeginHorizontal();
-                GUILayout.Label("2:选中已做好物体，设置克隆个数：", SetGuiStyle(Color.black, 14));
+                GUILayout.Label("3:选中已做好物体，设置克隆个数：", SetGuiStyle(Color.black, 14));
                 SelfCollider.Instance().CustomBoxCollNum = int.Parse(GUILayout.TextField(SelfCollider.Instance().CustomBoxCollNum.ToString()));
                 EditorGUILayout.EndHorizontal();
                 // 第三组水平排版结束
                 GUILayout.Space(3);
+               
+                GUILayout.EndVertical();
+                // ------------ 一：结束垂直画盒子 ------------
 
                 if (GUILayout.Button("开始克隆")) SelfCollider.Instance().RotateBoxCollider();
 
-                GUILayout.EndVertical();
-                // ------------ 一：结束垂直画盒子 ------------
 
                 #endregion
                 GUILayout.Space(3);

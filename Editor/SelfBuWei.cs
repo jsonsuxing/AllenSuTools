@@ -75,6 +75,8 @@ public class SelfBuWei : CommonFun
     public string ShowClickAxis = string.Empty; //提示哪个坐标轴
     public string ShowValueNum  = string.Empty; //提示+ - 0.4
 
+    public static bool ISBevelBox = false;             // 是否是倾斜盒子，默认不是
+
     #endregion
 
     #region 关键部位字段声明
@@ -271,6 +273,25 @@ public class SelfBuWei : CommonFun
 
     #endregion
 
+    #region 更改碰撞盒名称
+
+    [MenuItem("GameObject/2、更改为 Bevel Box名字", false, INDEXNUM)]
+    public static void BevelBox()
+    {
+        ISBevelBox = true;
+        ChangeBoxName();
+    }
+
+
+    [MenuItem("GameObject/3、更改为 Normal Box名字", false, INDEXNUM)]
+    public static void NormalBox()
+    {
+        ISBevelBox = false;
+        ChangeBoxName();
+    }
+
+    #endregion
+
     /// <summary>
     /// 批量更改关键部位名字，并为 GuanJianBuWei 脚本赋值
     /// </summary>
@@ -294,6 +315,20 @@ public class SelfBuWei : CommonFun
             buWei.director = director;      //方向
             buWei.length   = length;        //长度
             go.transform.SetAsLastSibling(); //然后放到最后面(要不还要重新拖到后面)
+            i++;
+        }
+    }
+
+    /// <summary>
+    /// 更改碰撞盒名称
+    /// </summary>
+    public static void ChangeBoxName()
+    {
+        var i = 1;
+        foreach (var selectObj in Selection.gameObjects)
+        {
+            selectObj.name = ISBevelBox ? "Bevel Box " + "(" + i + ")": "Normal Box " + "(" + i + ")";
+            selectObj.transform.SetAsLastSibling();
             i++;
         }
     }
