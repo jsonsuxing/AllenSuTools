@@ -94,15 +94,15 @@ public class SelfCollider : CommonFun
     public PivotAxis    PivotAxis          = PivotAxis.Y;        // 碰撞盒以哪个轴生成，默认以Y轴
     public EditorStatus EditorStatus       = EditorStatus.无效的选择; // 默认编辑状态
     public int          BoxCollNumGenerate = 8;                  // 生成多少个碰撞盒，默认为8个
-    public float        OuterRadius        = 0.3f;               // 碰撞盒外半径
-    public float        InnerRadius        = 0.2f;               // 碰撞盒内半径
-    public float        Height             = 0.5f;               // 碰撞盒高度
+    public float        OuterRadius        = 0.14f;              // 碰撞盒外半径
+    public float        InnerRadius        = 0.01f;              // 碰撞盒内半径
+    public float        Height             = 0.79f;              // 碰撞盒高度
     public float        RotationOffset     = 0f;                 // 旋转角度
     public float        DiffValue          = 0.004f;             // 自动生成的碰撞盒与实际模型尺寸的差值(尺寸完全一致不会吸合)
     public bool         IsLockInnerRadius;                       // 是否禁用内半径，默认关闭
     public bool         IsMatchHeightToWidth;                    // 是否开启高宽度匹配，默认开启
     public GameObject   WorkingCollider = null;                  // 接收生成的环形碰撞盒
-    public string       ChoseQuickData  = string.Empty;          // 当前所选的快捷数据
+    public string       ChoseQuickData  = "小圆棍";              // 当前所选的快捷数据
 
     // 自定义倾斜环形碰撞盒
     // 旋转

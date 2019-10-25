@@ -380,6 +380,7 @@ public class AllenSuTools : EditorWindow
                 EditorGUILayout.BeginHorizontal();
                 if (GUILayout.Button("4")) { SelfCollider.Instance().CustomBoxCollNum= 4; }
                 if (GUILayout.Button("8")) { SelfCollider.Instance().CustomBoxCollNum = 8; }
+                if (GUILayout.Button("10")) { SelfCollider.Instance().CustomBoxCollNum = 10; }
                 if (GUILayout.Button("12")) { SelfCollider.Instance().CustomBoxCollNum = 12; }
                 if (GUILayout.Button("16")) { SelfCollider.Instance().CustomBoxCollNum = 16; }
                 if (GUILayout.Button("x2")) { SelfCollider.Instance().CustomBoxCollNum = SelfCollider.Instance().CustomBoxCollNum*2; }
