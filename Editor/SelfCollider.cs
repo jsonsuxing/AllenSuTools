@@ -112,8 +112,7 @@ public class SelfCollider : CommonFun
     public float SelfPivotAxisZ   = 0;
     // 平移
     public SelfPivotAxis SelfPivotAxis = SelfPivotAxis.X轴正方向; // 选择轴向
-    public int           CloneObjNum   = 0;                   // 克隆的个数
-    public float         CloneSpace    = 0;                   // 克隆的间隔
+    public float         CloneSpace    = 0.8f;                   // 克隆的间隔
 
     // 显示模型的长宽高
     public double ModelLength = 0; // 模型长度
@@ -628,7 +627,7 @@ public class SelfCollider : CommonFun
             WindowTips("所选物体不能为空");
             return;
         }
-        if (CloneObjNum == 0)
+        if (CustomBoxCollNum == 0)
         {
             WindowTips("克隆个数不能为0");
             return;
@@ -638,7 +637,7 @@ public class SelfCollider : CommonFun
         var selectObjX = selectObj.transform.localPosition.x;
         var selectObjY = selectObj.transform.localPosition.y;
         var selectObjZ = selectObj.transform.localPosition.z;
-        for (var i = 1; i <= CloneObjNum; i++)
+        for (var i = 1; i <= CustomBoxCollNum; i++)
         {
             var cloneObj = Instantiate(selectObj);
             cloneObj.name = "Normal Box " + "(" + i + ")";

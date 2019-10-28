@@ -422,7 +422,7 @@ public class AllenSuTools : EditorWindow
                 // 第二组水平排版开始
                 EditorGUILayout.BeginHorizontal();
                 GUILayout.Label("设置克隆个数：", SetGuiStyle(Color.black, 14));
-                SelfCollider.Instance().CloneObjNum = int.Parse(EditorGUILayout.TextField(SelfCollider.Instance().CloneObjNum.ToString()));
+                SelfCollider.Instance().CustomBoxCollNum = int.Parse(EditorGUILayout.TextField(SelfCollider.Instance().CustomBoxCollNum.ToString()));
                 EditorGUILayout.EndHorizontal();
                 // 第二组水平排版结束
                 GUILayout.Space(3);
