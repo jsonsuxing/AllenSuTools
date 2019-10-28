@@ -29,7 +29,7 @@ public class AllenSuTools : EditorWindow
     #region 字段声明
 
     // 编辑器组
-    private readonly string[] _topInfoType = { "关键部位", "克隆碰撞盒", "碰撞盒信息","颗粒相关", "小功能" };
+    private readonly string[] _topInfoType = { "关键部位", "克隆碰撞盒", "碰撞盒信息","颗粒相关", "小功能" ,"ToolPro"};
     private          int      whichOneSelect; // 选中哪一个
 
     #endregion
@@ -212,7 +212,7 @@ public class AllenSuTools : EditorWindow
                 // 第一组水平排版开始
                 EditorGUILayout.BeginHorizontal();
                 if (GUILayout.Button("1：生成默认的关键部位")) SelfBuWei.Instance().CreateDefaultBuWei();
-                if (GUILayout.Button("2：生成空物体 Box (1)")) SelfBuWei.Instance().CreateEmptyBox();
+                if (GUILayout.Button("2：生成 Normal Box (1)")) SelfBuWei.Instance().CreateEmptyBox();
                 EditorGUILayout.EndHorizontal();
                 // 第一组水平排版结束
 
@@ -643,7 +643,7 @@ public class AllenSuTools : EditorWindow
 
                 #region 2：位置
 
-                GUILayout.Label("B：位置", SetGuiStyle(Color.red, 16));
+                GUILayout.Label("B：位置(暂未实现)", SetGuiStyle(Color.red, 16));
                 // ------------ 一：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
 
@@ -1161,6 +1161,46 @@ public class AllenSuTools : EditorWindow
 
                 #endregion
                 GUILayout.Space(2);
+
+                #endregion
+                break;
+            case 5:
+                #region ToolPro
+
+
+                GUILayout.Label("一：修改完旧模型的后续操作(暂无效)", TitleStyle());
+
+                #region 一：修改完旧模型的后续操作
+
+                // ------------ 一：开始垂直画盒子 ------------
+                GUILayout.BeginVertical("box");
+
+                #region 一：复制名称到指定 txt 文件
+
+                GUILayout.Label("1：复制名称到指定 txt 文件", SetGuiStyle(Color.red, 14));
+
+                // ------------ 二：开始垂直画盒子 ------------
+                GUILayout.BeginVertical("box");
+
+                // 第一组垂直排版开始
+                EditorGUILayout.BeginVertical();
+                if (GUILayout.Button("点击颗粒，复制名称")) ToolPro.Instance().CopyNameToTxt();
+                EditorGUILayout.EndVertical();
+                // 第一组垂直排版结束
+
+                GUILayout.EndVertical();
+                // ------------ 二：结束垂直画盒子 ------------
+
+                GUILayout.Space(3);
+
+                #endregion
+
+
+                GUILayout.EndVertical();
+                // ------------ 一：结束垂直画盒子 ------------
+
+                #endregion
+                GUILayout.Space(3);
 
                 #endregion
                 break;
