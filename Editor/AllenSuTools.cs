@@ -29,7 +29,7 @@ public class AllenSuTools : EditorWindow
     #region 字段声明
 
     // 编辑器组
-    private readonly string[] _topInfoType = { "关键部位", "克隆碰撞盒", "碰撞盒信息","颗粒相关", "小功能" ,"ToolPro"};
+    private readonly string[] _topInfoType = { "关键部位", "克隆碰撞盒", "碰撞盒信息", "模型相关", "小功能" ,"ToolPro"};
     private          int      whichOneSelect; // 选中哪一个
 
     #endregion
