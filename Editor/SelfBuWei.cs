@@ -131,15 +131,15 @@ public class SelfBuWei : CommonFun
 
     //0--凹槽
     [MenuItem("GameObject/0、更改关键部位名字/AoCao", false, INDEXNUM + 1)]
-    public static void Fun_AoCao() { ChangeKeyName(AoCao, GuanJianType.Grid, 0, Director.Up, 0); }
+    public static void Fun_AoCao() { ChangeKeyName(AoCao, GuanJianType.Grid, 0, 0); }
 
     //1--凸起
     [MenuItem("GameObject/0、更改关键部位名字/TuQi", false, INDEXNUM + 2)]
-    public static void Fun_TuQi() { ChangeKeyName(TuQi, GuanJianType.Grid, 1, Director.Up, 0); }
+    public static void Fun_TuQi() { ChangeKeyName(TuQi, GuanJianType.Grid, 1, 0); }
 
     //2--不能和 AoCao 重名
     [MenuItem("GameObject/0、更改关键部位名字/SonAoCao", false, INDEXNUM + 3)]
-    public static void Fun_SonTuQi() { ChangeKeyName(SonAoCao, GuanJianType.Grid, 0, Director.Up, 0); }
+    public static void Fun_SonTuQi() { ChangeKeyName(SonAoCao, GuanJianType.Grid, 0, 0); }
 
     #endregion
 
@@ -150,43 +150,43 @@ public class SelfBuWei : CommonFun
 
     //0--不穿透槽
     [MenuItem("GameObject/0、更改关键部位名字/BuChuanTouCao", false, INDEXNUM + 5)]
-    public static void Fun_BuChuanTouCao() { ChangeKeyName(BuChuanTouCao, GuanJianType.Axle, 0, Director.Up, 0.17f); }
+    public static void Fun_BuChuanTouCao() { ChangeKeyName(BuChuanTouCao, GuanJianType.Axle, 0, 0.17f); }
 
     //1--不穿透插
     [MenuItem("GameObject/0、更改关键部位名字/BuChuanTouCha", false, INDEXNUM + 6)]
-    public static void Fun_BuChuanTouCha() { ChangeKeyName(BuChuanTouCha, GuanJianType.Axle, 1, Director.Up, 0.17f); }
+    public static void Fun_BuChuanTouCha() { ChangeKeyName(BuChuanTouCha, GuanJianType.Axle, 1, 0.17f); }
   
     //2--小插槽
     [MenuItem("GameObject/0、更改关键部位名字/XiaoChaCao", false, INDEXNUM + 7)]
-    public static void Fun_XiaoChaCao() { ChangeKeyName(XiaoChaCao, GuanJianType.Axle, 2, Director.Up, 0.17f); }
+    public static void Fun_XiaoChaCao() { ChangeKeyName(XiaoChaCao, GuanJianType.Axle, 2, 0.17f); }
 
     //3--小插销
     [MenuItem("GameObject/0、更改关键部位名字/XiaoChaXiao", false, INDEXNUM + 8)]
-    public static void Fun_XiaoChaXiao() { ChangeKeyName(XiaoChaXiao, GuanJianType.Axle, 3, Director.Up, 0.17f); }
+    public static void Fun_XiaoChaXiao() { ChangeKeyName(XiaoChaXiao, GuanJianType.Axle, 3, 0.17f); }
 
     //4--插槽
     [MenuItem("GameObject/0、更改关键部位名字/ChaCao", false, INDEXNUM + 9)]
-    public static void Fun_ChaCao() { ChangeKeyName(ChaCao, GuanJianType.Axle, 4, Director.Up, 0.17f); }
+    public static void Fun_ChaCao() { ChangeKeyName(ChaCao, GuanJianType.Axle, 4, 0.17f); }
 
     //5--插销
     [MenuItem("GameObject/0、更改关键部位名字/ChaXiao", false, INDEXNUM + 10)]
-    public static void Fun_ChaXiao() { ChangeKeyName(ChaXiao, GuanJianType.Axle, 5, Director.Up, 0.17f); }
+    public static void Fun_ChaXiao() { ChangeKeyName(ChaXiao, GuanJianType.Axle, 5, 0.17f); }
 
     //6--插槽十字
     [MenuItem("GameObject/0、更改关键部位名字/ChaCaoShiZi", false, INDEXNUM + 11)]
-    public static void Fun_ChaCaoShiZi() { ChangeKeyName(ChaCaoShiZi, GuanJianType.Axle, 6, Director.Up, 0); }
+    public static void Fun_ChaCaoShiZi() { ChangeKeyName(ChaCaoShiZi, GuanJianType.Axle, 6, 0); }
 
     //7-插销十字
     [MenuItem("GameObject/0、更改关键部位名字/ChaXiaoShiZi", false, INDEXNUM + 12)]
-    public static void Fun_ChaXiaoShiZi() { ChangeKeyName(ChaXiaoShiZi, GuanJianType.Axle, 7, Director.Up, 0); }
+    public static void Fun_ChaXiaoShiZi() { ChangeKeyName(ChaXiaoShiZi, GuanJianType.Axle, 7, 0); }
   
     //特殊-皮轮外
     [MenuItem("GameObject/0、更改关键部位名字/PiLunWai", false, INDEXNUM + 15)]
-    public static void Fun_PiLunWai() { ChangeKeyName(PiLunWai, GuanJianType.Axle, -2, Director.Up, 0); }
+    public static void Fun_PiLunWai() { ChangeKeyName(PiLunWai, GuanJianType.Axle, -2, 0); }
 
     //特殊-皮轮内
     [MenuItem("GameObject/0、更改关键部位名字/PiLunNei", false, INDEXNUM + 16)]
-    public static void Fun_PiLunNei() { ChangeKeyName(PiLunNei, GuanJianType.Axle, -3, Director.Up, 0); }
+    public static void Fun_PiLunNei() { ChangeKeyName(PiLunNei, GuanJianType.Axle, -3, 0); }
 
     #endregion
 
@@ -197,19 +197,19 @@ public class SelfBuWei : CommonFun
 
     //0--插槽门窗
     [MenuItem("GameObject/0、更改关键部位名字/ChaCaoMenChuang", false, INDEXNUM + 18)]
-    public static void Fun_ChaCaoMenChuang() { ChangeKeyName(ChaCaoMenChuang, GuanJianType.Hinge, 0, Director.Up, 0); }
+    public static void Fun_ChaCaoMenChuang() { ChangeKeyName(ChaCaoMenChuang, GuanJianType.Hinge, 0, 0); }
   
     //1--插销门窗
     [MenuItem("GameObject/0、更改关键部位名字/ChaXiaoMenChuang", false, INDEXNUM + 19)]
-    public static void Fun_ChaXiaoMenChuang() { ChangeKeyName(ChaXiaoMenChuang, GuanJianType.Hinge, 1, Director.Up, 0); }
+    public static void Fun_ChaXiaoMenChuang() { ChangeKeyName(ChaXiaoMenChuang, GuanJianType.Hinge, 1, 0); }
   
     //2--转牙插槽
     [MenuItem("GameObject/0、更改关键部位名字/ZhuanYaChaCao", false, INDEXNUM + 20)]
-    public static void Fun_ZhuanYaChaCao() { ChangeKeyName(ZhuanYaChaCao, GuanJianType.Hinge, 2, Director.Up, 0); }
+    public static void Fun_ZhuanYaChaCao() { ChangeKeyName(ZhuanYaChaCao, GuanJianType.Hinge, 2, 0); }
 
     //3--转牙插销
     [MenuItem("GameObject/0、更改关键部位名字/ZhuanYaChaxiao", false, INDEXNUM + 21)]
-    public static void Fun_ZhuanYaChaxiao() { ChangeKeyName(ZhuanYaChaxiao, GuanJianType.Hinge, 3, Director.Up, 0); }
+    public static void Fun_ZhuanYaChaxiao() { ChangeKeyName(ZhuanYaChaxiao, GuanJianType.Hinge, 3, 0); }
 
     #endregion
 
@@ -220,11 +220,11 @@ public class SelfBuWei : CommonFun
 
     //0--圆球洞
     [MenuItem("GameObject/0、更改关键部位名字/YuanQiuDong", false, INDEXNUM + 23)]
-    public static void Fun_YuanQiuDong() { ChangeKeyName(YuanQiuDong, GuanJianType.Sphere, 0, Director.Up, 0); }
+    public static void Fun_YuanQiuDong() { ChangeKeyName(YuanQiuDong, GuanJianType.Sphere, 0, 0); }
 
     //1--圆球珠
     [MenuItem("GameObject/0、更改关键部位名字/YuanQiuZhu", false, INDEXNUM + 24)]
-    public static void Fun_YuanQiuZhu() { ChangeKeyName(YuanQiuZhu, GuanJianType.Sphere, 1, Director.Up, 0); }
+    public static void Fun_YuanQiuZhu() { ChangeKeyName(YuanQiuZhu, GuanJianType.Sphere, 1, 0); }
 
     #endregion
 
@@ -235,11 +235,11 @@ public class SelfBuWei : CommonFun
 
     //0--工具箱盖
     [MenuItem("GameObject/0、更改关键部位名字/GongJuxiangGai", false, INDEXNUM + 26)]
-    public static void Fun_GongJuxiangGai() { ChangeKeyName(GongJuxiangGai, GuanJianType.Fixure, 0, Director.Up, 0); }
+    public static void Fun_GongJuxiangGai() { ChangeKeyName(GongJuxiangGai, GuanJianType.Fixure, 0, 0); }
     
     //1--工具箱底
     [MenuItem("GameObject/0、更改关键部位名字/GongJuxiangDi", false, INDEXNUM + 27)]
-    public static void Fun_GongJuxiangDi() { ChangeKeyName(GongJuxiangDi, GuanJianType.Fixure, 1, Director.Up, 0); }
+    public static void Fun_GongJuxiangDi() { ChangeKeyName(GongJuxiangDi, GuanJianType.Fixure, 1, 0); }
 
     #endregion
 
@@ -250,11 +250,11 @@ public class SelfBuWei : CommonFun
 
     //0--滑动槽
     [MenuItem("GameObject/0、更改关键部位名字/HuaDongCao", false, INDEXNUM + 29)]
-    public static void Fun_HuaDongCao() { ChangeKeyName(HuaDongCao, GuanJianType.Slide, 0, Director.Up, 0); }
+    public static void Fun_HuaDongCao() { ChangeKeyName(HuaDongCao, GuanJianType.Slide, 0, 0); }
    
     //1--滑动销
     [MenuItem("GameObject/0、更改关键部位名字/HuaDongXiao", false, INDEXNUM + 30)]
-    public static void Fun_HuaDongXiao() { ChangeKeyName(HuaDongXiao, GuanJianType.Slide, 1, Director.Up, 0); }
+    public static void Fun_HuaDongXiao() { ChangeKeyName(HuaDongXiao, GuanJianType.Slide, 1, 0); }
 
     #endregion
 
@@ -265,11 +265,11 @@ public class SelfBuWei : CommonFun
 
     //0--管道槽
     [MenuItem("GameObject/0、更改关键部位名字/GuanDaoCao", false, INDEXNUM + 32)]
-    public static void Fun_GuanDaoCao() { ChangeKeyName(GuanDaoCao, GuanJianType.Grid, 0, Director.Up, 0); }
+    public static void Fun_GuanDaoCao() { ChangeKeyName(GuanDaoCao, GuanJianType.Grid, 0, 0); }
 
     //1--管道销
     [MenuItem("GameObject/0、更改关键部位名字/GuanDaoXiao", false, INDEXNUM + 33)]
-    public static void Fun_GuanDaoXiao() { ChangeKeyName(GuanDaoXiao, GuanJianType.Grid, 1, Director.Up, 0); }
+    public static void Fun_GuanDaoXiao() { ChangeKeyName(GuanDaoXiao, GuanJianType.Grid, 1, 0); }
 
     #endregion
 
@@ -300,7 +300,7 @@ public class SelfBuWei : CommonFun
     /// <param name="size">大小</param>
     /// <param name="director">方向</param>
     /// <param name="length">长度</param>
-    public static void ChangeKeyName(string name, GuanJianType type, int size, Director director, float length)
+    public static void ChangeKeyName(string name, GuanJianType type, int size, float length)
     {
         //调用该函数，说明在切换类型，所以先让 CurrentIndexNum 恢复默认值
         CurrentIndexNum = 1;
@@ -308,11 +308,11 @@ public class SelfBuWei : CommonFun
         foreach (GameObject go in Selection.gameObjects)
         {
             go.name = name + " " + "(" + i + ")"; //名字
-            go.transform.SetSiblingIndex(i);       //排序
             GuanJianBuWei buWei = go.GetComponent<GuanJianBuWei>();
             buWei.type     = type;          //类型
             buWei.size     = size;          //大小
-            buWei.director = director;      //方向
+            // 注释掉方向的重新定义，直接继承所选物体的方向
+            // buWei.director = director;      //方向  
             buWei.length   = length;        //长度
             go.transform.SetAsLastSibling(); //然后放到最后面(要不还要重新拖到后面)
             i++;
