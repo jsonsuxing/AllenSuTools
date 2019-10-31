@@ -350,6 +350,8 @@ public class AllenSuTools : EditorWindow
                 GUILayout.Label("三：自定义操作碰撞盒", TitleStyle());
                 GUILayout.Space(3);
                 GUILayout.Label("A：旋转", SetGuiStyle(Color.red, 16));
+                GUILayout.Space(3);
+                GUILayout.Label("提示：默认沿 Y 轴，同步环形碰撞盒的轴心", SetGuiStyle(Color.black, 14));
 
                 // ------------ 一：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
@@ -839,135 +841,10 @@ public class AllenSuTools : EditorWindow
                 #endregion
                 GUILayout.Space(8);
 
-                #region 碰撞盒、子物体移动到空物体
-
-                GUILayout.Label("☆☆☆☆☆☆修改碰撞盒预设☆☆☆☆☆☆", TitleStyle());
-
-                // ------------ 一：开始垂直画盒子 ------------
-                GUILayout.BeginVertical("box");
-
-                // 第一组水平排版开始
-                EditorGUILayout.BeginHorizontal();
-                if (GUILayout.Button("从Hierarchy批量修改"))
-                {
-                    SelfModel.Instance().IsClickHierarchy = true;
-                    SelfModel.Instance().CopyBoxColToEmpty();
-                }
-                else if (GUILayout.Button("从Prefab预设里单选修改"))
-                {
-                    SelfModel.Instance().IsClickHierarchy = false;
-                    SelfModel.Instance().CopyBoxColToEmpty();
-                }
-                EditorGUILayout.EndHorizontal();
-                // 第一组水平排版结束
-
-                GUILayout.EndVertical();
-                // ------------ 一：结束垂直画盒子 ------------
-
-                // ------------ 二：开始垂直画盒子 ------------
-                GUILayout.BeginVertical("box");
-
-                // 第一组水平排版开始
-                EditorGUILayout.BeginHorizontal();
-                GUILayout.Label("提示：当前修改方式为：", SetGuiStyle(Color.black, 14));
-                SelfModel.Instance().ShowTips = SelfModel.Instance().IsClickHierarchy ? "批量从Hierarchy修改" : "单选Prefab修改";
-                GUILayout.TextField(SelfModel.Instance().ShowTips);
-                EditorGUILayout.EndHorizontal();
-                // 第一组水平排版结束
-
-                GUILayout.EndVertical();
-                // ------------ 一：结束垂直画盒子 ------------
-
-                #endregion
-                GUILayout.Space(8);
-
-                #region 碰撞盒center转换
-
-                GUILayout.Label("批量操作预制体", TitleStyle());
-
-                // ------------ 一：开始垂直画盒子 ------------
-                GUILayout.BeginVertical("box");
-
-                // 第一组水平排版开始
-                EditorGUILayout.BeginHorizontal();
-                if (GUILayout.Button("从Hierarchy批量修改"))
-                {
-                    SelfModel.Instance().IsCenterHierarchy = true;
-                    SelfModel.Instance().ChangeCenter();
-                }
-                else if (GUILayout.Button("从Prefab预设里单选修改"))
-                {
-                    SelfModel.Instance().IsCenterHierarchy = false;
-                    SelfModel.Instance().ChangeCenter();
-                }
-                EditorGUILayout.EndHorizontal();
-                // 第一组水平排版结束
-
-                GUILayout.EndVertical();
-                // ------------ 一：结束垂直画盒子 ------------
-
-                // ------------ 二：开始垂直画盒子 ------------
-                GUILayout.BeginVertical("box");
-
-                // 第一组水平排版开始
-                EditorGUILayout.BeginHorizontal();
-                GUILayout.Label("提示：当前修改方式为：", SetGuiStyle(Color.black, 14));
-                SelfModel.Instance().ShowCenterTips = SelfModel.Instance().IsCenterHierarchy ? "批量从Hierarchy修改" : "单选Prefab修改";
-                GUILayout.TextField(SelfModel.Instance().ShowCenterTips);
-                EditorGUILayout.EndHorizontal();
-                // 第一组水平排版结束
-
-                GUILayout.EndVertical();
-                // ------------ 二：结束垂直画盒子 ------------
-
-                #endregion
-                GUILayout.Space(8);
-
-                #region 检查无NormalBox或者BevelBox的名称
-
-                GUILayout.Label("检查没被执行的颗粒名称", TitleStyle());
-
-                // ------------ 一：开始垂直画盒子 ------------
-                GUILayout.BeginVertical("box");
-
-                // 第一组垂直排版开始
-                EditorGUILayout.BeginVertical();
-                if (GUILayout.Button("点击开始检查无NormalBox或者BevelBox的名称")) SelfModel.Instance().CheckNotNormalOrBevelBox();
-                EditorGUILayout.EndVertical();
-                // 第一组垂直排版结束
-
-                GUILayout.EndVertical();
-                // ------------ 一：结束垂直画盒子 ------------
-
-                #endregion
-                GUILayout.Space(8);
-
                 #region 省事功能
 
                 GUILayout.Label("省事功能", TitleStyle());
-
-                #region 1：自动定位到所选类别
-
-                // ------------ 一：开始垂直画盒子 ------------
-                GUILayout.BeginVertical("box");
-                if (GUILayout.Button("一：点击自动定位到所选类别")) SelfModel.Instance().JumpToGranuleType();
-                GUILayout.EndVertical();
-                // ------------ 一：结束垂直画盒子 ------------
-
-                #endregion
-                GUILayout.Space(2);
-
-                #region 2：视图切换到最上方
-
-                // ------------ 一：开始垂直画盒子 ------------
-                GUILayout.BeginVertical("box");
-                if (GUILayout.Button("二：视图切换到最上方")) SelfModel.Instance().JumpToTopPanel();
-                // ------------ 一：结束垂直画盒子 ------------
-                GUILayout.EndVertical();
-
-                #endregion
-                GUILayout.Space(2);
-
+            
                 #region 3：批量检查指定功能
 
                 // ------------ 一：开始垂直画盒子 ------------
@@ -1133,51 +1010,21 @@ public class AllenSuTools : EditorWindow
                 #endregion
                 GUILayout.Space(2);
 
-
-                #region 6：从模型文件移动到指定文件夹(边框)
-
-                GUILayout.Label("六：移动模型文件(边框)", TitleStyle());
-
-                // ------------ 一：开始垂直画盒子 ------------
-                GUILayout.BeginVertical("box");
-
-                // 第一组垂直排版开始
-                EditorGUILayout.BeginVertical();
-                GUILayout.Label("1、原模型的文件夹路径", SetGuiStyle(Color.black, 14));
-                SelfTools.Instance().OldModelPath = GUILayout.TextField(SelfTools.Instance().OldModelPath);
-                GUILayout.Space(2);
-                GUILayout.Label("2、移动至的文件夹路径", SetGuiStyle(Color.black, 14));
-                SelfTools.Instance().NewModelPath = GUILayout.TextField(SelfTools.Instance().NewModelPath);
-                GUILayout.Space(2);
-                GUILayout.Label("3、待移动的文件名", SetGuiStyle(Color.black, 14));
-                SelfTools.Instance().NeedMoveFileName = GUILayout.TextField(SelfTools.Instance().NeedMoveFileName);
-                GUILayout.Space(2);
-                if (GUILayout.Button("点击移动模型"))SelfTools.Instance().MoveModel();
-                EditorGUILayout.EndVertical();
-                // 第一组垂直排版结束
-
-                GUILayout.EndVertical();
-                // ------------ 一：结束垂直画盒子 ------------
-
-                #endregion
-                GUILayout.Space(2);
-
                 #endregion
                 break;
             case 5:
                 #region ToolPro
 
-
-                GUILayout.Label("一：修改完旧模型的后续操作(暂无效)", TitleStyle());
-
                 #region 一：修改完旧模型的后续操作
+
+                GUILayout.Label("一：修改完旧模型的后续操作", TitleStyle());
 
                 // ------------ 一：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
 
                 #region 一：复制名称到指定 txt 文件
 
-                GUILayout.Label("1：复制名称到指定 txt 文件", SetGuiStyle(Color.red, 14));
+                GUILayout.Label("1：复制名称到指定 txt 文件(修改一个点一次)", SetGuiStyle(Color.red, 14));
 
                 // ------------ 二：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
@@ -1195,12 +1042,141 @@ public class AllenSuTools : EditorWindow
 
                 #endregion
 
+                #region 二：复制fbx到指定文件夹
+
+                GUILayout.Label("2：复制 fbx 到指定文件夹，并且取消待定颗粒标识(只点一次)", SetGuiStyle(Color.red, 14));
+
+                // ------------ 一：开始垂直画盒子 ------------
+                GUILayout.BeginVertical("box");
+
+                // 第一组垂直排版开始
+                EditorGUILayout.BeginVertical();
+                GUILayout.Label("1、指定外部文件夹路径", SetGuiStyle(Color.black, 14));
+                ToolPro.Instance().OutFbxPath = GUILayout.TextField(ToolPro.Instance().OutFbxPath);
+                if(GUILayout.Button("点击按钮")) ToolPro.Instance().CopyFbxToDirectory();
+                EditorGUILayout.EndVertical();
+                // 第一组垂直排版结束
+                GUILayout.Space(3);
+
+                GUILayout.EndVertical();
+                // ------------ 一：结束垂直画盒子 ------------
+
+                #endregion
 
                 GUILayout.EndVertical();
                 // ------------ 一：结束垂直画盒子 ------------
 
                 #endregion
                 GUILayout.Space(3);
+
+                #region 二：批量修改预设
+
+                GUILayout.Label("二：批量修改预设(未改完……)", TitleStyle());
+
+                #region 碰撞盒、子物体移动到空物体
+
+                GUILayout.Label("修改碰撞盒预设", TitleStyle());
+
+                // ------------ 一：开始垂直画盒子 ------------
+                GUILayout.BeginVertical("box");
+
+                // 第一组水平排版开始
+                EditorGUILayout.BeginHorizontal();
+                if (GUILayout.Button("从Hierarchy批量修改"))
+                {
+                    SelfModel.Instance().IsClickHierarchy = true;
+                    SelfModel.Instance().CopyBoxColToEmpty();
+                }
+                else if (GUILayout.Button("从Prefab预设里单选修改"))
+                {
+                    SelfModel.Instance().IsClickHierarchy = false;
+                    SelfModel.Instance().CopyBoxColToEmpty();
+                }
+                EditorGUILayout.EndHorizontal();
+                // 第一组水平排版结束
+
+                GUILayout.EndVertical();
+                // ------------ 一：结束垂直画盒子 ------------
+
+                // ------------ 二：开始垂直画盒子 ------------
+                GUILayout.BeginVertical("box");
+
+                // 第一组水平排版开始
+                EditorGUILayout.BeginHorizontal();
+                GUILayout.Label("提示：当前修改方式为：", SetGuiStyle(Color.black, 14));
+                SelfModel.Instance().ShowTips = SelfModel.Instance().IsClickHierarchy ? "批量从Hierarchy修改" : "单选Prefab修改";
+                GUILayout.TextField(SelfModel.Instance().ShowTips);
+                EditorGUILayout.EndHorizontal();
+                // 第一组水平排版结束
+
+                GUILayout.EndVertical();
+                // ------------ 一：结束垂直画盒子 ------------
+
+                #endregion
+                GUILayout.Space(8);
+
+                #region 碰撞盒center转换
+
+                GUILayout.Label("批量操作预制体", TitleStyle());
+
+                // ------------ 一：开始垂直画盒子 ------------
+                GUILayout.BeginVertical("box");
+
+                // 第一组水平排版开始
+                EditorGUILayout.BeginHorizontal();
+                if (GUILayout.Button("从Hierarchy批量修改"))
+                {
+                    SelfModel.Instance().IsCenterHierarchy = true;
+                    SelfModel.Instance().ChangeCenter();
+                }
+                else if (GUILayout.Button("从Prefab预设里单选修改"))
+                {
+                    SelfModel.Instance().IsCenterHierarchy = false;
+                    SelfModel.Instance().ChangeCenter();
+                }
+                EditorGUILayout.EndHorizontal();
+                // 第一组水平排版结束
+
+                GUILayout.EndVertical();
+                // ------------ 一：结束垂直画盒子 ------------
+
+                // ------------ 二：开始垂直画盒子 ------------
+                GUILayout.BeginVertical("box");
+
+                // 第一组水平排版开始
+                EditorGUILayout.BeginHorizontal();
+                GUILayout.Label("提示：当前修改方式为：", SetGuiStyle(Color.black, 14));
+                SelfModel.Instance().ShowCenterTips = SelfModel.Instance().IsCenterHierarchy ? "批量从Hierarchy修改" : "单选Prefab修改";
+                GUILayout.TextField(SelfModel.Instance().ShowCenterTips);
+                EditorGUILayout.EndHorizontal();
+                // 第一组水平排版结束
+
+                GUILayout.EndVertical();
+                // ------------ 二：结束垂直画盒子 ------------
+
+                #endregion
+                GUILayout.Space(8);
+
+                #region 检查无NormalBox或者BevelBox的名称
+
+                GUILayout.Label("检查没被执行的颗粒名称", TitleStyle());
+
+                // ------------ 一：开始垂直画盒子 ------------
+                GUILayout.BeginVertical("box");
+
+                // 第一组垂直排版开始
+                EditorGUILayout.BeginVertical();
+                if (GUILayout.Button("点击开始检查无NormalBox或者BevelBox的名称")) SelfModel.Instance().CheckNotNormalOrBevelBox();
+                EditorGUILayout.EndVertical();
+                // 第一组垂直排版结束
+
+                GUILayout.EndVertical();
+                // ------------ 一：结束垂直画盒子 ------------
+
+                #endregion
+                GUILayout.Space(8);
+
+                #endregion
 
                 #endregion
                 break;

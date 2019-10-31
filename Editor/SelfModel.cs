@@ -620,32 +620,6 @@ public class SelfModel : CommonFun
 
     #region 一：自动定位层级面板所选颗粒类别
 
-    /// <summary>
-    /// 自动定位层级面板所选颗粒类别
-    /// </summary>
-    public void JumpToGranuleType()
-    {
-        // 自动选中所有颗粒的父物体 Content
-        var contentPath = "View/Canvas Assembling/Left Tool Panel/Granule Library/Viewport/Content/";
-        JudgeGranuleType();
-        var choseKeLi = GameObject.Find(contentPath + ShowGranuleType);
-        EditorGUIUtility.PingObject(choseKeLi);
-    }
-
-    #endregion
-
-    #region 二：跳转到面板最上方
-
-    /// <summary>
-    /// 锁定到面板最上方
-    /// </summary>
-    public void JumpToTopPanel()
-    {
-        var view = GameObject.Find("Game Manager");
-        //这行代码会自动跳到 view
-        EditorGUIUtility.PingObject(view);
-    }
-
     #endregion
 
     #region 批量检查指定功能

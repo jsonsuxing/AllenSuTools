@@ -291,46 +291,6 @@ public class SelfTools : CommonFun
 
     #endregion
 
-    #region 七：移动模型文件(边框)
-
-    /// <summary>
-    /// 移动模型到指定文件夹
-    /// </summary>
-    public void MoveModel()
-    {
-        if (OldModelPath==string.Empty)
-        {
-            WindowTips("原来的模型文件夹路径不能为空");
-            return;
-        }
-        if (NewModelPath == string.Empty)
-        {
-            WindowTips("指定的模型文件夹路径不能为空");
-            return;
-        }
-        if (NeedMoveFileName == string.Empty)
-        {
-            WindowTips("待移动的文件名不能为空");
-            return;
-        }
-        
-        // 外部模型模型文件路径
-        string outFileNamePath = OldModelPath + "\\" + NeedMoveFileName + ".fbx";
-        // 移动到的模型文件路径
-        string inFileNamePath = NewModelPath + "\\" + NeedMoveFileName + ".fbx";
-        string fileName = Path.GetFileNameWithoutExtension(outFileNamePath);
-        if (!File.Exists(outFileNamePath))
-        {
-            WindowTips("原来的模型文件夹中没有 " + fileName + " 这个文件");
-            return;
-        }
-        File.Move(outFileNamePath,inFileNamePath);
-        WindowTips("恭喜你，导入成功！！！");
-        NeedMoveFileName = string.Empty;
-    }
-
-    #endregion
-
 
     public static SelfTools Instance()
     {
