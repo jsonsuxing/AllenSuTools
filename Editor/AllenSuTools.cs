@@ -1024,7 +1024,7 @@ public class AllenSuTools : EditorWindow
 
                 #region 一：复制名称到指定 txt 文件
 
-                GUILayout.Label("1：复制名称到指定 txt 文件(修改一个点一次)", SetGuiStyle(Color.red, 14));
+                GUILayout.Label("1：复制颗粒名称到 txt 文件(修改一个点一次)", SetGuiStyle(Color.red, 14));
 
                 // ------------ 二：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
@@ -1041,20 +1041,24 @@ public class AllenSuTools : EditorWindow
                 GUILayout.Space(3);
 
                 #endregion
+                GUILayout.Space(2);
 
                 #region 二：复制fbx到指定文件夹
 
-                GUILayout.Label("2：复制 fbx 到指定文件夹，并且取消待定颗粒标识(只点一次)", SetGuiStyle(Color.red, 14));
+                GUILayout.Label("2：复制 fbx 到文件夹，并且取消场景待定颗粒标识(只点一次)", SetGuiStyle(Color.red, 14));
 
                 // ------------ 一：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
 
-                // 第一组垂直排版开始
-                EditorGUILayout.BeginVertical();
-                GUILayout.Label("1、指定外部文件夹路径", SetGuiStyle(Color.black, 14));
+                GUILayout.Label("指定外部文件夹路径", SetGuiStyle(Color.black, 14));
                 ToolPro.Instance().OutFbxPath = GUILayout.TextField(ToolPro.Instance().OutFbxPath);
-                if(GUILayout.Button("点击按钮")) ToolPro.Instance().CopyFbxToDirectory();
-                EditorGUILayout.EndVertical();
+
+                // 第一组垂直排版开始
+                EditorGUILayout.BeginHorizontal();
+                if (GUILayout.Button("1、开始复制")) ToolPro.Instance().CopyFbxToDirectory();
+                if (GUILayout.Button("2、打开 txt")) ToolPro.Instance().OpenTxt();
+                if (GUILayout.Button("3、删除 txt")) ToolPro.Instance().DeleteTxt();
+                EditorGUILayout.EndHorizontal();
                 // 第一组垂直排版结束
                 GUILayout.Space(3);
 
@@ -1062,6 +1066,7 @@ public class AllenSuTools : EditorWindow
                 // ------------ 一：结束垂直画盒子 ------------
 
                 #endregion
+                GUILayout.Space(2);
 
                 GUILayout.EndVertical();
                 // ------------ 一：结束垂直画盒子 ------------
@@ -1069,43 +1074,37 @@ public class AllenSuTools : EditorWindow
                 #endregion
                 GUILayout.Space(3);
 
-                #region 二：批量修改预设
+                #region 二：批量修改颗粒预设
 
                 GUILayout.Label("二：批量修改预设(未改完……)", TitleStyle());
+                GUILayout.Space(3);
 
-                #region 碰撞盒、子物体移动到空物体
+                #region 1：移除颗粒父物体上所有碰撞盒，转换为其子物体的 Bevel Box 和 Normal Box
 
-                GUILayout.Label("修改碰撞盒预设", TitleStyle());
+                GUILayout.Label("自定义检查面板",SetGuiStyle(Color.black, 14));
 
                 // ------------ 一：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
 
                 // 第一组水平排版开始
                 EditorGUILayout.BeginHorizontal();
-                if (GUILayout.Button("从Hierarchy批量修改"))
-                {
-                    SelfModel.Instance().IsClickHierarchy = true;
-                    SelfModel.Instance().CopyBoxColToEmpty();
-                }
-                else if (GUILayout.Button("从Prefab预设里单选修改"))
-                {
-                    SelfModel.Instance().IsClickHierarchy = false;
-                    SelfModel.Instance().CopyBoxColToEmpty();
-                }
+                ToolPro.Instance().IsCheckGranuleAndWu = 
+                    EditorGUILayout.Toggle(new GUIContent("1：颗粒，物件的位置、旋转", "是否检查颗粒和物件_1的位置，旋转问题"), ToolPro.Instance().IsCheckGranuleAndWu);
+                ToolPro.Instance().IsCheckWuScaleAndRemoveMrMf =
+                    EditorGUILayout.Toggle(new GUIContent("2：物件比例，关键部位Mesh", "是否检查物件的比例，以及移除关键部位上的已存在的 MeshRenderer 和 MeshFilter"), ToolPro.Instance().IsCheckWuScaleAndRemoveMrMf);
                 EditorGUILayout.EndHorizontal();
                 // 第一组水平排版结束
+                GUILayout.Space(3);
 
                 GUILayout.EndVertical();
                 // ------------ 一：结束垂直画盒子 ------------
 
-                // ------------ 二：开始垂直画盒子 ------------
+                // ------------ 一：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
 
                 // 第一组水平排版开始
                 EditorGUILayout.BeginHorizontal();
-                GUILayout.Label("提示：当前修改方式为：", SetGuiStyle(Color.black, 14));
-                SelfModel.Instance().ShowTips = SelfModel.Instance().IsClickHierarchy ? "批量从Hierarchy修改" : "单选Prefab修改";
-                GUILayout.TextField(SelfModel.Instance().ShowTips);
+               if(GUILayout.Button("点击按钮，开始检查")) ToolPro.Instance().CheckGranule();
                 EditorGUILayout.EndHorizontal();
                 // 第一组水平排版结束
 
@@ -1177,6 +1176,7 @@ public class AllenSuTools : EditorWindow
                 GUILayout.Space(8);
 
                 #endregion
+                GUILayout.Space(3);
 
                 #endregion
                 break;
