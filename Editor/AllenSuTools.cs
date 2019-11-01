@@ -1029,11 +1029,15 @@ public class AllenSuTools : EditorWindow
                 // ------------ 二：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
 
-                // 第一组垂直排版开始
-                EditorGUILayout.BeginVertical();
-                if (GUILayout.Button("点击颗粒，复制名称")) ToolPro.Instance().CopyNameToTxt();
-                EditorGUILayout.EndVertical();
-                // 第一组垂直排版结束
+                if (GUILayout.Button("1、点击颗粒预设，添加至 txt")) ToolPro.Instance().CopyNameToTxt();
+                GUILayout.Space(3);
+
+                // 第一组水平排版开始
+                EditorGUILayout.BeginHorizontal();
+                if (GUILayout.Button("2、打开 txt")) ToolPro.Instance().OpenTxt();
+                if (GUILayout.Button("3、删除 txt")) ToolPro.Instance().DeleteTxt();
+                EditorGUILayout.EndHorizontal();
+                // 第一组水平排版结束
 
                 GUILayout.EndVertical();
                 // ------------ 二：结束垂直画盒子 ------------
@@ -1053,12 +1057,10 @@ public class AllenSuTools : EditorWindow
                 GUILayout.Label("指定外部文件夹路径", SetGuiStyle(Color.black, 14));
                 ToolPro.Instance().OutFbxPath = GUILayout.TextField(ToolPro.Instance().OutFbxPath);
 
-                // 第一组垂直排版开始
-                EditorGUILayout.BeginHorizontal();
-                if (GUILayout.Button("1、开始复制")) ToolPro.Instance().CopyFbxToDirectory();
-                if (GUILayout.Button("2、打开 txt")) ToolPro.Instance().OpenTxt();
-                if (GUILayout.Button("3、删除 txt")) ToolPro.Instance().DeleteTxt();
-                EditorGUILayout.EndHorizontal();
+                // 第一组垂排版开始
+                EditorGUILayout.BeginVertical();
+                if (GUILayout.Button("点击复制 fbx 文件，同时取消场景待定颗粒标识")) ToolPro.Instance().CopyFbxToDirectory();
+                EditorGUILayout.EndVertical();
                 // 第一组垂直排版结束
                 GUILayout.Space(3);
 

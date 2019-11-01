@@ -45,6 +45,9 @@ public class ToolPro : CommonFun
 
     #region 一：复制名称到指定 txt 文件
 
+    /// <summary>
+    /// 复制名称到指定 txt 文件
+    /// </summary>
     public void CopyNameToTxt()
     {
         SelectObj = Selection.activeGameObject;
@@ -72,6 +75,40 @@ public class ToolPro : CommonFun
         // 写入到本地文件
         WriteToTxt("D:/", "所选颗粒名称汇总", SelectObj.name);
         WindowTips(message: "添加成功,当前已加入 " + (StrContent == null ? "1" : (StrContent.Length + 1).ToString()) + " 个颗粒");
+    }
+
+
+    /// <summary>
+    /// 打开 txt
+    /// </summary>
+    public void OpenTxt()
+    {
+        if (File.Exists(TxtPath))
+        {
+            // 直接打开文件
+            System.Diagnostics.Process.Start(TxtPath);
+        }
+        else
+        {
+            WindowTips("不存在 D:/所选颗粒名称汇总.txt 这个文件");
+        }
+    }
+
+
+    /// <summary>
+    /// 删除 txt
+    /// </summary>
+    public void DeleteTxt()
+    {
+        if (File.Exists(TxtPath))
+        {
+            File.Delete(TxtPath);
+            WindowTips("已删除");
+        }
+        else
+        {
+            WindowTips("不存在 D:/所选颗粒名称汇总.txt 这个文件");
+        }
     }
 
     #endregion
@@ -151,33 +188,7 @@ public class ToolPro : CommonFun
     }
 
 
-    /// <summary>
-    /// 打开txt文件
-    /// </summary>
-    public void OpenTxt()
-    {
-        if (!File.Exists(TxtPath))
-        {
-            WindowTips("不存在 D:/所选颗粒名称汇总.txt 这个文件");
-            return;
-        }
-        else
-        {
-            // 直接打开文件
-            System.Diagnostics.Process.Start(TxtPath);
-        }
-        
-    }
 
-
-    public void DeleteTxt()
-    {
-        if (File.Exists(TxtPath))
-        {
-            File.Delete(TxtPath);
-            WindowTips("已删除");
-        }
-    }
 
     #endregion
 
