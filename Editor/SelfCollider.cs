@@ -848,7 +848,7 @@ public class SelfCollider : CommonFun
 
     public Vector3 GetCenterOfCircle(Vector3 firstPoint, Vector3 secondPoint, Vector3 thirdPoint)
     {
-        // 过点一和点二的中垂线平面
+        // 用于表达过点一，点二中垂线的平面
         var sfDiffX = secondPoint.x - firstPoint.x;
         var sfSumX = secondPoint.x + firstPoint.x;
         var sfDiffY = secondPoint.y - firstPoint.y;
@@ -856,7 +856,7 @@ public class SelfCollider : CommonFun
         var sfDiffZ = secondPoint.z - firstPoint.z;
         var sfSumZ = secondPoint.z + firstPoint.z;
 
-        // 过点一和点三的中垂线平面
+        // 用于表达过点一，点三中垂线的平面
         var tfDiffX = thirdPoint.x - firstPoint.x;
         var tfSumX = thirdPoint.x + firstPoint.x;
         var tfDiffY = thirdPoint.y - firstPoint.y;
@@ -875,16 +875,17 @@ public class SelfCollider : CommonFun
 
         var d = CountDeterminant(sfDiffX, sfDiffY, sfDiffZ, tfDiffX, tfDiffY, tfDiffZ, normalVector.x, normalVector.y, normalVector.z);
         var d1 = CountDeterminant(t1, sfDiffY, sfDiffZ, t2, tfDiffY, tfDiffZ, t3, normalVector.y, normalVector.z);
-        var d2 = CountDeterminant(sfDiffX, d1, sfDiffZ, tfDiffX, t2, tfDiffZ, normalVector.x, t3, normalVector.z);
-        var d3 = CountDeterminant(sfDiffX, sfDiffY, d1, tfDiffX, tfDiffY, t2, normalVector.x, normalVector.y, t3);
+        var d2 = CountDeterminant(sfDiffX, t1, sfDiffZ, tfDiffX, t2, tfDiffZ, normalVector.x, t3, normalVector.z);
+        var d3 = CountDeterminant(sfDiffX, sfDiffY, t1, tfDiffX, tfDiffY, t2, normalVector.x, normalVector.y, t3);
 
         var mindX = d1 / d;
         var mindY = d2 / d;
         var mindZ = d3 / d;
-
+    
         return new Vector3(mindX, mindY, mindZ);
     }
-    private  float CountDeterminant(float a1, float a2, float a3, float b1, float b2, float b3, float c1, float c2, float c3)
+
+    public float CountDeterminant(float a1, float a2, float a3, float b1, float b2, float b3, float c1, float c2, float c3)
     {
         // 经试验，原本以为是加减法可以随意换位置，但改变顺序后会影响计算，我感觉是因为向量计算，而不是普通的加减法
         return (a1 * b2 * c3 + b1 * c2 * a3 + c1 * a2 * b3 - a3 * b2 * c1 - b3 * c2 * a1 - c3 * a2 * b1);
