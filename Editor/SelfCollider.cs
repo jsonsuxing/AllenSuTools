@@ -136,10 +136,20 @@ public class SelfCollider : CommonFun
     public Vector3 SecondAnglePos = Vector3.zero; // 点击的第二个点的坐标
     public Vector3 AngleResult = Vector3.zero;    // 输出结果
     public int AngleClickTime = 1;                // 第几次点击
+    public string StrAngleTips = string.Empty;    // 点击了几次的提示信息
+
     // 2：位置
     public Vector3 FirstPos = Vector3.zero;       // 点击的第一个点的坐标
     public Vector3 SecondPos = Vector3.zero;      // 点击的第二个点的坐标
     public int PosClickTime = 1;                  // 第几次点击
+
+
+    // 计算圆心
+    public Vector3 FirstPoint = Vector3.zero;  // 第一个点
+    public Vector3 SecondPoint = Vector3.zero; // 第二个点
+    public Vector3 ThirdPoint = Vector3.zero;  // 第三个点
+    public int WhichTimeClick = 0; // 点击了第几次
+    public string WhichTimeTips = string.Empty; // 点击了几次的提示信息
 
 
     #endregion
@@ -802,54 +812,83 @@ public class SelfCollider : CommonFun
 
     #endregion
 
-    #region 三：从ACE项目移动预设
+    #region 三：打三点确定圆心
 
-    /// <summary>
-    /// 从ACE项目移动预设
-    /// </summary>
-    public void MovePrefabFromAce()
+    public void CreateCenterOfCircle()
     {
-        var acePath = "D:/Works/testFileFormat/Assets/Resources/Prefab/";
-        var qdPath  = Application.dataPath + "/A-SuXing/selfPrefab/";
-        try
+        var selectObj = Selection.activeGameObject;
+        if (selectObj == null)
         {
-            // 如果指定路径不存在，则创建
-            CreateNewDirectory(acePath);
-            CreateNewDirectory(qdPath);
-            var aceFiles = Directory.GetFiles(acePath, "*", SearchOption.AllDirectories);
-            if (aceFiles.Length == 0) WindowTips("D:/Works/testFileFormat/Assets/Resources/Prefab/文件夹下没有预设");
-            foreach (var str in aceFiles)
-            {
-                if (Path.GetExtension(str) == ".prefab")
-                {
-                    var prefabFileName = Path.GetFileNameWithoutExtension(str);
-                    File.Move(str, Path.GetDirectoryName(qdPath) + "\\" + prefabFileName + Path.GetExtension(str));
-                }
-
-                if (Path.GetExtension(str) == ".meta") File.Delete(str);
-            }
-
-            AssetDatabase.Refresh();
+            WindowTips("没有选中任何对象");
+            return;
         }
-        catch (Exception e)
+
+        WhichTimeClick++;
+
+        var pos = selectObj.transform.position;
+        switch (WhichTimeClick)
         {
-            WindowTips("错误信息：" + e);
-            throw;
+            case 1:
+                FirstPoint = pos;
+                WhichTimeTips = "第 1 个点已有值";
+                break;
+            case 2:
+                SecondPoint = pos;
+                WhichTimeTips = "第 2 个点已有值";
+                break;
+            case 3:
+                ThirdPoint = pos;
+                selectObj.transform.position = GetCenterOfCircle(FirstPoint, SecondPoint, ThirdPoint);
+                WhichTimeTips = "圆心坐标：" + "( "+ pos.x + "，" + pos.y + "，" + pos.z + " )";
+                WhichTimeClick = 0;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
         }
     }
 
-
-    /// <summary>
-    /// 删除从ACE项目导入的预设
-    /// </summary>
-    public void DeletePrefab()
+    public Vector3 GetCenterOfCircle(Vector3 firstPoint, Vector3 secondPoint, Vector3 thirdPoint)
     {
-        //加这个判断是因为每次删除后unity都会报警告，所以直接把meta也删了
-        var meta = Application.dataPath + "/A-SuXing/selfPrefab/碰撞盒集合体.meta";
-        if (File.Exists(meta)) File.Delete(meta);
-        var qdPath = Application.dataPath + "/A-SuXing/selfPrefab/碰撞盒集合体.prefab";
-        if (File.Exists(qdPath)) File.Delete(qdPath);
-        AssetDatabase.Refresh();
+        // 过点一和点二的中垂线平面
+        var sfDiffX = secondPoint.x - firstPoint.x;
+        var sfSumX = secondPoint.x + firstPoint.x;
+        var sfDiffY = secondPoint.y - firstPoint.y;
+        var sfSumY = secondPoint.y + firstPoint.y;
+        var sfDiffZ = secondPoint.z - firstPoint.z;
+        var sfSumZ = secondPoint.z + firstPoint.z;
+
+        // 过点一和点三的中垂线平面
+        var tfDiffX = thirdPoint.x - firstPoint.x;
+        var tfSumX = thirdPoint.x + firstPoint.x;
+        var tfDiffY = thirdPoint.y - firstPoint.y;
+        var tfSumY = thirdPoint.y + firstPoint.y;
+        var tfDiffZ = thirdPoint.z - firstPoint.z;
+        var tfSumZ = thirdPoint.z + firstPoint.z;
+
+        // 平面的法向量
+        var sfDiff = secondPoint - firstPoint;
+        var tfDiff = thirdPoint - firstPoint;
+        var normalVector = Vector3.Cross(sfDiff, tfDiff);
+
+        var t1 = (sfDiffX * sfSumX + sfDiffY * sfSumY + sfDiffZ * sfSumZ) / 2;
+        var t2 = (tfDiffX * tfSumX + tfDiffY * tfSumY + tfDiffZ * tfSumZ) / 2;
+        var t3 = normalVector.x * firstPoint.x + normalVector.y * firstPoint.y + normalVector.z * firstPoint.z;
+
+        var d = CountDeterminant(sfDiffX, sfDiffY, sfDiffZ, tfDiffX, tfDiffY, tfDiffZ, normalVector.x, normalVector.y, normalVector.z);
+        var d1 = CountDeterminant(t1, sfDiffY, sfDiffZ, t2, tfDiffY, tfDiffZ, t3, normalVector.y, normalVector.z);
+        var d2 = CountDeterminant(sfDiffX, d1, sfDiffZ, tfDiffX, t2, tfDiffZ, normalVector.x, t3, normalVector.z);
+        var d3 = CountDeterminant(sfDiffX, sfDiffY, d1, tfDiffX, tfDiffY, t2, normalVector.x, normalVector.y, t3);
+
+        var mindX = d1 / d;
+        var mindY = d2 / d;
+        var mindZ = d3 / d;
+
+        return new Vector3(mindX, mindY, mindZ);
+    }
+    private  float CountDeterminant(float a1, float a2, float a3, float b1, float b2, float b3, float c1, float c2, float c3)
+    {
+        // 经试验，原本以为是加减法可以随意换位置，但改变顺序后会影响计算，我感觉是因为向量计算，而不是普通的加减法
+        return (a1 * b2 * c3 + b1 * c2 * a3 + c1 * a2 * b3 - a3 * b2 * c1 - b3 * c2 * a1 - c3 * a2 * b1);
     }
 
     #endregion
@@ -864,33 +903,25 @@ public class SelfCollider : CommonFun
         var selectObj = Selection.activeGameObject;
         if (selectObj == null)
         {
-            WindowTips("没有选中关键部位");
+            WindowTips("没有选中任何对象");
             return;
         }
 
+        var pos = selectObj.transform.position;
         if (AngleClickTime == 1)
         {
-            ClearAngleModel();
-            FirstAnglePos = selectObj.transform.position;
+            FirstAnglePos = pos;
+            StrAngleTips = "第 1 个点已有值";
         }
         else if (AngleClickTime == 2)
         {
-            SecondAnglePos = selectObj.transform.position;
+            SecondAnglePos = pos;
             AngleResult = (FirstAnglePos - SecondAnglePos).normalized;
             selectObj.GetComponent<GuanJianBuWei>().dirVector = AngleResult;
+            StrAngleTips = "向量值是：" + "( " + AngleResult.x + "，" + AngleResult.y + "，" + AngleResult.z + " )";
         }
         AngleClickTime++;
         if (AngleClickTime > 2) AngleClickTime = 1;
-    }
-
-    /// <summary>
-    /// 清空获得到的数据
-    /// </summary>
-    public void ClearAngleModel()
-    {
-        FirstAnglePos=Vector3.zero;
-        SecondAnglePos=Vector3.zero;
-        AngleResult=Vector3.zero;
     }
 
 
@@ -949,6 +980,58 @@ public class SelfCollider : CommonFun
             return;
         }
         selectObj.AddComponent<TestDrawLine>();
+    }
+
+    #endregion
+
+    #region 五：从ACE项目移动预设
+
+    /// <summary>
+    /// 从ACE项目移动预设
+    /// </summary>
+    public void MovePrefabFromAce()
+    {
+        var acePath = "D:/Works/testFileFormat/Assets/Resources/Prefab/";
+        var qdPath  = Application.dataPath + "/A-SuXing/selfPrefab/";
+        try
+        {
+            // 如果指定路径不存在，则创建
+            CreateNewDirectory(acePath);
+            CreateNewDirectory(qdPath);
+            var aceFiles = Directory.GetFiles(acePath, "*", SearchOption.AllDirectories);
+            if (aceFiles.Length == 0) WindowTips("D:/Works/testFileFormat/Assets/Resources/Prefab/文件夹下没有预设");
+            foreach (var str in aceFiles)
+            {
+                if (Path.GetExtension(str) == ".prefab")
+                {
+                    var prefabFileName = Path.GetFileNameWithoutExtension(str);
+                    File.Move(str, Path.GetDirectoryName(qdPath) + "\\" + prefabFileName + Path.GetExtension(str));
+                }
+
+                if (Path.GetExtension(str) == ".meta") File.Delete(str);
+            }
+
+            AssetDatabase.Refresh();
+        }
+        catch (Exception e)
+        {
+            WindowTips("错误信息：" + e);
+            throw;
+        }
+    }
+
+
+    /// <summary>
+    /// 删除从ACE项目导入的预设
+    /// </summary>
+    public void DeletePrefab()
+    {
+        //加这个判断是因为每次删除后unity都会报警告，所以直接把meta也删了
+        var meta = Application.dataPath + "/A-SuXing/selfPrefab/碰撞盒集合体.meta";
+        if (File.Exists(meta)) File.Delete(meta);
+        var qdPath = Application.dataPath + "/A-SuXing/selfPrefab/碰撞盒集合体.prefab";
+        if (File.Exists(qdPath)) File.Delete(qdPath);
+        AssetDatabase.Refresh();
     }
 
     #endregion

@@ -569,19 +569,23 @@ public class AllenSuTools : EditorWindow
                 #endregion
                 GUILayout.Space(8);
 
-                #region 三：从ACE项目移动预设
+                #region 三：打三点确定圆心
 
-                GUILayout.Label("三：导出ACE预设", TitleStyle());
+                GUILayout.Label("三：同一平面三个顶点确定圆心", TitleStyle());
+                GUILayout.Space(3);
 
                 // ------------ 一：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
 
                 // 第一组水平排版开始
                 EditorGUILayout.BeginHorizontal();
-                if (GUILayout.Button("1：从ACE项目移动预设")) SelfCollider.Instance().MovePrefabFromAce();
-                if (GUILayout.Button("2：删除QD下的预设")) SelfCollider.Instance().DeletePrefab();
+                GUILayout.Label("提示信息",SetGuiStyle(Color.black, 14));
+                GUILayout.TextField(SelfCollider.Instance().WhichTimeTips);
                 EditorGUILayout.EndHorizontal();
                 // 第一组水平排版结束
+                GUILayout.Space(3);
+
+                if (GUILayout.Button("点击3次按钮，获取圆心")) SelfCollider.Instance().CreateCenterOfCircle();
 
                 GUILayout.EndVertical();
                 // ------------ 一：结束垂直画盒子 ------------
@@ -601,75 +605,69 @@ public class AllenSuTools : EditorWindow
                 // ------------ 一：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
 
-                // 第一组水平排版开始  显示点击的第一个点的位置信息
+                // 第一组水平排版开始
                 EditorGUILayout.BeginHorizontal();
-                GUILayout.Label("点一 position：", SetGuiStyle(Color.black, 14));
-                // 这里只把显示结果保留三位小数，但计算时仍然用的原数据
-                GUILayout.TextField("(" + (Math.Round(SelfCollider.Instance().FirstAnglePos.x, 3) + "，" + (Math.Round(SelfCollider.Instance().FirstAnglePos.y, 3)) +
-                                          "，" + (Math.Round(SelfCollider.Instance().FirstAnglePos.z, 3))) + ")");
+                GUILayout.Label("提示信息", SetGuiStyle(Color.black, 14));
+                GUILayout.TextField(SelfCollider.Instance().StrAngleTips);
                 EditorGUILayout.EndHorizontal();
                 // 第一组水平排版结束
                 GUILayout.Space(3);
 
-                // 第二组水平排版开始  显示点击的第二个点的位置信息
-                EditorGUILayout.BeginHorizontal();
-                GUILayout.Label("点二 position：", SetGuiStyle(Color.black, 14));
-                GUILayout.TextField("(" + ((Math.Round(SelfCollider.Instance().SecondAnglePos.x, 3)) + "，" + Math.Round(SelfCollider.Instance().SecondAnglePos.y, 3) +
-                                           "，" + (Math.Round(SelfCollider.Instance().SecondAnglePos.z, 3))) + ")");
-                EditorGUILayout.EndHorizontal();
-                // 第二组水平排版结束
-                GUILayout.Space(3);
-
-                // 第三组水平排版开始  显示结果的单位向量
-                EditorGUILayout.BeginHorizontal();
-                GUILayout.Label("输出向量结果：", SetGuiStyle(Color.black, 14));
-                GUILayout.TextField("(" + ((Math.Round(SelfCollider.Instance().AngleResult.x, 3)) + "，" + (Math.Round(SelfCollider.Instance().AngleResult.y, 3)) +
-                                           "，" + (Math.Round(SelfCollider.Instance().AngleResult.z, 3))) + ")");
-                EditorGUILayout.EndHorizontal();
-                // 第三组水平排版结束
-                GUILayout.Space(3);
+                if (GUILayout.Button("点击两次按钮，计算单位向量")) SelfCollider.Instance().AngleModel();
 
                 GUILayout.EndVertical();
                 // ------------ 一：结束垂直画盒子 ------------
-
-                // 第四组水平排版开始
-                EditorGUILayout.BeginHorizontal();
-                if (GUILayout.Button("1：点击两次按钮，计算单位向量")) SelfCollider.Instance().AngleModel();
-                if (GUILayout.Button("2：清空数据")) SelfCollider.Instance().ClearAngleModel();
-                EditorGUILayout.EndHorizontal();
-                // 第四组水平排版结束
-
-
+              
                 #endregion
                 GUILayout.Space(8);
 
                 #region 2：位置
 
-                GUILayout.Label("B：位置(暂未实现)", SetGuiStyle(Color.red, 16));
+                // GUILayout.Label("B：位置(暂未实现)", SetGuiStyle(Color.red, 16));
+                // ------------ 一：开始垂直画盒子 ------------
+                // GUILayout.BeginVertical("box");
+                //
+                // // 第一组水平排版开始
+                // EditorGUILayout.BeginHorizontal();
+                // if (GUILayout.Button("点击添加脚本")) SelfCollider.Instance().AddTestDrawLine();
+                //
+                // EditorGUILayout.EndHorizontal();
+                // // 第一组水平排版结束
+                // GUILayout.Space(3);
+                //
+                // // 第一组水平排版开始
+                // EditorGUILayout.BeginHorizontal();
+                // if (GUILayout.Button("点击绘制线框")) SelfCollider.Instance().DrawLineAndGetCenterPos();
+                // if (GUILayout.Button("清空数据")) SelfCollider.Instance().ClearPosValue();
+                // EditorGUILayout.EndHorizontal();
+                // // 第一组水平排版结束
+                // GUILayout.Space(3);
+                //
+                // GUILayout.EndVertical();
+                // ------------ 一：结束垂直画盒子 ------------
+
+
+                #endregion
+
+                #endregion
+                GUILayout.Space(8);
+
+                #region 五：从ACE项目移动预设
+
+                GUILayout.Label("五：导出ACE预设", TitleStyle());
+
                 // ------------ 一：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
 
                 // 第一组水平排版开始
                 EditorGUILayout.BeginHorizontal();
-                if (GUILayout.Button("点击添加脚本")) SelfCollider.Instance().AddTestDrawLine();
-
+                if (GUILayout.Button("1：从ACE项目移动预设")) SelfCollider.Instance().MovePrefabFromAce();
+                if (GUILayout.Button("2：删除QD下的预设")) SelfCollider.Instance().DeletePrefab();
                 EditorGUILayout.EndHorizontal();
                 // 第一组水平排版结束
-                GUILayout.Space(3);
 
-                // 第一组水平排版开始
-                EditorGUILayout.BeginHorizontal();
-                if (GUILayout.Button("点击绘制线框")) SelfCollider.Instance().DrawLineAndGetCenterPos();
-                if (GUILayout.Button("清空数据")) SelfCollider.Instance().ClearPosValue();
-                EditorGUILayout.EndHorizontal();
-                // 第一组水平排版结束
-                GUILayout.Space(3);
-              
                 GUILayout.EndVertical();
                 // ------------ 一：结束垂直画盒子 ------------
-
-
-                #endregion
 
                 #endregion
                 GUILayout.Space(8);
