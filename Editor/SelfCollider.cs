@@ -825,21 +825,20 @@ public class SelfCollider : CommonFun
 
         WhichTimeClick++;
 
-        var pos = selectObj.transform.position;
         switch (WhichTimeClick)
         {
             case 1:
-                FirstPoint = pos;
+                FirstPoint = selectObj.transform.position;
                 WhichTimeTips = "第 1 个点已有值";
                 break;
             case 2:
-                SecondPoint = pos;
+                SecondPoint = selectObj.transform.position;
                 WhichTimeTips = "第 2 个点已有值";
                 break;
             case 3:
-                ThirdPoint = pos;
+                ThirdPoint = selectObj.transform.position;
                 selectObj.transform.position = GetCenterOfCircle(FirstPoint, SecondPoint, ThirdPoint);
-                WhichTimeTips = "圆心坐标：" + "( "+ pos.x + "，" + pos.y + "，" + pos.z + " )";
+                WhichTimeTips = "圆心坐标：" + "( "+ selectObj.transform.position.x + "，" + selectObj.transform.position.y + "，" + selectObj.transform.position.z + " )";
                 WhichTimeClick = 0;
                 break;
             default:
