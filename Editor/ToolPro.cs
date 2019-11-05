@@ -94,23 +94,6 @@ public class ToolPro : CommonFun
         }
     }
 
-
-    /// <summary>
-    /// 删除 txt
-    /// </summary>
-    public void DeleteTxt()
-    {
-        if (File.Exists(TxtPath))
-        {
-            File.Delete(TxtPath);
-            WindowTips("已删除");
-        }
-        else
-        {
-            WindowTips("不存在 D:/所选颗粒名称汇总.txt 这个文件");
-        }
-    }
-
     #endregion
 
     #region 二：复制 fbx 到指定文件夹

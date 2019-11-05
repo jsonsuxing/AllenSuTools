@@ -1023,17 +1023,15 @@ public class AllenSuTools : EditorWindow
                 #region 一：复制名称到指定 txt 文件
 
                 GUILayout.Label("1：复制颗粒名称到 txt 文件(修改一个点一次)", SetGuiStyle(Color.red, 14));
+                GUILayout.Space(3);
 
                 // ------------ 二：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
 
-                if (GUILayout.Button("1、点击颗粒预设，添加至 txt")) ToolPro.Instance().CopyNameToTxt();
-                GUILayout.Space(3);
-
                 // 第一组水平排版开始
                 EditorGUILayout.BeginHorizontal();
+                if (GUILayout.Button("1、点击颗粒预设，添加至 txt")) ToolPro.Instance().CopyNameToTxt();
                 if (GUILayout.Button("2、打开 txt")) ToolPro.Instance().OpenTxt();
-                if (GUILayout.Button("3、删除 txt")) ToolPro.Instance().DeleteTxt();
                 EditorGUILayout.EndHorizontal();
                 // 第一组水平排版结束
 
@@ -1057,7 +1055,7 @@ public class AllenSuTools : EditorWindow
 
                 // 第一组垂排版开始
                 EditorGUILayout.BeginVertical();
-                if (GUILayout.Button("点击复制 fbx 文件，同时取消场景待定颗粒标识")) ToolPro.Instance().CopyFbxToDirectory();
+                if (GUILayout.Button("点击按钮，复制 fbx 文件，同时取消场景待定颗粒标识")) ToolPro.Instance().CopyFbxToDirectory();
                 EditorGUILayout.EndVertical();
                 // 第一组垂直排版结束
                 GUILayout.Space(3);
