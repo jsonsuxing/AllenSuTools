@@ -156,14 +156,14 @@ public class SelfModel : CommonFun
             }
             else
             {
-                // 如果指定的文件夹没有该模型，那就是原来模型分配错了文件夹
+                // 如果指定的文件夹没有该模型，那就是原来模型分配错了文件夹或者不存在
                 IsWrongDirectory = true;
             }
 
             // 把指定模型文件移动到对应工程文件路径
             string fileName = Path.GetFileNameWithoutExtension(outFileName);
             File.Move(outFileName, Path.GetDirectoryName(projectModelPath) + "\\" + fileName + Path.GetExtension(outFileName));
-            WindowTips(IsWrongDirectory ? "恭喜你，导入成功，但之前模型分配错了文件夹，请查看！！！" : "恭喜你，导入成功");
+            WindowTips(IsWrongDirectory ? "恭喜你，导入成功，但 之前模型分配错了文件夹 或 不存在，请查看！！！" : "恭喜你，导入成功");
             IsWrongDirectory = false;
         }
 
