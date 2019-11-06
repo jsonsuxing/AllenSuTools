@@ -6,6 +6,7 @@
 // ========================================================
 
 using System;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using System.IO;
@@ -63,6 +64,8 @@ public class SelfCollider : CommonFun
 {
     // 碰撞盒管理类
     private static SelfCollider instance;
+
+   
 
     #region MenuItem
 
@@ -151,45 +154,61 @@ public class SelfCollider : CommonFun
     public int WhichTimeClick = 0; // 点击了第几次
     public string WhichTimeTips = string.Empty; // 点击了几次的提示信息
 
+    // 长方体的一条对角线两个顶点，确定一个 BoxCollider
+    public List<Vector3> VertexList;  // 获取到的顶点列表
+
 
     #endregion
 
     #region 一：克隆碰撞盒
 
-    #region 一：一键添加长方体类型的碰撞盒(如高一粒)
 
-    /// <summary>
-    /// 为长方体类型颗粒添加碰撞盒
-    /// </summary>
-    public void AddBoxCollider()
+    #region 一：一：对角线两顶点确定碰撞盒
+
+    public void VertexBox()
     {
-        IfSelectionIsNull("没有选中颗粒");
+        if (VertexList == null) VertexList = new List<Vector3>();
+        VertexList.Add(Selection.activeGameObject.transform.position);
 
-        // 从内存中找到颗粒
-        var prefabObj = Resources.Load<GameObject>("Prefab/ModelPrefabs/" + Selection.activeGameObject.name);
-        // 预设路径
-        var prefabPath = AssetDatabase.GetAssetPath(prefabObj);
+        if (VertexList.Count == 2)
+        {
+            for (var i = 0; i < VertexList.Count; i++)
+            {
+                // 变换位置，从世界坐标到局部坐标。和 Transform.TransformPoint 相反
+                VertexList[i] = Selection.activeTransform.InverseTransformPoint(VertexList[i]);
+            }
+            float xMin, xMax = xMin = VertexList[0].x;
+            float yMin, yMax = yMin = VertexList[0].y;
+            float zMin, zMax = zMin = VertexList[0].z;
 
-        // 实例化颗粒到场景
-        var cloneObj = Instantiate(prefabObj);
-        // 获取“物件_1”上的 Mesh
-        var bounds = cloneObj.transform.GetChild(0).GetComponent<MeshFilter>().sharedMesh.bounds;
-        // 获得模型原始尺寸的大小,并减去规定的差值
-        var sizeX  = bounds.size.x * cloneObj.transform.localScale.x              - DiffValue;
-        var sizeY  = bounds.size.y * cloneObj.transform.localScale.y - TuQiHeight - DiffValue;
-        var scaleZ = bounds.size.z * cloneObj.transform.localScale.z              - DiffValue;
+            foreach (var vector in VertexList)
+            {
+                // 获取用于创建向量的最小值和最大值。
+                xMin = (vector.x < xMin) ? vector.x : xMin;
+                xMax = (vector.x > xMax) ? vector.x : xMax;
+                yMin = (vector.y < yMin) ? vector.y : yMin;
+                yMax = (vector.y > yMax) ? vector.y : yMax;
+                zMin = (vector.z < zMin) ? vector.z : zMin;
+                zMax = (vector.z > zMax) ? vector.z : zMax;
+            }
+            var maxVector   = new Vector3(xMax, yMax, zMax);
+            var minVector   = new Vector3(xMin, yMin, zMin);
 
-        // 添加碰撞盒，并设置大小及中心点
-        var boxCollider = cloneObj.AddComponent<BoxCollider>();
-        boxCollider.size   = new Vector3(sizeX, sizeY,             scaleZ);
-        boxCollider.center = new Vector3(0,     -(TuQiHeight / 2), 0);
+            var size        = maxVector - minVector;
+            var center      = (maxVector + minVector) / 2;
+            var boxCollider = Undo.AddComponent<BoxCollider>(Selection.activeGameObject);
+            // boxCollider.size      = size;
+            boxCollider.size=new Vector3(size.x - DiffValue , size.y - DiffValue , size.z - DiffValue);
+            boxCollider.center    = center;
+            VertexList.Clear();
+        }
 
-        // 替换模型
-        PrefabUtility.SaveAsPrefabAsset(cloneObj, prefabPath);
-        DestroyImmediate(cloneObj);
     }
 
+
     #endregion
+
+
 
     #region 二：添加环形类的碰撞盒
 
@@ -697,6 +716,42 @@ public class SelfCollider : CommonFun
     }
 
     #endregion
+
+    #region 四：一键添加长方体类型的碰撞盒(如高一粒)
+
+    /// <summary>
+    /// 为长方体类型颗粒添加碰撞盒
+    /// </summary>
+    public void AddBoxCollider()
+    {
+        IfSelectionIsNull("没有选中颗粒");
+
+        // 从内存中找到颗粒
+        var prefabObj = Resources.Load<GameObject>("Prefab/ModelPrefabs/" + Selection.activeGameObject.name);
+        // 预设路径
+        var prefabPath = AssetDatabase.GetAssetPath(prefabObj);
+
+        // 实例化颗粒到场景
+        var cloneObj = Instantiate(prefabObj);
+        // 获取“物件_1”上的 Mesh
+        var bounds = cloneObj.transform.GetChild(0).GetComponent<MeshFilter>().sharedMesh.bounds;
+        // 获得模型原始尺寸的大小,并减去规定的差值
+        var sizeX  = bounds.size.x * cloneObj.transform.localScale.x              - DiffValue;
+        var sizeY  = bounds.size.y * cloneObj.transform.localScale.y - TuQiHeight - DiffValue;
+        var scaleZ = bounds.size.z * cloneObj.transform.localScale.z              - DiffValue;
+
+        // 添加碰撞盒，并设置大小及中心点
+        var boxCollider = cloneObj.AddComponent<BoxCollider>();
+        boxCollider.size   = new Vector3(sizeX, sizeY,             scaleZ);
+        boxCollider.center = new Vector3(0,     -(TuQiHeight / 2), 0);
+
+        // 替换模型
+        PrefabUtility.SaveAsPrefabAsset(cloneObj, prefabPath);
+        DestroyImmediate(cloneObj);
+    }
+
+    #endregion
+
 
     #endregion
 

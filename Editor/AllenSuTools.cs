@@ -281,19 +281,26 @@ public class AllenSuTools : EditorWindow
                 // 设置《海贼王》标题语
                 EditorGUILayout.HelpBox(" 弱者是没有资格谈正义的--《海贼王》", MessageType.Info, true);
 
-                #region 一：一键添加长方体类型的碰撞盒(如高一粒)
+                #region 一：长方体类模型，通过一对角线的两个顶点，确定碰撞盒
 
-                GUILayout.Label("一：克隆正方类碰撞盒", TitleStyle());
-
+                GUILayout.Label("一：对角线两顶点确定碰撞盒", TitleStyle());
+                
                 // ------------ 一：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
-                if (GUILayout.Button("点击克隆碰撞盒")) SelfCollider.Instance().AddBoxCollider();
+                
+                // 第一组垂直排版开始
+                EditorGUILayout.BeginVertical();
+                GUILayout.Label("当前已确定 "+ (SelfCollider.Instance().VertexList == null ? 0 : SelfCollider.Instance().VertexList.Count) +" 个顶点",SetGuiStyle(Color.black, 14));
+                if (GUILayout.Button("获取对角线两顶点，确定碰撞盒")) SelfCollider.Instance().VertexBox();
+                EditorGUILayout.EndVertical();
+                // 第一组垂直排版结束
+                GUILayout.Space(3);
+                
                 GUILayout.EndVertical();
-                //------------一：结束垂直画盒子------------
+                // ------------ 一：结束垂直画盒子 ------------
 
                 #endregion
-                GUILayout.Space(8);
-
+                
                 #region 二：添加环形类的碰撞盒
 
                 SelfCollider.Instance().RingBoxCollGuiControl();
@@ -446,6 +453,20 @@ public class AllenSuTools : EditorWindow
                 GUILayout.Space(8);
 
                 #endregion
+                GUILayout.Space(8);
+
+                #region 四：一键添加长方体类型的碰撞盒(如高一粒)
+
+                GUILayout.Label("四：克隆正方类碰撞盒", TitleStyle());
+
+                // ------------ 一：开始垂直画盒子 ------------
+                GUILayout.BeginVertical("box");
+                if (GUILayout.Button("点击克隆碰撞盒")) SelfCollider.Instance().AddBoxCollider();
+                GUILayout.EndVertical();
+                //------------一：结束垂直画盒子------------
+
+                #endregion
+                GUILayout.Space(8);
 
                 #endregion
                 break;
