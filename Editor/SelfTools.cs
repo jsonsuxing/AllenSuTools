@@ -43,7 +43,7 @@ public class SelfTools : CommonFun
 
     #endregion
 
-    #region 二：所选物体坐标归0
+    #region 所选物体坐标归0
 
     /// <summary>
     /// 所选物体坐标归0
@@ -56,7 +56,7 @@ public class SelfTools : CommonFun
 
     #endregion
 
-    #region 三：计算 Length 的值
+    #region 计算 Length 的值
 
     /// <summary>
     /// 计算关键部位上 Length 的值
@@ -71,16 +71,18 @@ public class SelfTools : CommonFun
     /// <summary>
     /// 获取颗粒 Length 的值
     /// </summary>
-    /// <param name="go">所选物体</param>
+    /// <param name="selectObj">所选物体</param>
     /// <param name="axle">轴向</param>
-    public void GetLengthValue(GameObject go, string axle)
+    public void GetLengthValue(GameObject selectObj, string axle)
     {
-        var buWei = go.GetComponent<GuanJianBuWei>();
+        var buWei = selectObj.GetComponent<GuanJianBuWei>();
         if (!buWei)
         {
             WindowTips("关键部位上没有 GuanJianBuWei 脚本");
             return;
         }
+
+        var objPos = selectObj.transform.position;
 
         if (ClickTime == 1)
         {
@@ -89,13 +91,13 @@ public class SelfTools : CommonFun
             switch (axle)
             {
                 case "x":
-                    FirstValue = go.transform.localPosition.x;
+                    FirstValue = objPos.x;
                     break;
                 case "y":
-                    FirstValue = go.transform.localPosition.y;
+                    FirstValue = objPos.y;
                     break;
                 case "z":
-                    FirstValue = go.transform.localPosition.z;
+                    FirstValue = objPos.z;
                     break;
             }
         }
@@ -104,23 +106,19 @@ public class SelfTools : CommonFun
             switch (axle)
             {
                 case "x":
-                    SecondValue = go.transform.localPosition.x;
+                    SecondValue = objPos.x;
+                    selectObj.transform.position = new Vector3((float)(Math.Round((FirstValue + SecondValue) / 2, 6)), objPos.y,objPos.z );
                     break;
                 case "y":
-                    SecondValue = go.transform.localPosition.y;
+                    SecondValue = objPos.y;
+                    selectObj.transform.position = new Vector3(objPos.x, (float)(Math.Round((FirstValue + SecondValue) / 2, 6)), objPos.z);
                     break;
                 case "z":
-                    SecondValue = go.transform.localPosition.z;
+                    SecondValue = objPos.z;
+                    selectObj.transform.position = new Vector3(objPos.x,objPos.y, (float)(Math.Round((FirstValue + SecondValue) / 2, 6)));
                     break;
             }
 
-            //这段代码不适用实操过程中有多个小数点的判断，故注释
-            //if (FirstValue == SecondValue)
-            //{
-            //    WindowTips("两次的坐标值一样");
-            //    ClearValue();
-            //    return;
-            //}
             if (FirstValue >= 0 && SecondValue >= 0 || FirstValue <= 0 && SecondValue <= 0)
             {
                 //保留两位小数，Math.Round是国际标注，四舍六入
@@ -130,16 +128,13 @@ public class SelfTools : CommonFun
             {
                 Length = Math.Round(Math.Abs(FirstValue) + Math.Abs(SecondValue), 2);
             }
-
             // 关键部位的长度
             buWei.length = (float) Length;
-            // 两点的中点值
-            MidPoint = Math.Round((FirstValue + SecondValue)/2 , 4);
-            // if (MidPoint < 0.0000001f) MidPoint = 0;
 
-            // 这里不管是否下面两项会用到，直接传值
-            SelfCollider.Instance().Height= (float)Length - 0.004f; // 环形碰撞盒的高度要比实际值小
-            SelfCollider.Instance().CloneSpace = (float)Length; // 自定义平移碰撞盒的间隔
+            // 以下数据不管是否用到，都传值显示
+            MidPoint = Math.Round((FirstValue + SecondValue) / 2, 6); // 两点的中点值
+            SelfCollider.Instance().Height= (float)Length - 0.004f;   // 环形碰撞盒的高度要比实际值小
+            SelfCollider.Instance().CloneSpace = (float)Length;       // 自定义平移碰撞盒的间隔
         }
 
         ClickTime++;
@@ -157,7 +152,7 @@ public class SelfTools : CommonFun
 
     #endregion
 
-    #region 四：批量修改“-”为“&”
+    #region 批量修改“-”为“&”
 
     /// <summary>
     /// 批量修改文件名中含有“-”的为 (shift+7对应的符号)
@@ -194,7 +189,7 @@ public class SelfTools : CommonFun
 
     #endregion
 
-    #region 五：添加，删除 MeshRenderer,MeshFilter
+    #region 添加，删除 MeshRenderer,MeshFilter
 
     /// <summary>
     /// 添加MeshRenderer,MeshFilter
@@ -259,7 +254,7 @@ public class SelfTools : CommonFun
 
     #endregion
 
-    #region 六：删除指定后缀名的文件
+    #region 删除指定后缀名的文件
 
     /// <summary>
     /// 删除指定后缀名的文件
@@ -285,6 +280,45 @@ public class SelfTools : CommonFun
             if (Equals(extension, SelectExtension))
             {
                 File.Delete(str);
+            }
+        }
+    }
+
+    #endregion
+
+    #region 镜像克隆碰撞盒
+
+    /// <summary>
+    /// 镜像克隆碰撞盒
+    /// </summary>
+    public void MirrorObjects()
+    {
+        // 所选物体
+        var gameObjects = Selection.gameObjects;
+        if (gameObjects.Length == 0)
+        {
+            WindowTips("没有选中任何物体");
+            return;
+        }
+        if (Equals(SetAxis, "x"))
+        {
+            foreach (var o in Selection.gameObjects)
+            {
+                o.transform.position = new Vector3(o.transform.position.x, o.transform.position.y, -o.transform.position.z);
+            }
+        }
+        else if (Equals(SetAxis,"z"))
+        {
+            foreach (var o in Selection.gameObjects)
+            {
+                o.transform.position = new Vector3(-o.transform.position.x, o.transform.position.y, o.transform.position.z);
+            }
+        }
+        else
+        {
+            foreach (var o in Selection.gameObjects)
+            {
+                o.transform.position = new Vector3(o.transform.position.x, -o.transform.position.y, o.transform.position.z);
             }
         }
     }

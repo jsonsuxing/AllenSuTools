@@ -65,8 +65,6 @@ public class SelfCollider : CommonFun
     // 碰撞盒管理类
     private static SelfCollider instance;
 
-   
-
     #region MenuItem
 
     // 1--复制粘贴当前碰撞盒
@@ -162,7 +160,6 @@ public class SelfCollider : CommonFun
 
     #region 一：克隆碰撞盒
 
-
     #region 一：一：对角线两顶点确定碰撞盒
 
     public void VertexBox()
@@ -207,8 +204,6 @@ public class SelfCollider : CommonFun
 
 
     #endregion
-
-
 
     #region 二：添加环形类的碰撞盒
 
