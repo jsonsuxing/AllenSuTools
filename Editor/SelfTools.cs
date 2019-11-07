@@ -286,46 +286,6 @@ public class SelfTools : CommonFun
 
     #endregion
 
-    #region 镜像克隆碰撞盒
-
-    /// <summary>
-    /// 镜像克隆碰撞盒
-    /// </summary>
-    public void MirrorObjects()
-    {
-        // 所选物体
-        var gameObjects = Selection.gameObjects;
-        if (gameObjects.Length == 0)
-        {
-            WindowTips("没有选中任何物体");
-            return;
-        }
-        if (Equals(SetAxis, "x"))
-        {
-            foreach (var o in Selection.gameObjects)
-            {
-                o.transform.position = new Vector3(o.transform.position.x, o.transform.position.y, -o.transform.position.z);
-            }
-        }
-        else if (Equals(SetAxis,"z"))
-        {
-            foreach (var o in Selection.gameObjects)
-            {
-                o.transform.position = new Vector3(-o.transform.position.x, o.transform.position.y, o.transform.position.z);
-            }
-        }
-        else
-        {
-            foreach (var o in Selection.gameObjects)
-            {
-                o.transform.position = new Vector3(o.transform.position.x, -o.transform.position.y, o.transform.position.z);
-            }
-        }
-    }
-
-    #endregion
-
-
     public static SelfTools Instance()
     {
         return instance ?? (instance = new SelfTools());

@@ -603,10 +603,8 @@ public class SelfCollider : CommonFun
             return;
         }
 
-        var tempParent = new GameObject("拖出子物体，删除该父物体");
         // 克隆物体时的朝向
         var pivot = Vector3.zero;
-        tempParent.transform.SetParent(selectObj.transform.parent);
         switch (PivotAxis)
         {
             case PivotAxis.X:
@@ -630,11 +628,10 @@ public class SelfCollider : CommonFun
             var cloneAngle = i * (360f / CustomBoxCollNum);
             
             cloneObj.transform.RotateAround(new Vector3(SelfPivotAxisX, SelfPivotAxisY, SelfPivotAxisZ), pivot, cloneAngle);
-            cloneObj.transform.SetParent(tempParent.transform, true);
+            cloneObj.transform.SetParent(selectObj.transform.parent, true);
+            Undo.RegisterCreatedObjectUndo(cloneObj, "MyCloneObj");
         }
-
-        Undo.RegisterCreatedObjectUndo(tempParent, "tempParent");
-        DestroyImmediate(selectObj);
+        Undo.DestroyObjectImmediate(selectObj);
     }
 
 

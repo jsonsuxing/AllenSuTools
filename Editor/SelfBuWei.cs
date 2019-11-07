@@ -32,8 +32,8 @@ public class SelfBuWei : CommonFun
         EditorGUIUtility.PingObject(Selection.activeGameObject.transform.parent);
     }
 
-    // 热键：Shift + V  跳转到颗粒最下方
-    [MenuItem("GameObject/JumpToEnd #V")]
+    // 热键：Shift + M  跳转到颗粒最下方
+    [MenuItem("GameObject/JumpToEnd #M")]
     static void JumpToEnd()
     {
         var selectTrans = Selection.activeGameObject.transform;

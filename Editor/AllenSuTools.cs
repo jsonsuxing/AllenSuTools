@@ -284,23 +284,23 @@ public class AllenSuTools : EditorWindow
                 #region 一：长方体类模型，通过一对角线的两个顶点，确定碰撞盒
 
                 GUILayout.Label("一：对角线两顶点确定碰撞盒", TitleStyle());
-
+                
                 // ------------ 一：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
-
+                
                 // 第一组垂直排版开始
                 EditorGUILayout.BeginVertical();
-                GUILayout.Label("当前已确定 " + (SelfCollider.Instance().VertexList == null ? 0 : SelfCollider.Instance().VertexList.Count) + " 个顶点", SetGuiStyle(Color.black, 14));
+                GUILayout.Label("当前已确定 "+ (SelfCollider.Instance().VertexList == null ? 0 : SelfCollider.Instance().VertexList.Count) +" 个顶点",SetGuiStyle(Color.black, 14));
                 if (GUILayout.Button("获取对角线两顶点，确定碰撞盒")) SelfCollider.Instance().VertexBox();
                 EditorGUILayout.EndVertical();
                 // 第一组垂直排版结束
                 GUILayout.Space(3);
-
+                
                 GUILayout.EndVertical();
                 // ------------ 一：结束垂直画盒子 ------------
 
                 #endregion
-
+                
                 #region 二：添加环形类的碰撞盒
 
                 SelfCollider.Instance().RingBoxCollGuiControl();
@@ -367,7 +367,7 @@ public class AllenSuTools : EditorWindow
                 // 第一组水平排版开始
                 EditorGUILayout.BeginHorizontal();
                 GUILayout.Label("1:旋转中心(默认为原点)", SetGuiStyle(Color.black, 14));
-                if (GUILayout.Button("可点击物体，自动传值")) SelfCollider.Instance().SetMyPivot();
+                if(GUILayout.Button("可点击物体，自动传值")) SelfCollider.Instance().SetMyPivot();
                 EditorGUILayout.EndHorizontal();
                 // 第一组水平排版结束
                 GUILayout.Space(3);
@@ -387,12 +387,12 @@ public class AllenSuTools : EditorWindow
                 GUILayout.Label("2:快捷设置克隆个数", SetGuiStyle(Color.black, 14));
                 // 第四组水平排版开始
                 EditorGUILayout.BeginHorizontal();
-                if (GUILayout.Button("4")) { SelfCollider.Instance().CustomBoxCollNum = 4; }
+                if (GUILayout.Button("4")) { SelfCollider.Instance().CustomBoxCollNum= 4; }
                 if (GUILayout.Button("8")) { SelfCollider.Instance().CustomBoxCollNum = 8; }
                 if (GUILayout.Button("10")) { SelfCollider.Instance().CustomBoxCollNum = 10; }
                 if (GUILayout.Button("12")) { SelfCollider.Instance().CustomBoxCollNum = 12; }
                 if (GUILayout.Button("16")) { SelfCollider.Instance().CustomBoxCollNum = 16; }
-                if (GUILayout.Button("x2")) { SelfCollider.Instance().CustomBoxCollNum = SelfCollider.Instance().CustomBoxCollNum * 2; }
+                if (GUILayout.Button("x2")) { SelfCollider.Instance().CustomBoxCollNum = SelfCollider.Instance().CustomBoxCollNum*2; }
                 EditorGUILayout.EndHorizontal();
                 // 第四组水平排版结束
                 GUILayout.Space(3);
@@ -404,7 +404,7 @@ public class AllenSuTools : EditorWindow
                 EditorGUILayout.EndHorizontal();
                 // 第三组水平排版结束
                 GUILayout.Space(3);
-
+               
                 GUILayout.EndVertical();
                 // ------------ 一：结束垂直画盒子 ------------
 
@@ -950,32 +950,11 @@ public class AllenSuTools : EditorWindow
                 // 第三组水平排版结束
 
                 #endregion
-                GUILayout.Space(2);
+                GUILayout.Space(5);
 
-                #region 3：镜像克隆碰撞盒
+                #region 3:批量修改“-”为“&”
 
-                GUILayout.Label("三：镜像克隆碰撞盒", TitleStyle());
-                GUILayout.Space(3);
-
-                // ------------ 一：开始垂直画盒子 ------------
-                GUILayout.BeginVertical("box");
-
-                // 第一组水平排版开始
-                EditorGUILayout.BeginHorizontal();
-                if (GUILayout.Button("点击按钮，镜像所选物体（仅坐标零点）")) SelfTools.Instance().MirrorObjects();
-                EditorGUILayout.EndHorizontal();
-                // 第一组水平排版结束
-                GUILayout.Space(3);
-
-                GUILayout.EndVertical();
-                // ------------ 一：结束垂直画盒子 ------------
-               
-                #endregion
-                GUILayout.Space(2);
-
-                #region 4:批量修改“-”为“&”
-
-                GUILayout.Label("四：批量修改“-”为“&”", TitleStyle());
+                GUILayout.Label("三：批量修改“-”为“&”", TitleStyle());
 
                 // ------------ 一：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
@@ -995,9 +974,9 @@ public class AllenSuTools : EditorWindow
                 #endregion
                 GUILayout.Space(2);
 
-                #region 5：添加，删除 MeshRenderer,MeshFilter
+                #region 4：添加，删除 MeshRenderer,MeshFilter
 
-                GUILayout.Label("五：添加，移除紫色 Mesh", TitleStyle());
+                GUILayout.Label("四：添加，移除紫色 Mesh", TitleStyle());
 
                 // ------------ 一：开始水平画盒子 ------------
                 GUILayout.BeginVertical("box");
@@ -1015,9 +994,9 @@ public class AllenSuTools : EditorWindow
                 #endregion
                 GUILayout.Space(2);
 
-                #region 6：删除指定后缀名的文件
+                #region 5：删除指定后缀名的文件
 
-                GUILayout.Label("六：删除指定后缀名的文件", TitleStyle());
+                GUILayout.Label("五：删除指定后缀名的文件", TitleStyle());
 
                 // ------------ 一：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
