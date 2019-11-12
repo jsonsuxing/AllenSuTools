@@ -193,13 +193,14 @@ public class SelfCollider : CommonFun
 
             var size        = maxVector - minVector;
             var center      = (maxVector + minVector) / 2;
+            // 如果原来物体上有碰撞盒，则先移除
+            if (Selection.activeGameObject.GetComponent<BoxCollider>()) DestroyImmediate(Selection.activeGameObject.GetComponent<BoxCollider>());
             var boxCollider = Undo.AddComponent<BoxCollider>(Selection.activeGameObject);
             // boxCollider.size      = size;
             boxCollider.size=new Vector3(size.x - DiffValue , size.y - DiffValue , size.z - DiffValue);
             boxCollider.center    = center;
             VertexList.Clear();
         }
-
     }
 
 
