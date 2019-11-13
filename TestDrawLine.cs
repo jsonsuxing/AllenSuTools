@@ -15,12 +15,6 @@ public class TestDrawLine : MonoBehaviour
     public Color Color;
     public void OnDrawGizmosSelected()
     {
-        // if (StartVector != Vector3.zero && EndVector != Vector3.zero)
-        // {
-        //     Gizmos.color = Color;
-        //     Gizmos.DrawLine(StartVector, EndVector);
-        // }
-
         Gizmos.color = Color;
         Gizmos.DrawLine(StartVector, EndVector);
     }

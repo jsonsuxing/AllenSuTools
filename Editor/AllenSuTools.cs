@@ -1029,6 +1029,19 @@ public class AllenSuTools : EditorWindow
                 #endregion
                 GUILayout.Space(2);
 
+                #region 6：动态修改零件库 Image
+
+                GUILayout.Label("六：动态修改零件库 Image", TitleStyle());
+
+                // ------------ 一：开始垂直画盒子 ------------
+                GUILayout.BeginVertical("box");
+                if (GUILayout.Button("点击按钮，动态修改零件库 Image")) SelfTools.Instance().ChangeGranuleImage();
+                GUILayout.EndVertical();
+                // ------------ 一：结束垂直画盒子 ------------
+
+                #endregion
+                GUILayout.Space(2);
+
                 #endregion
                 break;
             case 5:
