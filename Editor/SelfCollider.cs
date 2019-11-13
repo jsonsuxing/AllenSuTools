@@ -14,6 +14,7 @@ using System.Linq;
 using System.Reflection;
 using UnityEditorInternal;
 using Application = UnityEngine.Application;
+using Object = UnityEngine.Object;
 
 
 #region 枚举
@@ -194,7 +195,7 @@ public class SelfCollider : CommonFun
             var size        = maxVector - minVector;
             var center      = (maxVector + minVector) / 2;
             // 如果原来物体上有碰撞盒，则先移除
-            if (Selection.activeGameObject.GetComponent<BoxCollider>()) DestroyImmediate(Selection.activeGameObject.GetComponent<BoxCollider>());
+            if (Selection.activeGameObject.GetComponent<BoxCollider>()) Object.DestroyImmediate(Selection.activeGameObject.GetComponent<BoxCollider>());
             var boxCollider = Undo.AddComponent<BoxCollider>(Selection.activeGameObject);
             // boxCollider.size      = size;
             boxCollider.size=new Vector3(size.x - DiffValue , size.y - DiffValue , size.z - DiffValue);
@@ -510,7 +511,7 @@ public class SelfCollider : CommonFun
     public void UpdateRingBoxColl()
     {
         // 如果存在工作对撞机，则删除它
-        if (WorkingCollider != null) DestroyImmediate(WorkingCollider);
+        if (WorkingCollider != null) Object.DestroyImmediate(WorkingCollider);
         // 创建一个新的对撞机
         CreateRingBoxColl();
     }
@@ -579,7 +580,7 @@ public class SelfCollider : CommonFun
                 bevelBox.transform.SetParent(ringBox.transform.parent);
             }
             // 删除每个父物体
-            DestroyImmediate(ringBox);
+            Object.DestroyImmediate(ringBox);
         }
     }
 
@@ -622,7 +623,7 @@ public class SelfCollider : CommonFun
         }
         for (var i = 0; i < CustomBoxCollNum; i++)
         {
-            var cloneObj = Instantiate(selectObj);
+            var cloneObj = Object.Instantiate(selectObj);
             cloneObj.name = "Bevel Box " + "(" + (i + 1) + ")";
 
             // 克隆的角度
@@ -678,7 +679,7 @@ public class SelfCollider : CommonFun
         var selectObjZ = selectObj.transform.localPosition.z;
         for (var i = 1; i <= CustomBoxCollNum; i++)
         {
-            var cloneObj = Instantiate(selectObj);
+            var cloneObj = Object.Instantiate(selectObj);
             cloneObj.name = "Normal Box " + "(" + i + ")";
             switch (SelfPivotAxis)
             {
@@ -725,7 +726,7 @@ public class SelfCollider : CommonFun
         var prefabPath = AssetDatabase.GetAssetPath(prefabObj);
 
         // 实例化颗粒到场景
-        var cloneObj = Instantiate(prefabObj);
+        var cloneObj = Object.Instantiate(prefabObj);
         // 获取“物件_1”上的 Mesh
         var bounds = cloneObj.transform.GetChild(0).GetComponent<MeshFilter>().sharedMesh.bounds;
         // 获得模型原始尺寸的大小,并减去规定的差值
@@ -740,7 +741,7 @@ public class SelfCollider : CommonFun
 
         // 替换模型
         PrefabUtility.SaveAsPrefabAsset(cloneObj, prefabPath);
-        DestroyImmediate(cloneObj);
+        Object.DestroyImmediate(cloneObj);
     }
 
     #endregion
@@ -787,7 +788,7 @@ public class SelfCollider : CommonFun
         {
             foreach (var coll in allBoxCollider)
             {
-                DestroyImmediate(coll);
+                Object.DestroyImmediate(coll);
             }
             IsClickRemoveBtn = false;
         }

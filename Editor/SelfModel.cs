@@ -280,7 +280,7 @@ public class SelfModel : CommonFun
                 // 获得路径下不含扩展名的文件名
                 var modelFileName = Path.GetFileNameWithoutExtension(modelFile);
                 // 克隆新颗粒,并重新命名
-                var newKeLi = Instantiate(firstKeLi, content.transform);
+                var newKeLi = Object.Instantiate(firstKeLi, content.transform);
                 if (newKeLi == null)
                 {
                     WindowTips("克隆新颗粒失败！！！");
@@ -342,7 +342,7 @@ public class SelfModel : CommonFun
         foreach (var granuleModel in Selection.gameObjects)
         {
             // 操作方式
-            var newPrefab = IsCenterHierarchy ? granuleModel : Instantiate(granuleModel, Vector3.zero, Quaternion.identity);
+            var newPrefab = IsCenterHierarchy ? granuleModel : Object.Instantiate(granuleModel, Vector3.zero, Quaternion.identity);
             if (newPrefab != null)
             {
                 // 批量操作方式一：碰撞盒的center与物体的transform转换
@@ -365,16 +365,16 @@ public class SelfModel : CommonFun
                 }
 
                 // 批量操作方式三：移除父物体上原来存在的脚本 KeLiData 和 GranuleModel，以及刚体组件
-                if (newPrefab.GetComponent<KeLiData>()) DestroyImmediate(newPrefab.GetComponent<KeLiData>());
-                if (newPrefab.GetComponent<GranuleModel>()) DestroyImmediate(newPrefab.GetComponent<GranuleModel>());
-                if (newPrefab.GetComponent<Rigidbody>()) DestroyImmediate(newPrefab.GetComponent<Rigidbody>());
+                if (newPrefab.GetComponent<KeLiData>()) Object.DestroyImmediate(newPrefab.GetComponent<KeLiData>());
+                if (newPrefab.GetComponent<GranuleModel>()) Object.DestroyImmediate(newPrefab.GetComponent<GranuleModel>());
+                if (newPrefab.GetComponent<Rigidbody>()) Object.DestroyImmediate(newPrefab.GetComponent<Rigidbody>());
             }
 
             count++;
             PrefabUtility.SaveAsPrefabAsset(newPrefab, IsCenterHierarchy ? "Assets/Resources/Prefab/ModelPrefabs/" + granuleModel.name + ".prefab" : AssetDatabase.GetAssetPath(granuleModel));
             // 操作方式为单点预设时执行删除操作，批量从Hierarchy删除会有模型未被改到的问题
             // if (IsCenterHierarchy)
-            DestroyImmediate(newPrefab);
+            Object.DestroyImmediate(newPrefab);
             var floatProgress = (float) count / Selection.gameObjects.Length;
             EditorUtility.DisplayProgressBar("修改进度", count + "/" + Selection.gameObjects.Length + "完成修改", floatProgress);
         }

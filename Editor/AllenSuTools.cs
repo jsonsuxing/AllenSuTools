@@ -1035,7 +1035,10 @@ public class AllenSuTools : EditorWindow
 
                 // ------------ 一：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
-                if (GUILayout.Button("点击按钮，动态修改零件库 Image")) SelfTools.Instance().ChangeGranuleImage();
+                if (GUILayout.Button("点击按钮，动态修改零件库 Image"))
+                {
+                    SelfTools.ChangeGranuleImage();
+                }
                 GUILayout.EndVertical();
                 // ------------ 一：结束垂直画盒子 ------------
 

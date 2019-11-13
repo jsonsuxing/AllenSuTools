@@ -9,10 +9,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using ChinarX;
+using QmDreamer.Manager;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.U2D;
 using UnityEngine.UI;
+using Object = UnityEngine.Object;
 
 
 /// <summary>
@@ -232,8 +234,8 @@ public class SelfTools : CommonFun
             if (selectObj.transform.GetComponent<MeshRenderer>()
                 && selectObj.transform.GetComponent<MeshFilter>())
             {
-                DestroyImmediate(selectObj.transform.GetComponent<MeshRenderer>());
-                DestroyImmediate(selectObj.transform.GetComponent<MeshFilter>());
+               Object.DestroyImmediate(selectObj.transform.GetComponent<MeshRenderer>());
+                Object.DestroyImmediate(selectObj.transform.GetComponent<MeshFilter>());
             }
         }
         else
@@ -248,8 +250,8 @@ public class SelfTools : CommonFun
                     if (selectObj.transform.GetChild(i).GetComponent<MeshRenderer>()
                         && selectObj.transform.GetChild(i).GetComponent<MeshFilter>())
                     {
-                        DestroyImmediate(selectObj.transform.GetChild(i).GetComponent<MeshRenderer>());
-                        DestroyImmediate(selectObj.transform.GetChild(i).GetComponent<MeshFilter>());
+                        Object.DestroyImmediate(selectObj.transform.GetChild(i).GetComponent<MeshRenderer>());
+                        Object.DestroyImmediate(selectObj.transform.GetChild(i).GetComponent<MeshFilter>());
                     }
                 }
             }
@@ -295,38 +297,38 @@ public class SelfTools : CommonFun
     /// <summary>
     /// 动态修改零件库 Image
     /// </summary>
-    public void ChangeGranuleImage()
+    public static void ChangeGranuleImage()
     {
         // 存放颗粒大类对象的列表 如：方高类
         var granuleList = new List<GameObject>();
         // 图集中的小图片
-        var content = GameObject.Find("View/Canvas Assembling/Left Tool Panel/Granule Library/Viewport/Content/");
-
+        var content = GameObject.Find("View/Canvas Assembling/Left Tool Panel/Granule Library/Viewport/Content");
+        
         for (var i = 0; i < content.transform.childCount; i++)
         {
-            if (content.transform.GetChild(i).GetComponent<PrimaryBlockType>())
+            if (content.transform.GetChild(i).GetComponent<GranuleUiType>())
             {
                 granuleList.Add(content.transform.GetChild(i).gameObject);
             }
         }
-        
-        for (var i = 1; i < granuleList.Count; i++)
+
+        foreach (var granule in granuleList)
         {
-            granuleList[i].GetComponent<Image>().color = granuleList[0].GetComponent<Image>().color;
+            granule.GetComponent<Image>().color = granuleList[0].GetComponent<Image>().color;
             var prefabObj = Resources.Load<GameObject>("Border");
             if (prefabObj)
             {
-                var prefab = Instantiate(prefabObj,granuleList[i].transform);
+                var prefab = Object.Instantiate(prefabObj, granule.transform);
                 Undo.RegisterCreatedObjectUndo(prefab, "prefab");
 
                 prefab.name = "Border";
                
                 // 给 Main 换 Sprite
-                prefab.transform.GetChild(0).GetComponent<Image>().sprite = ChinarAtlas.LoadSprite("UI/Assembling/Granule Library", "零件库-"+granuleList[i].name);
+                prefab.transform.GetChild(0).GetComponent<Image>().sprite = ChinarAtlas.LoadSprite("UI/Assembling/Granule Library", "零件库-" +granule.name);
 
                 //颗粒类原来的 sprite 设置为空
-                granuleList[i].GetComponent<Image>().sprite = null;
-                granuleList[i].GetComponent<Button>().targetGraphic = granuleList[i].transform.GetChild(0).GetChild(0).GetComponent<Image>();
+                granule.GetComponent<Image>().sprite         = null;
+                granule.GetComponent<Button>().targetGraphic = granule.transform.GetChild(0).GetChild(0).GetComponent<Image>();
             }
         }
     }

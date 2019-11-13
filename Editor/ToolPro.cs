@@ -281,8 +281,8 @@ public class ToolPro : CommonFun
                     }
                     else
                     {
-                        DestroyImmediate(_.GetComponent<MeshFilter>());
-                        DestroyImmediate(_);
+                        Object.DestroyImmediate(_.GetComponent<MeshFilter>());
+                        Object.DestroyImmediate(_);
                     }
                 });
             }
@@ -308,7 +308,7 @@ public class ToolPro : CommonFun
                         box.name = "Bevel Box " + "(" + bevelCount + ")";
                         box.transform.SetAsLastSibling();
                         if (parent.childCount != 0) continue;
-                        DestroyImmediate(parent.gameObject);
+                        Object.DestroyImmediate(parent.gameObject);
                     }
                     else
                     {
@@ -328,7 +328,7 @@ public class ToolPro : CommonFun
                             // 复制、粘贴原Box上的位置信息
                             UnityEditorInternal.ComponentUtility.CopyComponent(box.transform);
                             UnityEditorInternal.ComponentUtility.PasteComponentValues(bevelBox2.transform);
-                            DestroyImmediate(box);
+                            Object.DestroyImmediate(box);
                         }
                     }
                 }
@@ -348,7 +348,7 @@ public class ToolPro : CommonFun
                         UnityEditorInternal.ComponentUtility.PasteComponentAsNew(normalBox);
                         normalBox.transform.SetParent(newPrefab.transform);
                         normalBox.transform.SetAsLastSibling();
-                        DestroyImmediate(box);
+                        Object.DestroyImmediate(box);
                     }
                     // 关键部位上有碰撞盒
                     else
@@ -357,7 +357,7 @@ public class ToolPro : CommonFun
                         WriteToTxt(TxtDirPath, "关键部位上有碰撞盒汇总", "第 " + errorBuWeiNum + " 个：" + singleGranule.name + "上的 " + box.name);
 
                         // 删除碰撞盒
-                        DestroyImmediate(box);
+                        Object.DestroyImmediate(box);
                     }
                 }
             }
@@ -365,7 +365,7 @@ public class ToolPro : CommonFun
 
             count++;
             PrefabUtility.SaveAsPrefabAsset(newPrefab, "Assets/Resources/Prefab/ModelPrefabs/" + selectObj.name);
-            DestroyImmediate(newPrefab);
+            Object.DestroyImmediate(newPrefab);
             var floatProgress = (float)count / Selection.gameObjects.Length;
             EditorUtility.DisplayProgressBar("修改进度", count + "/" + Selection.gameObjects.Length + "完成修改", floatProgress);
         }

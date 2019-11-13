@@ -15,7 +15,7 @@ using UnityEngine;
 /// <summary>
 /// 公共函数管理类
 /// </summary>
-public class CommonFun : MonoBehaviour
+public class CommonFun
 {
     #region 通用字段声明
 
