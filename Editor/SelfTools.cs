@@ -312,6 +312,7 @@ public class SelfTools : CommonFun
         
         for (var i = 1; i < granuleList.Count; i++)
         {
+            granuleList[i].GetComponent<Image>().color = granuleList[0].GetComponent<Image>().color;
             var prefabObj = Resources.Load<GameObject>("Border");
             if (prefabObj)
             {
@@ -319,8 +320,6 @@ public class SelfTools : CommonFun
                 Undo.RegisterCreatedObjectUndo(prefab, "prefab");
 
                 prefab.name = "Border";
-                // var reactTrans = prefab.transform.GetComponent<RectTransform>();
-                // reactTrans.anchorMax = Vector2.zero; // 控制Right、Bottom
                
                 // 给 Main 换 Sprite
                 prefab.transform.GetChild(0).GetComponent<Image>().sprite = ChinarAtlas.LoadSprite("UI/Assembling/Granule Library", "零件库-"+granuleList[i].name);
