@@ -9,10 +9,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using ChinarX;
-using QmDreamer.Manager;
+using ChinarX.ExtensionMethods;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.U2D;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
@@ -47,18 +46,9 @@ public class SelfTools : CommonFun
     public string NewModelPath = string.Empty;    // 指定的模型文件夹路径
     public string NeedMoveFileName = string.Empty;// 待移动的文件名
 
-    #endregion
-
-    #region 所选物体坐标归0
-
-    /// <summary>
-    /// 所选物体坐标归0
-    /// </summary>
-    public void TransformToZero()
-    {
-        IfSelectionIsNull("没有选中关键部位");
-        Selection.activeGameObject.transform.localPosition = Vector3.zero;
-    }
+    // 镜像克隆对象
+    public string SetMirrorAxis = "y"; // 设置镜像克隆的对称轴
+    public Vector3 MirrorPoint = Vector3.zero; // 指定对称中心
 
     #endregion
 
@@ -329,6 +319,68 @@ public class SelfTools : CommonFun
                 //颗粒类原来的 sprite 设置为空
                 granule.GetComponent<Image>().sprite         = null;
                 granule.GetComponent<Button>().targetGraphic = granule.transform.GetChild(0).GetChild(0).GetComponent<Image>();
+            }
+        }
+    }
+
+    #endregion
+
+    #region 镜像克隆对象
+
+    /// <summary>
+    /// 镜像克隆对象
+    /// </summary>
+    public void MirrorObj()
+    {
+        var gameObjects = Selection.gameObjects;
+        if (gameObjects.Length == 0)
+        {
+            WindowTips("至少要选中一个对象");
+            return;
+        }
+        else
+        {
+            foreach (var obj in gameObjects)
+            {
+                var boxCollider = obj.GetComponent<BoxCollider>();
+                obj.transform.position = obj.transform.TransformPoint(boxCollider.center);
+                boxCollider.center = Vector3.zero;
+                var newObject = Object.Instantiate(obj, obj.transform.parent);
+                Undo.RegisterCreatedObjectUndo(newObject,"MirrorObjects");
+                newObject.name = newObject.name.Replace("(Clone)", "(Mirror)");
+            }
+          
+            switch (SetMirrorAxis)
+            {
+                case "x":
+                    foreach (var obj in gameObjects)
+                    {
+                        obj.transform.position = new Vector3(obj.transform.position.x, obj.transform.position.y, obj.transform.position.z - 2 * (obj.transform.position.z - MirrorPoint.z));
+                        var vector3Rotation = obj.transform.rotation.eulerAngles;
+                        var newEulerAngles  = new Vector3(-vector3Rotation.x, -vector3Rotation.y, vector3Rotation.z);
+                        obj.transform.rotation = Quaternion.Euler(newEulerAngles);
+                    }
+                    break;
+                case "y":
+                    foreach (var obj in gameObjects)
+                    {
+                        obj.transform.position = new Vector3(obj.transform.position.x, obj.transform.position.y - 2 * (obj.transform.position.y - MirrorPoint.y), obj.transform.position.z);
+                        var vector3Rotation = obj.transform.rotation.eulerAngles;
+                        var newEulerAngles  = new Vector3(-vector3Rotation.x, -vector3Rotation.y, -vector3Rotation.z);
+                        obj.transform.rotation = Quaternion.Euler(newEulerAngles);
+                    }
+                    break;
+                case "z":
+                    foreach (var obj in gameObjects)
+                    {
+                        obj.transform.position = new Vector3(obj.transform.position.x - 2 * (obj.transform.position.x - MirrorPoint.x), obj.transform.position.y, obj.transform.position.z);
+                        var vector3Rotation = obj.transform.rotation.eulerAngles;
+                        var newEulerAngles  = new Vector3(vector3Rotation.x, -vector3Rotation.y, -vector3Rotation.z);
+                        obj.transform.rotation = Quaternion.Euler(newEulerAngles);
+                    }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }

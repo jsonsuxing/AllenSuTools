@@ -5,6 +5,8 @@
 // 版 本：1.0
 // ========================================================
 
+using System.Linq;
+using ChinarX.ExtensionMethods;
 using UnityEditor;
 using UnityEngine;
 
@@ -16,42 +18,6 @@ public class SelfBuWei : CommonFun
 {
     // 碰撞盒管理类
     private static SelfBuWei instance;
-
-    #region MenuItem
-
-    // 热键：Shift + B 跳回颗粒本身
-    [MenuItem("GameObject/JumpToStart #B")]
-    static void JumpToStart()
-    {
-        if (Selection.activeGameObject == null)
-        {
-            WindowTips("没有选中关键部位");
-            return;
-        }
-        //跳到自身
-        EditorGUIUtility.PingObject(Selection.activeGameObject.transform.parent);
-    }
-
-    // 热键：Shift + M  跳转到颗粒最下方
-    [MenuItem("GameObject/JumpToEnd #M")]
-    static void JumpToEnd()
-    {
-        var selectTrans = Selection.activeGameObject.transform;
-        if (Selection.activeGameObject == null)
-        {
-            WindowTips("没有选中颗粒");
-            return;
-        }
-        if (selectTrans.childCount == 0)
-        {
-            WindowTips("该功能要选中颗粒，不能是关键部位");
-            return;
-        }
-        // 跳到最后
-        EditorGUIUtility.PingObject(selectTrans.GetChild(selectTrans.childCount - 1));
-    }
-
-    #endregion
 
     #region 字段声明
 
@@ -126,7 +92,7 @@ public class SelfBuWei : CommonFun
 
     #region Grid 栅格类型
 
-    [MenuItem("GameObject/0、更改关键部位名字/----------栅格类型----------", false, INDEXNUM)]
+    [MenuItem("AllenSu/0、更改关键部位名字/----------栅格类型----------", false, INDEXNUM)]
     public static void FlagTypeGrid() { }
 
     //0--凹槽
@@ -298,25 +264,24 @@ public class SelfBuWei : CommonFun
     /// <param name="name">名字</param>
     /// <param name="type">类型</param>
     /// <param name="size">大小</param>
-    /// <param name="director">方向</param>
     /// <param name="length">长度</param>
     public static void ChangeKeyName(string name, GuanJianType type, int size, float length)
     {
         //调用该函数，说明在切换类型，所以先让 CurrentIndexNum 恢复默认值
         CurrentIndexNum = 1;
+
         var i = 1;
-        foreach (GameObject go in Selection.gameObjects)
+        var siblingObjects  = Selection.gameObjects.OrderBy(_ => _.transform.GetSiblingIndex());
+
+        siblingObjects.ForEach(obj =>
         {
-            go.name = name + " " + "(" + i + ")"; //名字
-            GuanJianBuWei buWei = go.GetComponent<GuanJianBuWei>();
-            buWei.type     = type;          //类型
-            buWei.size     = size;          //大小
-            // 注释掉方向的重新定义，直接继承所选物体的方向
-            // buWei.director = director;      //方向  
-            buWei.length   = length;        //长度
-            go.transform.SetAsLastSibling(); //然后放到最后面(要不还要重新拖到后面)
-            i++;
-        }
+            Undo.RecordObject(obj, "siblingObjects");
+            obj.name= name + " " + "(" + (i++) + ")"; //名字;
+            var buWei = obj.GetComponent<GuanJianBuWei>();
+            buWei.type = type; //类型
+            buWei.size = size; //大小
+            buWei.length = length;           //长度
+        });
     }
 
     /// <summary>

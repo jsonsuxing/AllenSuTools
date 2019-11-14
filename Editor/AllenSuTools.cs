@@ -23,36 +23,35 @@ public class AllenSuTools : EditorWindow
         var allenSuTools = GetWindow<AllenSuTools>(false, "苏醒工程窗口");
         allenSuTools.Show();
     }
-
     #endregion
 
     #region 字段声明
 
     // 编辑器组
-    private readonly string[] _topInfoType = { "关键部位", "克隆碰撞盒", "碰撞盒信息", "模型相关", "小功能" ,"ToolPro"};
+    private readonly string[] _topInfoType = { "关键部位","模型相关", "常用工具" , "ToolPro", "一般工具"};
     private          int      whichOneSelect; // 选中哪一个
 
-    #endregion
+    private Vector2 scrowPos=Vector2.zero;
 
+    #endregion
     void OnGUI()
     {
+        scrowPos = GUILayout.BeginScrollView(scrowPos,GUILayout.Width(position.width),GUILayout.Height(position.height));
+
         EditorGUI.BeginChangeCheck();
 
         // 设置标题语（用途:错行）
         EditorGUILayout.HelpBox("木叶飞舞之处，火亦生生不息", MessageType.Info, true);
-        whichOneSelect = GUI.Toolbar(new Rect(5, 5, _topInfoType.Length * 65, 30), whichOneSelect, _topInfoType);
-
+        whichOneSelect = GUI.Toolbar(new Rect(5, 5, _topInfoType.Length * 70, 37), whichOneSelect, _topInfoType);
+        
         switch (whichOneSelect)
         {
             case 0:
                 #region 关键部位
+               
+                #region 一：克隆关键部位
 
-                // 设置《火影忍者》标题语
-                EditorGUILayout.HelpBox("版本号：2019年10月17日17:31:37", MessageType.Info, true);
-
-                #region 一：逐个克隆关键部位
-
-                GUILayout.Label("一：逐个克隆关键部位", TitleStyle());
+                GUILayout.Label("一：克隆关键部位", TitleStyle());
 
                 // 默认间隔
                 SelfBuWei.Instance().ModelSpace = SelfBuWei.Instance().GeneralSpace;
@@ -183,48 +182,9 @@ public class AllenSuTools : EditorWindow
                 #endregion
                 GUILayout.Space(8); //设置上下间隔
 
-                #region 二：对称克隆关键部位
+                #region 二：特殊部位坐标的计算(+-0.4类型)
 
-                GUILayout.Label("二：对称克隆关键部位", TitleStyle());
-
-                // ------------ 一：开始垂直画盒子 ------------
-                GUILayout.BeginVertical("box");
-
-                //第一组垂直排版开始
-                EditorGUILayout.BeginVertical();
-                if (GUILayout.Button("对称克隆关键部位")) SelfBuWei.Instance().SymmetryCloneBuWei();
-                EditorGUILayout.EndVertical();
-                // 第一组垂直排版结束
-
-                GUILayout.EndVertical();
-                // ------------ 一：结束垂直画盒子 ------------
-
-                #endregion
-                GUILayout.Space(8);
-
-                #region 三：生成默认关键部位、Box
-
-                GUILayout.Label("三：默认关键部位、Box", TitleStyle());
-
-                // ------------ 一：开始垂直画盒子 ------------
-                GUILayout.BeginVertical("box");
-
-                // 第一组水平排版开始
-                EditorGUILayout.BeginHorizontal();
-                if (GUILayout.Button("1：生成默认的关键部位")) SelfBuWei.Instance().CreateDefaultBuWei();
-                if (GUILayout.Button("2：生成 Normal Box (1)")) SelfBuWei.Instance().CreateEmptyBox();
-                EditorGUILayout.EndHorizontal();
-                // 第一组水平排版结束
-
-                GUILayout.EndVertical();
-                // ------------ 一：结束垂直画盒子 ------------
-
-                #endregion
-                GUILayout.Space(8);
-
-                #region 四：特殊部位坐标的计算(+-0.4类型)
-
-                GUILayout.Label("四：特殊部位坐标的计算", TitleStyle());
+                GUILayout.Label("二：特殊部位坐标的计算", TitleStyle());
 
                 // ------------ 一：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
@@ -262,7 +222,7 @@ public class AllenSuTools : EditorWindow
 
                 // 第二组垂直排版开始
                 EditorGUILayout.BeginVertical();
-                GUILayout.TextField("当前操作方式：" + SelfBuWei.Instance().ShowClickAxis+"    "+SelfBuWei.Instance().ShowValueNum);
+                GUILayout.TextField("当前操作方式：" + SelfBuWei.Instance().ShowClickAxis + "    " + SelfBuWei.Instance().ShowValueNum);
                 if (GUILayout.Button("点击设定新坐标")) SelfBuWei.Instance().SpecialAxis();
                 EditorGUILayout.EndVertical();
                 // 第二组垂直排版结束
@@ -273,444 +233,50 @@ public class AllenSuTools : EditorWindow
                 #endregion
                 GUILayout.Space(8);
 
-                #endregion
-                break;
-            case 1:
-                #region 克隆碰撞盒
+                #region 三：对称克隆关键部位
 
-                // 设置《海贼王》标题语
-                EditorGUILayout.HelpBox(" 弱者是没有资格谈正义的--《海贼王》", MessageType.Info, true);
+                GUILayout.Label("三：对称克隆关键部位", TitleStyle());
 
-                #region 一：长方体类模型，通过一对角线的两个顶点，确定碰撞盒
-
-                GUILayout.Label("一：对角线两顶点确定碰撞盒", TitleStyle());
-                
                 // ------------ 一：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
-                
-                // 第一组垂直排版开始
+
+                //第一组垂直排版开始
                 EditorGUILayout.BeginVertical();
-                GUILayout.Label("当前已确定 "+ (SelfCollider.Instance().VertexList == null ? 0 : SelfCollider.Instance().VertexList.Count) +" 个顶点",SetGuiStyle(Color.black, 14));
-                if (GUILayout.Button("获取对角线两顶点，确定碰撞盒")) SelfCollider.Instance().VertexBox();
+                if (GUILayout.Button("对称克隆关键部位")) SelfBuWei.Instance().SymmetryCloneBuWei();
                 EditorGUILayout.EndVertical();
                 // 第一组垂直排版结束
-                GUILayout.Space(3);
-                
+
                 GUILayout.EndVertical();
                 // ------------ 一：结束垂直画盒子 ------------
 
                 #endregion
-                
-                #region 二：添加环形类的碰撞盒
-
-                SelfCollider.Instance().RingBoxCollGuiControl();
-                if (EditorGUI.EndChangeCheck() && SelfCollider.Instance().EditorStatus == EditorStatus.编辑) // <-- 控制检查结束在这里
-                {
-                    SelfCollider.Instance().UpdateRingBoxColl();
-                }
-
-                SelfCollider.Instance().DrawStatusText();
-                if (SelfCollider.Instance().EditorStatus == EditorStatus.编辑)
-                {
-                    // 第一组水平排版开始
-                    EditorGUILayout.BeginHorizontal();
-
-                    //完成创建碰撞盒
-                    if (GUILayout.Button("确认"))
-                    {
-                        // 清除工作对撞机参考，结束编辑状态
-                        SelfCollider.Instance().WorkingCollider = null;
-                    }
-
-                    //取消
-                    if (GUILayout.Button("取消"))
-                    {
-                        // //删除工作对撞机，取消其创建
-                        DestroyImmediate(SelfCollider.Instance().WorkingCollider);
-
-                        // 清除工作对撞机参考，结束编辑状态
-                        SelfCollider.Instance().WorkingCollider = null;
-                    }
-
-                    EditorGUILayout.EndHorizontal();
-                    // 第一组水平排版结束
-                }
-                else
-                {
-                    // 第一组水平排版开始
-                    EditorGUILayout.BeginHorizontal();
-                    if (SelfCollider.Instance().EditorStatus != EditorStatus.准备) GUI.enabled = false;
-                    if (GUILayout.Button("1：点击颗粒预设，开始克隆")) SelfCollider.Instance().CreateRingBoxColl();
-                    GUI.enabled = true;
-                    if (GUILayout.Button("2：整理、拆分碰撞盒")) SelfCollider.Instance().DeleteAndArrangeRing();
-                    EditorGUILayout.EndHorizontal();
-                    // 第一组水平排版结束
-                }
-
-                #endregion
                 GUILayout.Space(8);
 
-                #region 三：自定义倾斜环形碰撞盒
+                #region 四：生成默认关键部位、Box
 
-                #region 一：旋转
-
-                GUILayout.Label("三：自定义操作碰撞盒", TitleStyle());
-                GUILayout.Space(3);
-                GUILayout.Label("A：旋转", SetGuiStyle(Color.red, 16));
-                GUILayout.Space(3);
-                GUILayout.Label("提示：默认沿 Y 轴，同步环形碰撞盒的轴心", SetGuiStyle(Color.black, 14));
+                GUILayout.Label("四：默认关键部位、Box", TitleStyle());
 
                 // ------------ 一：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
-                GUILayout.Space(3);
 
                 // 第一组水平排版开始
                 EditorGUILayout.BeginHorizontal();
-                GUILayout.Label("1:旋转中心(默认为原点)", SetGuiStyle(Color.black, 14));
-                if(GUILayout.Button("可点击物体，自动传值")) SelfCollider.Instance().SetMyPivot();
+                if (GUILayout.Button("1：生成默认的关键部位")) SelfBuWei.Instance().CreateDefaultBuWei();
+                if (GUILayout.Button("2：生成 Normal Box (1)")) SelfBuWei.Instance().CreateEmptyBox();
                 EditorGUILayout.EndHorizontal();
                 // 第一组水平排版结束
-                GUILayout.Space(3);
 
-                // 第二组水平排版开始
-                EditorGUILayout.BeginHorizontal();
-                GUILayout.Label("x:", SetGuiStyle(Color.black, 14));
-                SelfCollider.Instance().SelfPivotAxisX = float.Parse(EditorGUILayout.TextField(SelfCollider.Instance().SelfPivotAxisX.ToString()));
-                GUILayout.Label("y:", SetGuiStyle(Color.black, 14));
-                SelfCollider.Instance().SelfPivotAxisY = float.Parse(EditorGUILayout.TextField(SelfCollider.Instance().SelfPivotAxisY.ToString()));
-                GUILayout.Label("z:", SetGuiStyle(Color.black, 14));
-                SelfCollider.Instance().SelfPivotAxisZ = float.Parse(EditorGUILayout.TextField(SelfCollider.Instance().SelfPivotAxisZ.ToString()));
-                EditorGUILayout.EndHorizontal();
-                // 第二组水平排版结束
-                GUILayout.Space(5);
-
-                GUILayout.Label("2:快捷设置克隆个数", SetGuiStyle(Color.black, 14));
-                // 第四组水平排版开始
-                EditorGUILayout.BeginHorizontal();
-                if (GUILayout.Button("4")) { SelfCollider.Instance().CustomBoxCollNum= 4; }
-                if (GUILayout.Button("8")) { SelfCollider.Instance().CustomBoxCollNum = 8; }
-                if (GUILayout.Button("10")) { SelfCollider.Instance().CustomBoxCollNum = 10; }
-                if (GUILayout.Button("12")) { SelfCollider.Instance().CustomBoxCollNum = 12; }
-                if (GUILayout.Button("16")) { SelfCollider.Instance().CustomBoxCollNum = 16; }
-                if (GUILayout.Button("x2")) { SelfCollider.Instance().CustomBoxCollNum = SelfCollider.Instance().CustomBoxCollNum*2; }
-                EditorGUILayout.EndHorizontal();
-                // 第四组水平排版结束
-                GUILayout.Space(3);
-
-                // 第三组水平排版开始
-                EditorGUILayout.BeginHorizontal();
-                GUILayout.Label("3:选中已做好物体，设置克隆个数：", SetGuiStyle(Color.black, 14));
-                SelfCollider.Instance().CustomBoxCollNum = int.Parse(GUILayout.TextField(SelfCollider.Instance().CustomBoxCollNum.ToString()));
-                EditorGUILayout.EndHorizontal();
-                // 第三组水平排版结束
-                GUILayout.Space(3);
-               
                 GUILayout.EndVertical();
                 // ------------ 一：结束垂直画盒子 ------------
-
-                if (GUILayout.Button("开始克隆")) SelfCollider.Instance().RotateBoxCollider();
-
-
-                #endregion
-                GUILayout.Space(3);
-
-                #region 二：平移
-
-                GUILayout.Label("B：平移", SetGuiStyle(Color.red, 16));
-
-                // ------------ 二：开始垂直画盒子 ------------
-                GUILayout.BeginVertical("box");
-
-                // 第一组垂直排版开始
-                EditorGUILayout.BeginVertical();
-                SelfCollider.Instance().SelfPivotAxis = (SelfPivotAxis)EditorGUILayout.EnumPopup("选择克隆方向", SelfCollider.Instance().SelfPivotAxis);
-                EditorGUILayout.EndVertical();
-                // 第一组垂直排版结束
-                GUILayout.Space(3);
-
-                // 第二组水平排版开始
-                EditorGUILayout.BeginHorizontal();
-                GUILayout.Label("设置克隆个数：", SetGuiStyle(Color.black, 14));
-                SelfCollider.Instance().CustomBoxCollNum = int.Parse(EditorGUILayout.TextField(SelfCollider.Instance().CustomBoxCollNum.ToString()));
-                EditorGUILayout.EndHorizontal();
-                // 第二组水平排版结束
-                GUILayout.Space(3);
-
-                // 第三组水平排版开始
-                EditorGUILayout.BeginHorizontal();
-                GUILayout.Label("设置克隆间隔：", SetGuiStyle(Color.black, 14));
-                SelfCollider.Instance().CloneSpace = float.Parse(EditorGUILayout.TextField(SelfCollider.Instance().CloneSpace.ToString()));
-                EditorGUILayout.EndHorizontal();
-                // 第三组水平排版结束
-                GUILayout.Space(3);
-
-                if (GUILayout.Button("开始克隆")) SelfCollider.Instance().PanBoxCollider();
-
-                GUILayout.EndVertical();
-                // ------------ 二：结束垂直画盒子 ------------
-
-                #endregion
-                GUILayout.Space(8);
-
-                #endregion
-                GUILayout.Space(8);
-
-                #region 四：一键添加长方体类型的碰撞盒(如高一粒)
-
-                GUILayout.Label("四：克隆正方类碰撞盒", TitleStyle());
-
-                // ------------ 一：开始垂直画盒子 ------------
-                GUILayout.BeginVertical("box");
-                if (GUILayout.Button("点击克隆碰撞盒")) SelfCollider.Instance().AddBoxCollider();
-                GUILayout.EndVertical();
-                //------------一：结束垂直画盒子------------
 
                 #endregion
                 GUILayout.Space(8);
 
                 #endregion
                 break;
-            case 2:
-                #region 碰撞盒信息
-
-                #region 一：隐藏碰撞盒
-
-                GUILayout.Label("一：隐藏,移除全部碰撞盒", TitleStyle());
-
-                // ------------ 一：开始水平画盒子 ------------
-                GUILayout.BeginVertical("box");
-
-                // 第一组水平排版开始
-                EditorGUILayout.BeginHorizontal();
-                SelfCollider.Instance().HideOrShowTips = !SelfCollider.Instance().IsHideAllBoxColl ? "1：隐藏全部碰撞盒" : "1：显示全部碰撞盒";
-                if (GUILayout.Button(SelfCollider.Instance().HideOrShowTips))
-                {
-                    SelfCollider.Instance().IsClickHideBtn = true;
-                    SelfCollider.Instance().CollBtn();
-                }
-                if (GUILayout.Button("2：移除所有碰撞盒"))
-                {
-                    SelfCollider.Instance().IsClickRemoveBtn = true;
-                    SelfCollider.Instance().CollBtn();
-                }
-                EditorGUILayout.EndHorizontal();
-                // 第一组水平排版结束
-
-                GUILayout.EndVertical();
-                //------------ 一：结束水平画盒子 ------------
-
-                #endregion
-                GUILayout.Space(8);
-
-                #region 二：显示模型数据
-
-                GUILayout.Space(3);
-                GUILayout.Label("二：显示模型数据", TitleStyle());
-
-                GUILayout.Space(3);
-                GUILayout.Label("1：模型基础数据", SetGuiStyle(Color.red, 14));
-
-                // ------------ 一：开始垂直画盒子 ------------
-                GUILayout.BeginVertical("box");
-               
-                // ------------ 第一组水平排版开始 -----------
-                EditorGUILayout.BeginHorizontal();
-                GUILayout.TextField("长度：" + SelfCollider.Instance().ModelLength);
-                GUILayout.TextField("宽度：" + SelfCollider.Instance().ModelWidth);
-                GUILayout.TextField("高度：" + SelfCollider.Instance().ModelHeight);
-                EditorGUILayout.EndHorizontal();
-                // ------------ 第一组水平排版结束 ------------
-                GUILayout.Space(3);
-
-                // ------------ 第二组水平排版开始 ------------
-                EditorGUILayout.BeginHorizontal();
-                GUILayout.TextField("凹槽 Y 轴坐标：" + SelfCollider.Instance().AoCaoY);
-                GUILayout.TextField("凸起 Y 轴坐标：" + SelfCollider.Instance().TuQiY);
-                EditorGUILayout.EndHorizontal();
-                // ------------ 第二组水平排版结束 ------------
-
-                GUILayout.Space(3);
-
-                GUILayout.EndVertical();
-                // ------------一：结束垂直画盒子------------
-
-                GUILayout.Label("2：模型最坐标", SetGuiStyle(Color.red, 14));
-
-                // ------------ 二：开始垂直画盒子 ------------
-                GUILayout.BeginVertical("box");
-
-                // 第一组水平排版开始
-                EditorGUILayout.BeginHorizontal();
-                GUILayout.TextField("X轴 最小坐标是：" + SelfCollider.Instance().MinX);
-                GUILayout.Space(3);
-                GUILayout.TextField("X轴 最大坐标是：" + SelfCollider.Instance().MaxX);
-                EditorGUILayout.EndHorizontal();
-                // 第一组水平排版结束
-
-                // 第二组水平排版开始
-                EditorGUILayout.BeginHorizontal();
-                GUILayout.TextField("Y轴 最小坐标是：" + SelfCollider.Instance().MinY);
-                GUILayout.Space(3);
-                GUILayout.TextField("Y轴 最大坐标是：" + SelfCollider.Instance().MaxY);
-                EditorGUILayout.EndHorizontal();
-                // 第二组水平排版结束
-
-                // 第三组水平排版开始
-                EditorGUILayout.BeginHorizontal();
-                GUILayout.TextField("Z轴 最小坐标是：" + SelfCollider.Instance().MinZ);
-                GUILayout.Space(3);
-                GUILayout.TextField("Z轴 最大坐标是：" + SelfCollider.Instance().MaxZ);
-                EditorGUILayout.EndHorizontal();
-                // 第三组水平排版结束
-
-                GUILayout.EndVertical();
-                // ------------ 二：结束垂直画盒子 ------------
-
-                GUILayout.Label("3：碰撞盒总个数", SetGuiStyle(Color.red, 14));
-
-                // ------------ 三：开始垂直画盒子 ------------
-                GUILayout.BeginVertical("box");
-               
-                // 第一组垂直排版开始
-                EditorGUILayout.BeginVertical();
-                GUILayout.TextField("所有碰撞盒个数：" + SelfCollider.Instance().ChildBoxCollNum);
-                EditorGUILayout.EndVertical();
-                // 第一组垂直排版结束
-               
-                GUILayout.EndVertical();
-                // ------------ 三：结束垂直画盒子 ------------
-
-                // 第四组水平排版开始
-                EditorGUILayout.BeginHorizontal();
-                if (GUILayout.Button("1：点击颗粒名称获取")) SelfCollider.Instance().ShowModelLengthWidthHeight();
-                if (GUILayout.Button("2：清空以上所有数据")) SelfCollider.Instance().ClearModelData();
-                EditorGUILayout.EndHorizontal();
-                // 第四组水平排版结束
-             
-                #endregion
-                GUILayout.Space(8);
-
-                #region 三：打三点确定圆心
-
-                GUILayout.Label("三：同一平面三个顶点确定圆心", TitleStyle());
-                GUILayout.Space(3);
-
-                // ------------ 一：开始垂直画盒子 ------------
-                GUILayout.BeginVertical("box");
-
-                // 第一组水平排版开始
-                EditorGUILayout.BeginHorizontal();
-                GUILayout.Label("提示信息",SetGuiStyle(Color.black, 14));
-                GUILayout.TextField(SelfCollider.Instance().WhichTimeTips);
-                EditorGUILayout.EndHorizontal();
-                // 第一组水平排版结束
-                GUILayout.Space(3);
-
-                if (GUILayout.Button("点击3次按钮，获取圆心")) SelfCollider.Instance().CreateCenterOfCircle();
-
-                GUILayout.EndVertical();
-                // ------------ 一：结束垂直画盒子 ------------
-
-                #endregion
-                GUILayout.Space(8);
-
-                #region 四：带角度模型的计算
-
-                GUILayout.Label("四：带角度模型的计算", TitleStyle());
-                GUILayout.Space(3);
-
-                #region 1：角度
-
-                GUILayout.Label("A：角度", SetGuiStyle(Color.red, 16));
-
-                // ------------ 一：开始垂直画盒子 ------------
-                GUILayout.BeginVertical("box");
-
-                // 第一组水平排版开始
-                EditorGUILayout.BeginHorizontal();
-                GUILayout.Label("提示信息", SetGuiStyle(Color.black, 14));
-                GUILayout.TextField(SelfCollider.Instance().StrAngleTips);
-                EditorGUILayout.EndHorizontal();
-                // 第一组水平排版结束
-                GUILayout.Space(3);
-
-                if (GUILayout.Button("点击两次按钮，计算单位向量")) SelfCollider.Instance().AngleModel();
-
-                GUILayout.EndVertical();
-                // ------------ 一：结束垂直画盒子 ------------
-              
-                #endregion
-                GUILayout.Space(8);
-
-                #region 2：位置
-
-                // GUILayout.Label("B：位置(暂未实现)", SetGuiStyle(Color.red, 16));
-                // ------------ 一：开始垂直画盒子 ------------
-                // GUILayout.BeginVertical("box");
-                //
-                // // 第一组水平排版开始
-                // EditorGUILayout.BeginHorizontal();
-                // if (GUILayout.Button("点击添加脚本")) SelfCollider.Instance().AddTestDrawLine();
-                //
-                // EditorGUILayout.EndHorizontal();
-                // // 第一组水平排版结束
-                // GUILayout.Space(3);
-                //
-                // // 第一组水平排版开始
-                // EditorGUILayout.BeginHorizontal();
-                // if (GUILayout.Button("点击绘制线框")) SelfCollider.Instance().DrawLineAndGetCenterPos();
-                // if (GUILayout.Button("清空数据")) SelfCollider.Instance().ClearPosValue();
-                // EditorGUILayout.EndHorizontal();
-                // // 第一组水平排版结束
-                // GUILayout.Space(3);
-                //
-                // GUILayout.EndVertical();
-                // ------------ 一：结束垂直画盒子 ------------
-
-
-                #endregion
-
-                #endregion
-                GUILayout.Space(8);
-
-                #region 五：从ACE项目移动预设
-
-                GUILayout.Label("五：导出ACE预设", TitleStyle());
-
-                // ------------ 一：开始垂直画盒子 ------------
-                GUILayout.BeginVertical("box");
-
-                // 第一组水平排版开始
-                EditorGUILayout.BeginHorizontal();
-                if (GUILayout.Button("1：从ACE项目移动预设")) SelfCollider.Instance().MovePrefabFromAce();
-                if (GUILayout.Button("2：删除QD下的预设")) SelfCollider.Instance().DeletePrefab();
-                EditorGUILayout.EndHorizontal();
-                // 第一组水平排版结束
-
-                GUILayout.EndVertical();
-                // ------------ 一：结束垂直画盒子 ------------
-
-                #endregion
-                GUILayout.Space(8);
-
-                #region 临时测试
-
-                //if (GUILayout.Button("测试"))
-                //{
-                //    SelfCollider.Instance().TestInspector();
-                //}
-
-                #endregion
-                GUILayout.Space(8);
-
-                #endregion
-                break;
-            case 3:
+            case 1:
                 #region 模型相关
-
-                // 设置《画江湖之灵主》标题语
-                EditorGUILayout.HelpBox("天涯之人无处觅，咫尺之心且珍惜--《画江湖之灵主》", MessageType.Info, true);
-
+               
                 #region 前提
 
                 #region 前提一：选择颗粒大类
@@ -878,23 +444,34 @@ public class AllenSuTools : EditorWindow
 
                 #endregion
                 break;
-            case 4:
-                #region 其它小工具
+            case 2:
+                #region 常用工具
 
-                #region 1：所选物体坐标归0
+                #region 一：三个顶点确定圆心
 
-                GUILayout.Label("一：坐标归0", TitleStyle());
+                GUILayout.Label("一：三个顶点确定圆心", TitleStyle());
+                GUILayout.Space(3);
 
                 // ------------ 一：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
-                if (GUILayout.Button("1：点击所选物体坐标归0")) SelfTools.Instance().TransformToZero();
+
+                // 第一组水平排版开始
+                EditorGUILayout.BeginHorizontal();
+                GUILayout.Label("提示信息", SetGuiStyle(Color.black, 14));
+                GUILayout.TextField(SelfCollider.Instance().WhichTimeTips);
+                EditorGUILayout.EndHorizontal();
+                // 第一组水平排版结束
+                GUILayout.Space(3);
+
+                if (GUILayout.Button("点击3次按钮，获取圆心")) SelfCollider.Instance().CreateCenterOfCircle();
+
                 GUILayout.EndVertical();
                 // ------------ 一：结束垂直画盒子 ------------
 
                 #endregion
-                GUILayout.Space(2);
+                GUILayout.Space(8);
 
-                #region 2:计算 Length 的值
+                #region 二:计算 Length 的值
 
                 GUILayout.Label("二：计算长度的值", TitleStyle());
 
@@ -950,104 +527,42 @@ public class AllenSuTools : EditorWindow
                 // 第三组水平排版结束
 
                 #endregion
-                GUILayout.Space(5);
+                GUILayout.Space(8);
 
-                #region 3:批量修改“-”为“&”
+                #region 三：带角度模型的方向
 
-                GUILayout.Label("三：批量修改“-”为“&”", TitleStyle());
+                GUILayout.Label("三：带角度模型的方向", TitleStyle());
+                GUILayout.Space(3);
+
+                #region 1：角度
+
+                GUILayout.Label("A：角度", SetGuiStyle(Color.red, 16));
 
                 // ------------ 一：开始垂直画盒子 ------------
-                GUILayout.BeginVertical("box");
-
-                // 第一组垂直排版开始
-                EditorGUILayout.BeginVertical();
-                GUILayout.Label("1、要修改的文件路径", SetGuiStyle(Color.black, 14));
-                SelfTools.Instance().ChangeFileNamePath = GUILayout.TextField(SelfTools.Instance().ChangeFileNamePath);
-                EditorGUILayout.EndVertical();
-                // 第一组垂直排版结束
-
-                if (GUILayout.Button("点击批量修改“-”为“&”")) SelfTools.Instance().ChangeFileName();
-
-                GUILayout.EndVertical();
-                // ------------ 一：结束垂直画盒子 ------------
-
-                #endregion
-                GUILayout.Space(2);
-
-                #region 4：添加，删除 MeshRenderer,MeshFilter
-
-                GUILayout.Label("四：添加，移除紫色 Mesh", TitleStyle());
-
-                // ------------ 一：开始水平画盒子 ------------
                 GUILayout.BeginVertical("box");
 
                 // 第一组水平排版开始
                 EditorGUILayout.BeginHorizontal();
-                if (GUILayout.Button("添加紫色 Mesh")) SelfTools.Instance().AddMesh();
-                if (GUILayout.Button("移除紫色 Mesh")) SelfTools.Instance().RemoveMesh();
+                GUILayout.Label("提示信息", SetGuiStyle(Color.black, 14));
+                GUILayout.TextField(SelfCollider.Instance().StrAngleTips);
                 EditorGUILayout.EndHorizontal();
                 // 第一组水平排版结束
+                GUILayout.Space(3);
 
-                GUILayout.EndVertical();
-                // ------------ 一：结束水平画盒子 ------------
-
-                #endregion
-                GUILayout.Space(2);
-
-                #region 5：删除指定后缀名的文件
-
-                GUILayout.Label("五：删除指定后缀名的文件", TitleStyle());
-
-                // ------------ 一：开始垂直画盒子 ------------
-                GUILayout.BeginVertical("box");
-
-                // 第一组垂直排版开始
-                EditorGUILayout.BeginVertical();
-                GUILayout.Label("1、要修改的文件路径", SetGuiStyle(Color.black, 14));
-                SelfTools.Instance().DeleteFilePath = GUILayout.TextField(SelfTools.Instance().DeleteFilePath);
-                GUILayout.Label("2、选择要删除的文件后缀名", SetGuiStyle(Color.black, 14));
-
-                // 第一组水平排版开始
-                EditorGUILayout.BeginHorizontal();
-                if (GUILayout.Button(".meta")) SelfTools.Instance().SelectExtension = ".meta";
-                if (GUILayout.Button(".fbx")) SelfTools.Instance().SelectExtension = ".fbx";
-                if (GUILayout.Button(".jpg")) SelfTools.Instance().SelectExtension = ".jpg";
-                if (GUILayout.Button(".png")) SelfTools.Instance().SelectExtension = ".png";
-                EditorGUILayout.EndHorizontal();
-                // 第一组水平排版结束
-
-                SelfTools.Instance().SelectExtension = GUILayout.TextField(SelfTools.Instance().SelectExtension);
-
-                if (GUILayout.Button("点击删除指定后缀名的文件")) SelfTools.Instance().DeleteSelectExtension();
-
-                EditorGUILayout.EndVertical();
-                // 第一组垂直排版结束
+                if (GUILayout.Button("点击两次按钮，计算单位向量")) SelfCollider.Instance().AngleModel();
 
                 GUILayout.EndVertical();
                 // ------------ 一：结束垂直画盒子 ------------
 
                 #endregion
-                GUILayout.Space(2);
-
-                #region 6：动态修改零件库 Image
-
-                GUILayout.Label("六：动态修改零件库 Image", TitleStyle());
-
-                // ------------ 一：开始垂直画盒子 ------------
-                GUILayout.BeginVertical("box");
-                if (GUILayout.Button("点击按钮，动态修改零件库 Image"))
-                {
-                    SelfTools.ChangeGranuleImage();
-                }
-                GUILayout.EndVertical();
-                // ------------ 一：结束垂直画盒子 ------------
+                GUILayout.Space(8);
 
                 #endregion
-                GUILayout.Space(2);
+                GUILayout.Space(8);
 
                 #endregion
                 break;
-            case 5:
+            case 3:
                 #region ToolPro
 
                 #region 一：修改完旧模型的后续操作
@@ -1107,7 +622,7 @@ public class AllenSuTools : EditorWindow
                 // ------------ 一：结束垂直画盒子 ------------
 
                 #endregion
-                GUILayout.Space(3);
+                GUILayout.Space(8);
 
                 #region 二：批量修改颗粒预设
 
@@ -1211,13 +726,132 @@ public class AllenSuTools : EditorWindow
                 GUILayout.Space(8);
 
                 #endregion
-                GUILayout.Space(3);
+                GUILayout.Space(8);
+
+                #endregion
+                break;
+            case 4:
+                #region 一般工具
+
+                #region 一:批量修改“-”为“&”
+
+                GUILayout.Label("一：批量修改“-”为“&”", TitleStyle());
+
+                // ------------ 一：开始垂直画盒子 ------------
+                GUILayout.BeginVertical("box");
+
+                // 第一组垂直排版开始
+                EditorGUILayout.BeginVertical();
+                GUILayout.Label("1、要修改的文件路径", SetGuiStyle(Color.black, 14));
+                SelfTools.Instance().ChangeFileNamePath = GUILayout.TextField(SelfTools.Instance().ChangeFileNamePath);
+                EditorGUILayout.EndVertical();
+                // 第一组垂直排版结束
+
+                if (GUILayout.Button("点击批量修改“-”为“&”")) SelfTools.Instance().ChangeFileName();
+
+                GUILayout.EndVertical();
+                // ------------ 一：结束垂直画盒子 ------------
+
+                #endregion
+                GUILayout.Space(8);
+
+                #region 二：添加，删除 MeshRenderer,MeshFilter
+
+                GUILayout.Label("二：添加，移除紫色 Mesh", TitleStyle());
+
+                // ------------ 一：开始水平画盒子 ------------
+                GUILayout.BeginVertical("box");
+
+                // 第一组水平排版开始
+                EditorGUILayout.BeginHorizontal();
+                if (GUILayout.Button("添加紫色 Mesh")) SelfTools.Instance().AddMesh();
+                if (GUILayout.Button("移除紫色 Mesh")) SelfTools.Instance().RemoveMesh();
+                EditorGUILayout.EndHorizontal();
+                // 第一组水平排版结束
+
+                GUILayout.EndVertical();
+                // ------------ 一：结束水平画盒子 ------------
+
+                #endregion
+                GUILayout.Space(8);
+
+                #region 三：动态修改零件库 Image
+
+                GUILayout.Label("三：动态修改零件库 Image", TitleStyle());
+
+                // ------------ 一：开始垂直画盒子 ------------
+                GUILayout.BeginVertical("box");
+                if (GUILayout.Button("点击按钮，动态修改零件库 Image"))
+                {
+                    SelfTools.ChangeGranuleImage();
+                }
+                GUILayout.EndVertical();
+                // ------------ 一：结束垂直画盒子 ------------
+
+                #endregion
+                GUILayout.Space(8);
+
+                #region 四：删除指定后缀名的文件
+
+                GUILayout.Label("四：删除指定后缀名的文件", TitleStyle());
+
+                // ------------ 一：开始垂直画盒子 ------------
+                GUILayout.BeginVertical("box");
+
+                // 第一组垂直排版开始
+                EditorGUILayout.BeginVertical();
+                GUILayout.Label("1、要修改的文件路径", SetGuiStyle(Color.black, 14));
+                SelfTools.Instance().DeleteFilePath = GUILayout.TextField(SelfTools.Instance().DeleteFilePath);
+                GUILayout.Label("2、选择要删除的文件后缀名", SetGuiStyle(Color.black, 14));
+
+                // 第一组水平排版开始
+                EditorGUILayout.BeginHorizontal();
+                if (GUILayout.Button(".meta")) SelfTools.Instance().SelectExtension = ".meta";
+                if (GUILayout.Button(".fbx")) SelfTools.Instance().SelectExtension = ".fbx";
+                if (GUILayout.Button(".jpg")) SelfTools.Instance().SelectExtension = ".jpg";
+                if (GUILayout.Button(".png")) SelfTools.Instance().SelectExtension = ".png";
+                EditorGUILayout.EndHorizontal();
+                // 第一组水平排版结束
+
+                SelfTools.Instance().SelectExtension = GUILayout.TextField(SelfTools.Instance().SelectExtension);
+
+                if (GUILayout.Button("点击删除指定后缀名的文件")) SelfTools.Instance().DeleteSelectExtension();
+
+                EditorGUILayout.EndVertical();
+                // 第一组垂直排版结束
+
+                GUILayout.EndVertical();
+                // ------------ 一：结束垂直画盒子 ------------
+
+                #endregion
+                GUILayout.Space(8);
+
+                #region 五：从ACE项目移动预设
+
+                GUILayout.Label("五：导出ACE预设", TitleStyle());
+
+                // ------------ 一：开始垂直画盒子 ------------
+                GUILayout.BeginVertical("box");
+
+                // 第一组水平排版开始
+                EditorGUILayout.BeginHorizontal();
+                if (GUILayout.Button("1：从ACE项目移动预设")) SelfCollider.Instance().MovePrefabFromAce();
+                if (GUILayout.Button("2：删除QD下的预设")) SelfCollider.Instance().DeletePrefab();
+                EditorGUILayout.EndHorizontal();
+                // 第一组水平排版结束
+
+                GUILayout.EndVertical();
+                // ------------ 一：结束垂直画盒子 ------------
+
+                #endregion
+                GUILayout.Space(8);
 
                 #endregion
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
         }
+        GUILayout.EndScrollView();
     }
 
 

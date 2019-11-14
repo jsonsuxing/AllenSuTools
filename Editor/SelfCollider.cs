@@ -102,7 +102,6 @@ public class SelfCollider : CommonFun
     public float        RotationOffset     = 0f;                 // 旋转角度
     public float        DiffValue          = 0.004f;             // 自动生成的碰撞盒与实际模型尺寸的差值(尺寸完全一致不会吸合)
     public bool         IsLockInnerRadius;                       // 是否禁用内半径，默认关闭
-    public bool         IsMatchHeightToWidth;                    // 是否开启高宽度匹配，默认开启
     public GameObject   WorkingCollider = null;                  // 接收生成的环形碰撞盒
     public string       ChoseQuickData  = "小圆棍";              // 当前所选的快捷数据
 
@@ -234,7 +233,7 @@ public class SelfCollider : CommonFun
         };
         // 如果启用，将内半径与外半径的距离存储到锁定距离
         var radiusDiff = OuterRadius - InnerRadius;
-        GUILayout.Label("二：克隆环形类的碰撞盒", style);
+        GUILayout.Label("一：克隆环形类的碰撞盒", style);
 
         //------------一：开始垂直画盒子------------
         GUILayout.BeginVertical("box");
@@ -265,10 +264,6 @@ public class SelfCollider : CommonFun
 
         // 锁定内外半径间的距离
         if (IsLockInnerRadius) InnerRadius = Mathf.Max(0.1f, OuterRadius - radiusDiff);
-
-        // 高宽度匹配
-        IsMatchHeightToWidth = EditorGUILayout.Toggle(new GUIContent("高宽度自适应", "将高度锁定到外半径减去内半径"), IsMatchHeightToWidth);
-        if (IsMatchHeightToWidth) GUI.enabled = false;
 
         // 碰撞盒高度从0.01到无穷大
         Height      = Mathf.Max(EditorGUILayout.FloatField("手动调整碰撞盒高度", Height), 0.01f);
@@ -415,7 +410,7 @@ public class SelfCollider : CommonFun
         }
 
         // 根据是否开启高宽度自适应来决定环形碰撞盒的高度
-        var ringHeight = IsMatchHeightToWidth ? (OuterRadius - InnerRadius) : Height;
+        var ringHeight = Height;
 
         // 调用创建环形碰撞盒
         var compoundCollider = CreateRing(PivotAxis, BoxCollNumGenerate, OuterRadius, InnerRadius, ringHeight, RotationOffset);
@@ -734,8 +729,10 @@ public class SelfCollider : CommonFun
         var sizeY  = bounds.size.y * cloneObj.transform.localScale.y - TuQiHeight - DiffValue;
         var scaleZ = bounds.size.z * cloneObj.transform.localScale.z              - DiffValue;
 
+        var normalBox=new GameObject("Normal Box (1)");
+        normalBox.transform.SetParent(cloneObj.transform);
         // 添加碰撞盒，并设置大小及中心点
-        var boxCollider = cloneObj.AddComponent<BoxCollider>();
+        var boxCollider = normalBox.AddComponent<BoxCollider>();
         boxCollider.size   = new Vector3(sizeX, sizeY,             scaleZ);
         boxCollider.center = new Vector3(0,     -(TuQiHeight / 2), 0);
 
