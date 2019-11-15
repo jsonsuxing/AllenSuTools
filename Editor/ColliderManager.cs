@@ -12,17 +12,6 @@ using UnityEngine;
 
 public class ColliderManager:EditorWindow
 {
-    #region MenuItem
-
-    // 1--新建窗口
-    [MenuItem("GameObject/2、苏醒碰撞盒专用窗口", false, CommonFun.INDEXNUM)]
-    static void ToolWindows()
-    {
-        var colliderManager = GetWindow<ColliderManager>(false, "碰撞盒专用窗口");
-        colliderManager.Show();
-    }
-    #endregion
-
     #region 字段声明
 
     // 编辑器组
@@ -32,14 +21,16 @@ public class ColliderManager:EditorWindow
 
     #endregion
 
-
     void OnGUI()
     {
         scrowPos = GUILayout.BeginScrollView(scrowPos, GUILayout.Width(position.width), GUILayout.Height(position.height));
         EditorGUI.BeginChangeCheck();
+
         // 设置标题语（用途:错行）
         EditorGUILayout.HelpBox("", MessageType.Info, true);
+
         whichOneSelect = GUI.Toolbar(new Rect(5, 5, _topInfoType.Length * 100, 37), whichOneSelect, _topInfoType);
+
         switch (whichOneSelect)
         {
             case 0:
@@ -462,6 +453,18 @@ public class ColliderManager:EditorWindow
             },
             fontSize = fontSize
         };
+        return style;
+    }
+
+
+    public GUIStyle SetBtnStyle(int fontSize,Color textColor)
+    {
+        var style=new GUIStyle();
+        // style.alignment = TextAnchor.MiddleCenter;
+        style.fontSize = fontSize;
+        style.normal.textColor = textColor;
+        
+        // style.normal.background
         return style;
     }
 

@@ -22,6 +22,8 @@ public class AllenSuTools : EditorWindow
     {
         var allenSuTools = GetWindow<AllenSuTools>(false, "苏醒工程窗口");
         allenSuTools.Show();
+        var colliderManager = GetWindow<ColliderManager>(false, "碰撞盒专用窗口");
+        colliderManager.Show();
     }
     #endregion
 
@@ -34,6 +36,7 @@ public class AllenSuTools : EditorWindow
     private Vector2 scrowPos=Vector2.zero;
 
     #endregion
+
     void OnGUI()
     {
         scrowPos = GUILayout.BeginScrollView(scrowPos,GUILayout.Width(position.width),GUILayout.Height(position.height));
@@ -597,7 +600,7 @@ public class AllenSuTools : EditorWindow
 
                 #region 二：复制fbx到指定文件夹
 
-                GUILayout.Label("2：复制 fbx 到文件夹，并且取消场景待定颗粒标识(只点一次)", SetGuiStyle(Color.red, 14));
+                GUILayout.Label("2：复制fbx到文件夹，并取消待定颗粒标识(只点一次)", SetGuiStyle(Color.red, 14));
 
                 // ------------ 一：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
@@ -607,7 +610,7 @@ public class AllenSuTools : EditorWindow
 
                 // 第一组垂排版开始
                 EditorGUILayout.BeginVertical();
-                if (GUILayout.Button("点击按钮，复制 fbx 文件，同时取消场景待定颗粒标识")) ToolPro.Instance().CopyFbxToDirectory();
+                if (GUILayout.Button("点击按钮")) ToolPro.Instance().CopyFbxToDirectory();
                 EditorGUILayout.EndVertical();
                 // 第一组垂直排版结束
                 GUILayout.Space(3);
@@ -624,103 +627,86 @@ public class AllenSuTools : EditorWindow
                 #endregion
                 GUILayout.Space(8);
 
-                #region 二：批量修改颗粒预设
+                #region 二：从 Hierarchy 批量修改颗粒预设
 
-                GUILayout.Label("二：批量修改预设(未改完……)", TitleStyle());
+                GUILayout.Label("二：批量处理颗粒预设", TitleStyle());
                 GUILayout.Space(3);
 
-                #region 1：移除颗粒父物体上所有碰撞盒，转换为其子物体的 Bevel Box 和 Normal Box
+                GUILayout.Label("A：选择处理方式", SetGuiStyle(Color.red, 14));
+                GUILayout.Space(3);
 
-                GUILayout.Label("自定义检查面板",SetGuiStyle(Color.black, 14));
+                // 第一组水平排版开始
+                EditorGUILayout.BeginHorizontal();
+                if (GUILayout.Button("1：Hierarchy")) ToolPro.Instance().IsHierarchy = true;
+                if (GUILayout.Button("2：选择颗粒预设")) ToolPro.Instance().IsHierarchy = false;
+                EditorGUILayout.EndHorizontal();
+                // 第一组水平排版结束
+
+                // 第二组水平排版开始
+                EditorGUILayout.BeginHorizontal();
+                GUILayout.Label("提示：当前修改方式为：", SetGuiStyle(Color.black, 14));
+                ToolPro.Instance().strTips = ToolPro.Instance().IsHierarchy ? "Hierarchy" : "选择颗粒预设";
+                GUILayout.TextField(ToolPro.Instance().strTips);
+                EditorGUILayout.EndHorizontal();
+                // 第二组水平排版结束
+                GUILayout.Space(3);
+
+                #region 自定义检查面板
+
+                // 第零组水平排版开始
+                EditorGUILayout.BeginHorizontal();
+                GUILayout.Label("B：自定义检查面板", SetGuiStyle(Color.red, 14));
+                ToolPro.Instance().IsOpenAll = EditorGUILayout.Toggle(new GUIContent
+                ("一键 "+ (ToolPro.Instance().IsOpenAll ? "关闭" : "开启") + " 所有选项",
+                    "一键开启、关闭所有选项，默认全关"), ToolPro.Instance().IsOpenAll);
+                EditorGUILayout.EndHorizontal();
+                // 第零组水平排版结束
+                GUILayout.Space(3);
+
+                ToolPro.Instance().OpenAndCloseAll();
 
                 // ------------ 一：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
 
                 // 第一组水平排版开始
                 EditorGUILayout.BeginHorizontal();
-                ToolPro.Instance().IsCheckGranuleAndWu = 
-                    EditorGUILayout.Toggle(new GUIContent("1：颗粒，物件的位置、旋转", "是否检查颗粒和物件_1的位置，旋转问题"), ToolPro.Instance().IsCheckGranuleAndWu);
-                ToolPro.Instance().IsCheckWuScaleAndRemoveMrMf =
-                    EditorGUILayout.Toggle(new GUIContent("2：物件比例，关键部位Mesh", "是否检查物件的比例，以及移除关键部位上的已存在的 MeshRenderer 和 MeshFilter"), ToolPro.Instance().IsCheckWuScaleAndRemoveMrMf);
+                ToolPro.Instance().IsCheckBlockPrefab = 
+                    EditorGUILayout.Toggle(new GUIContent("1：颗粒预设的位置，旋转", "是否检查颗粒预设的位置，旋转问题"), 
+                        ToolPro.Instance().IsCheckBlockPrefab);
+                ToolPro.Instance().IsCheckWu =
+                    EditorGUILayout.Toggle(new GUIContent("2：物件比例，关键部位Mesh",
+                            "是否检查物件的比例，以及移除关键部位上的已存在的 MeshRenderer 和 MeshFilter"), ToolPro.Instance().IsCheckWu);
                 EditorGUILayout.EndHorizontal();
                 // 第一组水平排版结束
                 GUILayout.Space(3);
 
-                GUILayout.EndVertical();
-                // ------------ 一：结束垂直画盒子 ------------
-
-                // ------------ 一：开始垂直画盒子 ------------
-                GUILayout.BeginVertical("box");
-
-                // 第一组水平排版开始
+                // 第二组水平排版开始
                 EditorGUILayout.BeginHorizontal();
-               if(GUILayout.Button("点击按钮，开始检查")) ToolPro.Instance().CheckGranule();
+                ToolPro.Instance().IsRenameBoxCollider = EditorGUILayout.Toggle(new GUIContent("3：重置新、老碰撞盒名称", 
+                        "将父物体上的碰撞盒移动到子物体，普通碰撞盒改成 Normal Box，倾斜碰撞盒改成 Bevel Box"), ToolPro.Instance().IsRenameBoxCollider);
+                ToolPro.Instance().IsTransformPoint = EditorGUILayout.Toggle(new GUIContent("4：碰撞盒的 Center 转换",
+                    "将碰撞盒的 Center 重置，转换为父物体的 Position "), ToolPro.Instance().IsTransformPoint);
                 EditorGUILayout.EndHorizontal();
-                // 第一组水平排版结束
+                // 第二组水平排版结束
+                GUILayout.Space(3);
 
-                GUILayout.EndVertical();
-                // ------------ 一：结束垂直画盒子 ------------
-
-                #endregion
-                GUILayout.Space(8);
-
-                #region 碰撞盒center转换
-
-                GUILayout.Label("批量操作预制体", TitleStyle());
-
-                // ------------ 一：开始垂直画盒子 ------------
-                GUILayout.BeginVertical("box");
-
-                // 第一组水平排版开始
+                // 第三组水平排版开始
                 EditorGUILayout.BeginHorizontal();
-                if (GUILayout.Button("从Hierarchy批量修改"))
-                {
-                    SelfModel.Instance().IsCenterHierarchy = true;
-                    SelfModel.Instance().ChangeCenter();
-                }
-                else if (GUILayout.Button("从Prefab预设里单选修改"))
-                {
-                    SelfModel.Instance().IsCenterHierarchy = false;
-                    SelfModel.Instance().ChangeCenter();
-                }
+                ToolPro.Instance().IsRemoveScriptAndComponent = EditorGUILayout.Toggle(new GUIContent("5：移除不用的脚本、刚体",
+                    "所有子物体的 localScale 统一设置为1（除物件_1），移除父物体上原来存在的脚本 KeLiData 和 GranuleModel，以及刚体组件"), 
+                    ToolPro.Instance().IsRemoveScriptAndComponent);
                 EditorGUILayout.EndHorizontal();
-                // 第一组水平排版结束
+                // 第三组水平排版结束
+                GUILayout.Space(3);
 
                 GUILayout.EndVertical();
                 // ------------ 一：结束垂直画盒子 ------------
 
                 // ------------ 二：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
-
-                // 第一组水平排版开始
-                EditorGUILayout.BeginHorizontal();
-                GUILayout.Label("提示：当前修改方式为：", SetGuiStyle(Color.black, 14));
-                SelfModel.Instance().ShowCenterTips = SelfModel.Instance().IsCenterHierarchy ? "批量从Hierarchy修改" : "单选Prefab修改";
-                GUILayout.TextField(SelfModel.Instance().ShowCenterTips);
-                EditorGUILayout.EndHorizontal();
-                // 第一组水平排版结束
-
+                if (GUILayout.Button("开始检查")) ToolPro.Instance().CheckGranule();
                 GUILayout.EndVertical();
                 // ------------ 二：结束垂直画盒子 ------------
-
-                #endregion
-                GUILayout.Space(8);
-
-                #region 检查无NormalBox或者BevelBox的名称
-
-                GUILayout.Label("检查没被执行的颗粒名称", TitleStyle());
-
-                // ------------ 一：开始垂直画盒子 ------------
-                GUILayout.BeginVertical("box");
-
-                // 第一组垂直排版开始
-                EditorGUILayout.BeginVertical();
-                if (GUILayout.Button("点击开始检查无NormalBox或者BevelBox的名称")) SelfModel.Instance().CheckNotNormalOrBevelBox();
-                EditorGUILayout.EndVertical();
-                // 第一组垂直排版结束
-
-                GUILayout.EndVertical();
-                // ------------ 一：结束垂直画盒子 ------------
 
                 #endregion
                 GUILayout.Space(8);

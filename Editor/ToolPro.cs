@@ -28,17 +28,25 @@ public class ToolPro : CommonFun
     public string[]   StrContent = null;                                           // txt文件内容
 
     // 二：批量修改颗粒预设
+    public int errorPositionNumGranule = 0; // 颗粒位置错误个数
+    public int errorRotationNumGranule = 0; // 颗粒旋转位置错误个数
+    public int errorPositionNumWu = 0; // 物件位置错误个数
+    public int errorRotationNumWu = 0; // 物件旋转位置错误个数
+    public int errorScaleNumWu    = 0; // 物件比例错误个数
+    public int errorBuWeiNum = 0; // 关键部位上有碰撞盒的个数
+    public int count         = 0; // 进度表示
+    public string strTips = string.Empty;  // 提示批量操作的方式
+    public string strOpenAndClose = string.Empty; // 提示一键开启或者关闭
 
-    /// <summary>
-    /// 是否检查颗粒和物件_1的位置，旋转问题
-    /// </summary>
-    public bool IsCheckGranuleAndWu = false;
+    public bool IsHierarchy = true; // 批量处理预设的方式，默认是从层级面板处理，为 false 代表是直接点击预设处理
+    public bool IsOpenAll = false; // 一键开启、关闭，默认全关
 
-    /// <summary>
-    /// 是否检查物件的比例，以及移除关键部位上的已存在的 MeshRenderer 和 MeshFilter
-    /// </summary>
-    public bool IsCheckWuScaleAndRemoveMrMf = false;
-
+    public bool IsCheckBlockPrefab = false; // 是否处理 颗粒预设
+    public bool IsCheckWu = false; // 是否处理 物件_1
+    public bool IsRenameBoxCollider = false; // 是否将父物体上的碰撞盒移动到子物体，普通碰撞盒改成 Normal Box，倾斜碰撞盒改成 Bevel Box
+    public bool IsTransformPoint = false; // 是否将碰撞盒的 Center 重置，转换为父物体的 Position 
+    // 是否将所有子物体的 localScale 统一设置为1（除"物件_1"），移除父物体上原来存在的脚本 KeLiData 和 GranuleModel，以及刚体组件
+    public bool IsRemoveScriptAndComponent = false; 
     #endregion
 
     #region 一：修改完旧模型的后续操作
@@ -184,197 +192,290 @@ public class ToolPro : CommonFun
     /// </summary>
     public void CheckGranule()
     {
+        // 检查项二：记录物件比例不为 1 的颗粒名称，并且删除关键部位上的 MeshRenderer 和 MeshFilter
         if (Selection.gameObjects.Length == 0)
         {
             WindowTips("至少选择一个物体");
             return;
         }
 
-        var errorPositionNumGranule = 0; // 颗粒位置错误个数
-        var errorRotationNumGranule = 0; // 颗粒旋转位置错误个数
-
-        var errorPositionNumWu = 0; // 物件位置错误个数
-        var errorRotationNumWu = 0; // 物件旋转位置错误个数
-        var errorScaleNumWu = 0; // 物件比例错误个数
-
-        var errorBuWeiNum = 0; // 关键部位上有碰撞盒的个数
-        var count = 0; // 进度表示
+        // 每次点击时重置标记数字
+        errorPositionNumGranule = errorRotationNumGranule = 0;
+        errorPositionNumWu = errorRotationNumWu = 0;
+        errorScaleNumWu = errorBuWeiNum = count = 0;
 
         foreach (var selectObj in Selection.gameObjects)
         {
-            var selectTransform = selectObj.transform;
-            Transform wuTrans;
-            if (selectObj.transform.Find("物件_1"))
-            {
-                wuTrans = selectTransform.Find("物件_1");
-            }
-            else
-            {
-                WindowTips("物件命名错误：" + selectObj.name);
-                wuTrans = null;
-            }
+            // 检查项一：处理 颗粒预设
+            if (IsCheckBlockPrefab) CheckBlockPrefab(selectObj);
 
-            #region 检查项一：颗粒和物件_1的位置，旋转
+            // 检查项二：处理 物件
+            if (IsCheckWu) CheckWu(selectObj);
 
-            if (IsCheckGranuleAndWu)
-            {
-                // 检查位置不为 0 的颗粒
-                if (selectTransform.position != Vector3.zero)
-                {
-                    selectTransform.position = Vector3.zero;
-                    errorPositionNumGranule++;
-                    WriteToTxt(TxtDirPath, "颗粒位置错误字典", "第 " + errorPositionNumGranule + " 个：" + selectTransform.name);
-                }
-                // 检查旋转不为 0 的颗粒
-                if (selectTransform.rotation != Quaternion.identity)
-                {
-                    errorRotationNumGranule++;
-                    WriteToTxt(TxtDirPath, "颗粒旋转错误字典", "第 " + errorRotationNumGranule + " 个：" + selectTransform.name);
-                }
+            // 检查项三：
 
-                if (wuTrans)
-                {
-                    // 检查位置不为 0 的物件
-                    if (wuTrans.position != Vector3.zero)
-                    {
-                        errorPositionNumWu++;
-                        WriteToTxt(TxtDirPath, "物件位置错误字典", "第 " + errorPositionNumWu + " 个：" + selectTransform.name);
-                        Vector3 wuJianOriginalVector3 = wuTrans.position;
-                        foreach (Transform t in selectTransform)
-                        {
-                            if (t.name.Contains("物件")) //这里注意，把物件的改为物件_1 统一。由于不是所有都是物件_1所以，我这里模糊下查找。
-                            {
-                                t.position = Vector3.zero;
-                            }
-                            else
-                            {
-                                t.position -= wuJianOriginalVector3;
-                            }
-                        }
-                    }
-                    // 检查旋转不为 0 的物件
-                    if (wuTrans.rotation != Quaternion.identity) //物件旋转问题，属于他们的问题，不做变动。下方文件，已做记录。通知他们修改初始角度。
-                    {
-                        errorRotationNumWu++;
-                        WriteToTxt(TxtDirPath, "物件旋转错误字典", "第 " + errorRotationNumWu + " 个：" + selectTransform.name);
-                    }
-                }
-            }
+            // 检查项四：将碰撞盒的 Center 重置，转换为父物体的 Position 
+            if (IsTransformPoint) CheckBoxCollider(selectObj);
 
-            #endregion
+            // 检查项五：所有子物体的 localScale 统一设置为1（除"物件_1"），移除父物体上原来存在的脚本 KeLiData 和 GranuleModel，以及刚体组件
+            if(IsRemoveScriptAndComponent) CheckBuWei(selectObj);
 
-            var newPrefab = selectObj;
-            // 单个颗粒
-            var singleGranule = newPrefab.transform;
-
-            #region 检查项二：记录物件比例不为1的颗粒名称，并且删除关键部位上的MeshRenderer和MeshFilter
-
-            if (IsCheckWuScaleAndRemoveMrMf)
-            {
-                singleGranule.GetComponentsInChildren<MeshRenderer>().ToList().ForEach(_ =>
-                {
-                    if (_.name.Contains("物件_1"))
-                    {
-                        if (_.transform.localScale == Vector3.one) return;
-                        errorScaleNumWu++;
-                        WriteToTxt(TxtDirPath, "物件比例错误个数", "第 " + errorScaleNumWu + " 个：" + selectTransform.name);
-                    }
-                    else
-                    {
-                        Object.DestroyImmediate(_.GetComponent<MeshFilter>());
-                        Object.DestroyImmediate(_);
-                    }
-                });
-            }
-
-            #endregion
-
-            // 获得父物体上的所有碰撞盒
-            var allCollider = newPrefab.GetComponentsInChildren<BoxCollider>();
-            var bevelCount = 0;  // 倾斜盒子个数
-            var normalCount = 0; // 正常盒子个数
-            foreach (var box in allCollider)
-            {
-                //默认 isTrigger为关
-                box.isTrigger = false;
-                if (box.name.Contains("Normal Box") || box.name.Contains("Bevel Box")) continue;
-                if (box.name.Contains("Box"))
-                {
-                    bevelCount++;
-                    if (box.transform.parent.name.Contains("碰撞盒"))
-                    {
-                        var parent = box.transform.parent;
-                        box.transform.SetParent(newPrefab.transform);
-                        box.name = "Bevel Box " + "(" + bevelCount + ")";
-                        box.transform.SetAsLastSibling();
-                        if (parent.childCount != 0) continue;
-                        Object.DestroyImmediate(parent.gameObject);
-                    }
-                    else
-                    {
-                        if (box.GetComponents<BoxCollider>().Length == 1)
-                        {
-                            box.name = "Bevel Box " + "(" + bevelCount + ")";
-                            box.transform.SetAsLastSibling();
-                        }
-                        else
-                        {
-                            var bevelBox2 = new GameObject("Bevel Box " + "(" + bevelCount + ")");
-                            // 复制、粘贴原Box上的碰撞盒
-                            UnityEditorInternal.ComponentUtility.CopyComponent(box);
-                            UnityEditorInternal.ComponentUtility.PasteComponentAsNew(bevelBox2);
-                            bevelBox2.GetComponent<BoxCollider>().isTrigger = false;
-                            bevelBox2.transform.SetParent(newPrefab.transform);
-                            // 复制、粘贴原Box上的位置信息
-                            UnityEditorInternal.ComponentUtility.CopyComponent(box.transform);
-                            UnityEditorInternal.ComponentUtility.PasteComponentValues(bevelBox2.transform);
-                            Object.DestroyImmediate(box);
-                        }
-                    }
-                }
-                else if (box.name.Contains("Align"))
-                {
-                    box.name = "Align Box";
-                }
-                // 从父物体上获取到的碰撞盒  （也有可能是关键部位上有碰撞盒）
-                else
-                {
-                    // 从父物体上获取到的碰撞盒
-                    if (Equals(box.name, singleGranule.name))
-                    {
-                        normalCount++;
-                        var normalBox = new GameObject("Normal Box " + "(" + normalCount + ")");
-                        UnityEditorInternal.ComponentUtility.CopyComponent(box);
-                        UnityEditorInternal.ComponentUtility.PasteComponentAsNew(normalBox);
-                        normalBox.transform.SetParent(newPrefab.transform);
-                        normalBox.transform.SetAsLastSibling();
-                        Object.DestroyImmediate(box);
-                    }
-                    // 关键部位上有碰撞盒
-                    else
-                    {
-                        errorBuWeiNum++;
-                        WriteToTxt(TxtDirPath, "关键部位上有碰撞盒汇总", "第 " + errorBuWeiNum + " 个：" + singleGranule.name + "上的 " + box.name);
-
-                        // 删除碰撞盒
-                        Object.DestroyImmediate(box);
-                    }
-                }
-            }
-
+            // 检查项六：将父物体上的碰撞盒移动到子物体，普通碰撞盒改成 Normal Box，倾斜碰撞盒改成 Bevel Box，
+            if (IsRenameBoxCollider) ChangeColliderMode(selectObj);
 
             count++;
-            PrefabUtility.SaveAsPrefabAsset(newPrefab, "Assets/Resources/Prefab/ModelPrefabs/" + selectObj.name);
-            Object.DestroyImmediate(newPrefab);
+            PrefabUtility.SaveAsPrefabAsset(selectObj, "Assets/Resources/Prefab/ModelPrefabs/" + selectObj.name+ ".prefab");
+            if(IsHierarchy) Object.DestroyImmediate(selectObj);
+
+            // 显示修改进度
             var floatProgress = (float)count / Selection.gameObjects.Length;
             EditorUtility.DisplayProgressBar("修改进度", count + "/" + Selection.gameObjects.Length + "完成修改", floatProgress);
         }
 
+        // 清除进度条
         EditorUtility.ClearProgressBar();
+
         if (File.Exists("D:/Users/suxing/Desktop/没有实例化颗粒成功汇总.txt"))
         {
             WindowTips("没有实例化颗粒成功汇总文件已存在，详见路径：D:/Users/suxing/Desktop/没有实例化颗粒成功汇总.txt");
         }
+    }
+
+    /// <summary>
+    /// 《检查项一：处理颗粒预设》
+    /// 1：位置、旋转。2：移除 KeLiData 和 GranuleModel 脚本和刚体。
+    /// </summary>
+    /// <param name="selectObj">所选对象</param>
+    public void CheckBlockPrefab(GameObject selectObj)
+    {
+        // 1：如果位置不为 0
+        if (selectObj.transform.position != Vector3.zero)
+        {
+            selectObj.transform.position = Vector3.zero;
+            errorPositionNumGranule++;
+            WriteToTxt(TxtDirPath, "颗粒位置错误字典", "第 " + errorPositionNumGranule + " 个：" + selectObj.name);
+        }
+
+        // 2：如果旋转不为 0
+        if (selectObj.transform.rotation != Quaternion.identity)
+        {
+            errorRotationNumGranule++;
+            WriteToTxt(TxtDirPath, "颗粒旋转错误字典", "第 " + errorRotationNumGranule + " 个：" + selectObj.name);
+        }
+
+        // 3：移除原来存在的 KeLiData 和 GranuleModel 脚本和刚体。
+        if (selectObj.GetComponent<KeLiData>()) Object.DestroyImmediate(selectObj.GetComponent<KeLiData>());
+        if (selectObj.GetComponent<GranuleModel>()) Object.DestroyImmediate(selectObj.GetComponent<GranuleModel>());
+        if (selectObj.GetComponent<Rigidbody>()) Object.DestroyImmediate(selectObj.GetComponent<Rigidbody>());
+    }
+
+    /// <summary>
+    /// 《检查项二：处理物件》 1：位置、旋转、比例
+    /// </summary>
+    /// <param name="selectObj">所选对象</param>
+    public void CheckWu(GameObject selectObj)
+    {
+        // 物件_1
+        var wuTrans = selectObj.transform.GetChild(0).transform;
+
+        if (wuTrans)
+        {
+            // 1：位置不为 0
+            if (wuTrans.position != Vector3.zero)
+            {
+                errorPositionNumWu++;
+                WriteToTxt(TxtDirPath, "物件位置汇总", "第 " + errorPositionNumWu + " 个：" + selectObj.name);
+
+                var wuOriginalVector3 = wuTrans.position;
+                for (var i = 0; i < selectObj.transform.childCount; i++)
+                {
+                    if (selectObj.transform.GetChild(i).name.Contains("物件"))
+                    {
+                        selectObj.transform.GetChild(i).position = Vector3.zero;
+                    }
+                    else
+                    {
+                        selectObj.transform.GetChild(i).position -= wuOriginalVector3;
+                    }
+                }
+            }
+
+            // 2：旋转不为 0
+            if (wuTrans.rotation != Quaternion.identity)
+            {
+                errorRotationNumWu++;
+                // 物件旋转问题，属于建模问题，这里只做记录，不做改动。
+                WriteToTxt(TxtDirPath, "物件旋转错误字典", "第 " + errorRotationNumWu + " 个：" + selectObj.name);
+            }
+
+            // 3：比例不为 1
+            if (wuTrans.localScale != Vector3.one)
+            {
+                errorScaleNumWu++;
+                WriteToTxt(TxtDirPath, "物件比例错误个数", "第 " + errorScaleNumWu + " 个：" + selectObj.name);
+            }
+        }
+        else
+        {
+            WindowTips("存在名称不为 物件_1 的颗粒：" + selectObj.gameObject.name);
+        }
+    }
+
+    /// <summary>
+    /// 《检查项三：处理关键部位》 1：比例。
+    /// </summary>
+    /// <param name="selectObj">所选物体</param>
+    public void CheckBuWei(GameObject selectObj)
+    {
+        for (var i = 0; i < selectObj.transform.childCount; i++)
+        {
+            // 获取到所有子物体
+            var childTrans = selectObj.transform.GetChild(i);
+
+            if (Equals(childTrans.name,"物件_1")) continue;
+
+            // 1：把所有子物体的 localScale 统一设置为1（除"物件_1"）
+            if (childTrans.localScale != Vector3.one) childTrans.localScale = Vector3.one;
+
+            // 2：移除掉除物件_1之外所有子物体上的 MeshRenderer 和 MeshFilter 组件
+            if (childTrans.GetComponent<MeshRenderer>()) Object.DestroyImmediate(childTrans.GetComponent<MeshRenderer>());
+            if (childTrans.GetComponent<MeshFilter>()) Object.DestroyImmediate(childTrans.GetComponent<MeshFilter>());
+        }
+    }
+
+    /// <summary>
+    /// 《检查项四：处理碰撞盒》 1：Center 转化
+    /// </summary>
+    /// <param name="selectObj">所选对象</param>
+    public void CheckBoxCollider(GameObject selectObj)
+    {
+        // 获取到所有的碰撞盒
+        var childrenCollider = selectObj.GetComponentsInChildren<BoxCollider>();
+
+        // 1：碰撞盒的 Center 转化
+        foreach (var boxCollider in childrenCollider)
+        {
+            // 如果碰撞盒 Center 符合要求，则跳过
+            if (boxCollider.center == Vector3.zero) continue;
+
+            // TransformPoint：将相对 “当前游戏对象” 的坐标转化为基于世界坐标系的坐标，与其相反的函数是
+            // InverseTransformPoint：将世界坐标转化为相对 “当前游戏对象” 的基于世界坐标系的坐标
+            boxCollider.transform.position = boxCollider.transform.TransformPoint(boxCollider.center);
+            boxCollider.center             = Vector3.zero;
+
+            /*
+             * 解释说明
+             * 拼接代码里要求碰撞盒的 Center 为默认值 Vector3.zero ，但因为修改颗粒预设时会改动碰撞盒，导致碰撞盒 Center 不为 0，
+             * 从而引起一些拼搭问题，所以需要用该函数将碰撞盒的 Center 与父物体的 Position 转换一下。
+             */
+        }
+    }
+
+    /// <summary>
+    /// 《检查项五：将父物体上的碰撞盒移动到子物体，普通碰撞盒改成 Normal Box，倾斜碰撞盒改成 Bevel Box》
+    /// </summary>
+    /// <param name="selectObj">所选对象</param>
+    public void ChangeColliderMode(GameObject selectObj)
+    {
+        // 获得父物体上的所有碰撞盒
+        var allCollider = selectObj.GetComponentsInChildren<BoxCollider>();
+        var bevelCount = 0;  // 倾斜盒子个数
+        var normalCount = 0; // 正常盒子个数
+
+        foreach (var box in allCollider)
+        {
+            //默认 isTrigger 为关
+            box.isTrigger = false;
+
+            // 如果是已经更改过名称的颗粒则跳过
+            if (box.name.Contains("Normal Box") || box.name.Contains("Bevel Box")) continue;
+
+            /*
+             * 之前碰撞盒的加法是
+             * 1：如果是普通盒子，就加到父物体上。
+             * 2：如果是倾斜盒子，就新建一个 Box (1) 的子物体，单独把碰撞盒加到该子物体。
+             * 3：属于新增类型，比如围绕小圆棍加了一圈(8个)倾斜碰撞盒，把这8个碰撞盒放到一个名为 环形碰撞盒 (1) 的子物体
+             */
+
+            // 情况一：如果子物体名称含有 Box 
+            if (box.name.Contains("Box"))
+            {
+                bevelCount++;
+
+                // 如果是环形碰撞盒下的倾斜碰撞盒 Box
+                if (box.transform.parent.name.Contains("碰撞盒"))
+                {
+                    var parent = box.transform.parent;
+                    box.transform.SetParent(selectObj.transform);
+                    box.name = "Bevel Box " + "(" + bevelCount + ")";
+                    box.transform.SetAsLastSibling();
+                    if (parent.childCount != 0) continue;
+                    Object.DestroyImmediate(parent.gameObject);
+                }
+                // 如果是单独的倾斜碰撞盒 Box
+                else
+                {
+                    // 如果 Box 子物体上只有一个碰撞盒，直接改名即可
+                    if (box.GetComponents<BoxCollider>().Length == 1)
+                    {
+                        box.name = "Bevel Box " + "(" + bevelCount + ")";
+                        box.transform.SetAsLastSibling();
+                    }
+                    // 如果 Box 子物体上有多个碰撞盒
+                    else
+                    {
+                        var bevelBox2 = new GameObject("Bevel Box " + "(" + bevelCount + ")");
+
+                        // 复制、粘贴原 Box 上的碰撞盒
+                        UnityEditorInternal.ComponentUtility.CopyComponent(box);
+                        UnityEditorInternal.ComponentUtility.PasteComponentAsNew(bevelBox2);
+                        bevelBox2.GetComponent<BoxCollider>().isTrigger = false;
+                        bevelBox2.transform.SetParent(selectObj.transform);
+
+                        // 复制、粘贴原 Box 上的位置信息
+                        UnityEditorInternal.ComponentUtility.CopyComponent(box.transform);
+                        UnityEditorInternal.ComponentUtility.PasteComponentValues(bevelBox2.transform);
+
+                        // 删除掉原来的倾斜碰撞盒 Box
+                        Object.DestroyImmediate(box);
+                    }
+                }
+            }
+            // 情况二：如果是对齐盒子
+            else if (box.name.Contains("Align")) box.name = "Align Box";
+
+            // 情况三：排除掉情况一、二后，剩下的碰撞盒
+            else
+            {
+                // 如果是从父物体上获取到的碰撞盒
+                if (Equals(box.name, selectObj.name))
+                {
+                    normalCount++;
+                    var normalBox = new GameObject("Normal Box " + "(" + normalCount + ")");
+                    UnityEditorInternal.ComponentUtility.CopyComponent(box);
+                    UnityEditorInternal.ComponentUtility.PasteComponentAsNew(normalBox);
+                    normalBox.transform.SetParent(selectObj.transform);
+                    normalBox.transform.SetAsLastSibling();
+                    Object.DestroyImmediate(box);
+                }
+                // 如果关键部位上有碰撞盒
+                else
+                {
+                    errorBuWeiNum++;
+                    WriteToTxt(TxtDirPath, "关键部位上有碰撞盒汇总", "第 " + errorBuWeiNum + " 个：" + selectObj.name + "上的 " + box.name);
+
+                    // 删除碰撞盒
+                    Object.DestroyImmediate(box);
+                }
+            }
+        }
+    }
+
+    // 一键开启、关闭所有选项
+    public void OpenAndCloseAll()
+    {
+        IsCheckBlockPrefab = IsCheckWu = IsRenameBoxCollider =
+            IsTransformPoint = IsRemoveScriptAndComponent = IsOpenAll;
     }
 
     #endregion

@@ -277,7 +277,7 @@ public class SelfCollider : CommonFun
 
         // 第一组水平排版开始
         EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("一：轮架"))
+        if (GUILayout.Button("轮架"))
         {
             // 轮架数据 length=0.8，limit勾选
             // 小圆洞的 length=0.8-0.18=0.72，limit不勾选
@@ -286,12 +286,19 @@ public class SelfCollider : CommonFun
             Height         = 0.71f;
             ChoseQuickData = "轮架";
         }
-        if (GUILayout.Button("二：小圆棍"))
+        if (GUILayout.Button("小圆棍"))
         {
             OuterRadius    = 0.14f;
             InnerRadius    = 0.01f;
             Height         = 0.79f; // 1.58
             ChoseQuickData = "小圆棍";
+        }
+        if (GUILayout.Button("插槽"))
+        {
+            OuterRadius    = 0.3f;
+            InnerRadius    = 0.245f;
+            Height         = 0.79f;
+            ChoseQuickData = "插槽";
         }
 
         EditorGUILayout.EndHorizontal();
@@ -299,33 +306,21 @@ public class SelfCollider : CommonFun
 
         // 第二组水平排版开始
         EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("三：厚轮架格挡"))
+        if (GUILayout.Button("厚轮架格挡"))
         {
             OuterRadius    = 0.27f; // 丰满数据：0.28f
             InnerRadius    = 0.01f;
             Height         = 0.15f;
             ChoseQuickData = "厚轮架格挡";
         }
-        if (GUILayout.Button("四：薄轮架格挡"))
+        if (GUILayout.Button("薄轮架格挡"))
         {
             OuterRadius    = 0.27f; // 丰满数据：0.28f
             InnerRadius    = 0.01f;
             Height         = 0.075f;
             ChoseQuickData = "薄轮架格挡";
         }
-        EditorGUILayout.EndHorizontal();
-        // 第二组水平排版结束
-
-        // 第三组水平排版开始
-        EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("五：插槽"))
-        {
-            OuterRadius    = 0.3f;
-            InnerRadius    = 0.245f;
-            Height         = 0.79f;
-            ChoseQuickData = "插槽";
-        }
-        if (GUILayout.Button("六：圆洞"))
+        if (GUILayout.Button("圆洞"))
         {
             OuterRadius    = 0.35f;
             InnerRadius    = 0.31f;
@@ -335,20 +330,7 @@ public class SelfCollider : CommonFun
             //一：0.29  0.23  二：0.37  0.23
         }
         EditorGUILayout.EndHorizontal();
-        // 第三组水平排版结束
-
-        // 第四组水平排版开始
-        // EditorGUILayout.BeginHorizontal();
-        // if (GUILayout.Button("七：支撑凸起(圆)"))
-        // {
-        //     // 如果是给凸起加碰撞盒，则是 0.22 0.15 0.165
-        //     OuterRadius    = 0.295f;
-        //     InnerRadius    = 0.16f;
-        //     Height         = 0.31f;
-        //     ChoseQuickData = "支撑凸起(圆)";
-        // }
-        // EditorGUILayout.EndHorizontal();
-        // 第四组水平排版结束
+        // 第二组水平排版结束
 
         // 第N组水平排版开始
         EditorGUILayout.BeginHorizontal();

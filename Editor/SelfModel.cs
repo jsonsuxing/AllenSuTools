@@ -43,12 +43,6 @@ public class SelfModel : CommonFun
     public string ImportGranuleName = string.Empty; //单个导入的颗粒名称
     public bool   IsWrongDirectory;                 // 模型是否分配错了文件夹
 
-    // 
-
-    // 碰撞盒center
-    public bool   IsCenterHierarchy = false;        //默认
-    public string ShowCenterTips    = string.Empty; //提示修改方式
-
     // 其它
     public bool IsOpenGranuleToggle    = false; // 颗粒种类按钮是否打开
     public bool IsRememberGranuleType  = false; //是否记住颗粒大类路径
@@ -327,100 +321,6 @@ public class SelfModel : CommonFun
 
     #endregion
 
-
-    #region 碰撞盒center
-
-    public void ChangeCenter()
-    {
-        if (Selection.gameObjects.Length == 0)
-        {
-            WindowTips("至少选择一个物体");
-            return;
-        }
-
-        var count = 0;
-        foreach (var granuleModel in Selection.gameObjects)
-        {
-            // 操作方式
-            var newPrefab = IsCenterHierarchy ? granuleModel : Object.Instantiate(granuleModel, Vector3.zero, Quaternion.identity);
-            if (newPrefab != null)
-            {
-                // 批量操作方式一：碰撞盒的center与物体的transform转换
-                var childrenCollider = newPrefab.GetComponentsInChildren<BoxCollider>();
-                foreach (var boxCollider in childrenCollider)
-                {
-                    if (boxCollider.center == Vector3.zero) continue;
-                    boxCollider.transform.position = boxCollider.transform.TransformPoint(boxCollider.center);
-                    boxCollider.center             = Vector3.zero;
-                }
-
-                // 批量操作方式二：把所有子物体的 localScale 统一设置为1（除"物件_1"）
-                for (var i = 0; i < newPrefab.transform.childCount; i++)
-                {
-                    var childTrans = newPrefab.transform.GetChild(i);
-                    if (childTrans.name != "物件_1" && childTrans.localScale != Vector3.one)
-                    {
-                        childTrans.localScale = Vector3.one;
-                    }
-                }
-
-                // 批量操作方式三：移除父物体上原来存在的脚本 KeLiData 和 GranuleModel，以及刚体组件
-                if (newPrefab.GetComponent<KeLiData>()) Object.DestroyImmediate(newPrefab.GetComponent<KeLiData>());
-                if (newPrefab.GetComponent<GranuleModel>()) Object.DestroyImmediate(newPrefab.GetComponent<GranuleModel>());
-                if (newPrefab.GetComponent<Rigidbody>()) Object.DestroyImmediate(newPrefab.GetComponent<Rigidbody>());
-            }
-
-            count++;
-            PrefabUtility.SaveAsPrefabAsset(newPrefab, IsCenterHierarchy ? "Assets/Resources/Prefab/ModelPrefabs/" + granuleModel.name + ".prefab" : AssetDatabase.GetAssetPath(granuleModel));
-            // 操作方式为单点预设时执行删除操作，批量从Hierarchy删除会有模型未被改到的问题
-            // if (IsCenterHierarchy)
-            Object.DestroyImmediate(newPrefab);
-            var floatProgress = (float) count / Selection.gameObjects.Length;
-            EditorUtility.DisplayProgressBar("修改进度", count + "/" + Selection.gameObjects.Length + "完成修改", floatProgress);
-        }
-
-        EditorUtility.ClearProgressBar();
-    }
-
-    #endregion
-
-    #region 点击开始检查无NormalBox或者BevelBox的名称
-
-    public void CheckNotNormalOrBevelBox()
-    {
-        if (Selection.gameObjects.Length == 0)
-        {
-            WindowTips("至少选择一个物体");
-            return;
-        }
-
-        int  num       = 0;
-        bool isNotHave = false;
-        for (int i = 0; i < Selection.gameObjects.Length; i++)
-        {
-            Transform     selectTrans  = Selection.gameObjects[i].transform;
-            BoxCollider[] boxColliders = selectTrans.GetComponentsInChildren<BoxCollider>();
-            foreach (var boxCollider in boxColliders)
-            {
-                if (boxCollider.name.Contains("Normal") || boxCollider.name.Contains("Bevel"))
-                {
-                    break;
-                }
-
-                isNotHave = true;
-            }
-
-            if (isNotHave)
-            {
-                num++;
-                WriteToTxt(TxtDirPath, "未被编辑器执行到的颗粒名称", "第 " + num + " 个：" + selectTrans.name);
-                isNotHave = false;
-            }
-        }
-    }
-
-    #endregion
-
     #region 省事功能
 
     #region 一：自动定位层级面板所选颗粒类别
@@ -479,7 +379,6 @@ public class SelfModel : CommonFun
     #endregion
 
     #endregion
-
 
     #region 其它函数
 
