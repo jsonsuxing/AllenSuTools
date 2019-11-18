@@ -49,7 +49,9 @@ public class ToolPro : CommonFun
 
     // 三：批量处理 Hierarchy 上的颗粒大类
     public GameObject PrefabObj; // 选择的预设
-    public bool IsAddBorder = false;  // 是否添加 Border
+    public bool IsCreateBorder = false;  // 是否添加 Border
+    public bool IsCreateMain = false; // 是否添加 Main
+    public bool IsCreateSingleObj = false; // 是否添加指定的单个子物体
 
     #endregion
 
@@ -490,6 +492,7 @@ public class ToolPro : CommonFun
         // 图集中的小图片
         var content = GameObject.Find("View/Canvas Assembling/Left Tool Panel/Granule Library/Viewport/Content");
 
+        // 获取到所有颗粒大类对象
         for (var i = 0; i < content.transform.childCount; i++)
         {
             if (content.transform.GetChild(i).GetComponent<GranuleUiType>())
@@ -500,42 +503,78 @@ public class ToolPro : CommonFun
 
         foreach (var granule in granuleList)
         {
-            // 1:是否添加 Border
-            if(IsAddBorder) AddBorderAndMain(granule);
+            // 1：是否添加指定的单个子物体
+            if (IsCreateSingleObj) CreateSingleChild(granule);
 
-//            var prefabObj = Resources.Load<GameObject>("GranuleState");
-//            if (prefabObj)
-//            {
-//                var prefab = Object.Instantiate(prefabObj, granule.transform);
-//                Undo.RegisterCreatedObjectUndo(prefab, "GranuleStatePrefab");
-//                prefab.name = "GranuleState";
-//            }
+            // 2：是否添加 Border
+            if (IsCreateBorder) CreateBorder(granule);
 
+            // 3：是否添加 Main
+            if(IsCreateMain) CreateMain(granule);
         }
     }
 
     /// <summary>
-    /// 为每个大类下添加一个子物体 Border 以及一个孙物体 Main，负责零件库单个颗粒大类的UI显示
+    /// 添加单个子物体
     /// </summary>
     /// <param name="granule">某一颗粒大类</param>
-    public void AddBorderAndMain(GameObject granule)
+    public void CreateSingleChild(GameObject granule)
     {
-//        granule.GetComponent<Image>().color = granuleList[0].GetComponent<Image>().color;
-        var prefabObj = Resources.Load<GameObject>("Border");
-        if (prefabObj)
+        if (PrefabObj)
         {
-            var prefab = Object.Instantiate(prefabObj, granule.transform);
-            Undo.RegisterCreatedObjectUndo(prefab, "prefab");
-        
-            prefab.name = "Border";
-        
-            // 给 Main 换 Sprite
-            prefab.transform.GetChild(0).GetComponent<Image>().sprite = 
-                ChinarAtlas.LoadSprite("UI/Assembling/Granule Library", "零件库-" + granule.name);
-        
+            var prefab = Object.Instantiate(PrefabObj, granule.transform);
+            Undo.RegisterCreatedObjectUndo(prefab, "SingleChildPrefab");
+            prefab.name = PrefabObj.name;
+        }
+        else
+        {
+            WindowTips("预设不能为空");
+            IsCreateSingleObj = false;
+        }
+    }
+
+    /// <summary>
+    /// 为每个大类下添加一个子物体 Border
+    /// </summary>
+    /// <param name="granule">某一颗粒大类</param>
+    public void CreateBorder(GameObject granule)
+    {
+        if (PrefabObj)
+        {
+            var prefab = Object.Instantiate(PrefabObj, granule.transform);
+            Undo.RegisterCreatedObjectUndo(prefab, "BorderPrefab");
+
+            prefab.name = PrefabObj.name;
             //颗粒类原来的 sprite 设置为空
-            granule.GetComponent<Image>().sprite = null;
-            granule.GetComponent<Button>().targetGraphic = granule.transform.GetChild(0).GetChild(0).GetComponent<Image>();
+            if (granule.GetComponent<Image>().sprite != null) granule.GetComponent<Image>().sprite = null;
+        }
+        else
+        {
+            WindowTips(" Border 的预设不能为空");
+            IsCreateBorder = false;
+        }
+    }
+
+    /// <summary>
+    /// 为每个大类下添加一个子物体 Main
+    /// </summary>
+    /// <param name="granule">某一颗粒大类</param>
+    public void CreateMain(GameObject granule)
+    {
+        if (PrefabObj)
+        {
+            var prefab = Object.Instantiate(PrefabObj, granule.transform);
+            Undo.RegisterCreatedObjectUndo(prefab, "MainPrefab");
+
+            prefab.name = PrefabObj.name;
+            // 给 Main 更换 Sprite ，并且直接传值给颗粒大类的 Image；
+            prefab.transform.GetComponent<Image>().sprite = ChinarAtlas.LoadSprite("UI/Assembling/Granule Library", "零件库-" + granule.name);
+            granule.GetComponent<Button>().targetGraphic = granule.transform.Find("Main").GetComponent<Image>();
+        }
+        else
+        {
+            WindowTips(" Main 的预设不能为空");
+            IsCreateMain = false;
         }
     }
 

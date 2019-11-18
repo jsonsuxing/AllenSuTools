@@ -724,11 +724,27 @@ public class AllenSuTools : EditorWindow
                 ToolPro.Instance().PrefabObj = (GameObject)EditorGUILayout.ObjectField("点击选择预设：", ToolPro.Instance().PrefabObj, typeof(GameObject), true);
                 GUILayout.Space(3);
 
+                GUILayout.Label("B：待生成子物体面板", SetGuiStyle(Color.red, 14));
+                GUILayout.Space(3);
+
+                // 第一组水平排版开始
+                EditorGUILayout.BeginHorizontal();
+                ToolPro.Instance().IsCreateSingleObj =
+                    EditorGUILayout.Toggle(new GUIContent("1：添加单个子物体",
+                        "在每一个颗粒类下新建一个子物体 Back Ground"), ToolPro.Instance().IsCreateSingleObj);
+                ToolPro.Instance().IsCreateBorder =
+                    EditorGUILayout.Toggle(new GUIContent("2：添加 《Border》", 
+                        "在每一个颗粒类下新建一个子物体 Border，再新建一个孙物体 Main，处理零件库的 UI 显示"), ToolPro.Instance().IsCreateBorder);
+                
+                EditorGUILayout.EndHorizontal();
+                // 第一组水平排版结束
+                GUILayout.Space(3);
+
                 // 第二组水平排版开始
                 EditorGUILayout.BeginHorizontal();
-                ToolPro.Instance().IsAddBorder =
-                    EditorGUILayout.Toggle(new GUIContent("1：添加 Border、Main", 
-                        "在每一个颗粒类下新建一个子物体 Border，再新建一个孙物体 Main，处理零件库的 UI 显示"), ToolPro.Instance().IsAddBorder);
+                ToolPro.Instance().IsCreateMain =
+                    EditorGUILayout.Toggle(new GUIContent("3：添加 《Main》",
+                        "在每一个颗粒类下新建一个子物体 Back Ground"), ToolPro.Instance().IsCreateMain);
                 EditorGUILayout.EndHorizontal();
                 // 第二组水平排版结束
                 GUILayout.Space(3);
