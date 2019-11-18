@@ -656,14 +656,10 @@ public class AllenSuTools : EditorWindow
                 // 第零组水平排版开始
                 EditorGUILayout.BeginHorizontal();
                 GUILayout.Label("B：自定义检查面板", SetGuiStyle(Color.red, 14));
-                ToolPro.Instance().IsOpenAll = EditorGUILayout.Toggle(new GUIContent
-                ("一键 "+ (ToolPro.Instance().IsOpenAll ? "关闭" : "开启") + " 所有选项",
-                    "一键开启、关闭所有选项，默认全关"), ToolPro.Instance().IsOpenAll);
+                if(GUILayout.Button("一键 " + (ToolPro.Instance().IsOpenAll ? "关闭" : "开启") + " 所有选项")) ToolPro.Instance().OpenAndCloseAll();
                 EditorGUILayout.EndHorizontal();
                 // 第零组水平排版结束
                 GUILayout.Space(3);
-
-                ToolPro.Instance().OpenAndCloseAll();
 
                 // ------------ 一：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
@@ -671,30 +667,31 @@ public class AllenSuTools : EditorWindow
                 // 第一组水平排版开始
                 EditorGUILayout.BeginHorizontal();
                 ToolPro.Instance().IsCheckBlockPrefab = 
-                    EditorGUILayout.Toggle(new GUIContent("1：颗粒预设的位置，旋转", "是否检查颗粒预设的位置，旋转问题"), 
+                    EditorGUILayout.Toggle(new GUIContent("1：检查《颗粒预设》", "是否检查颗粒预设的 1：位置、旋转。2：移除 KeLiData 和 GranuleModel 脚本和刚体。"), 
                         ToolPro.Instance().IsCheckBlockPrefab);
                 ToolPro.Instance().IsCheckWu =
-                    EditorGUILayout.Toggle(new GUIContent("2：物件比例，关键部位Mesh",
-                            "是否检查物件的比例，以及移除关键部位上的已存在的 MeshRenderer 和 MeshFilter"), ToolPro.Instance().IsCheckWu);
+                    EditorGUILayout.Toggle(new GUIContent("2：检查《物件_1》",
+                            "是否检查物件的 1：位置、旋转、比例、名称"), ToolPro.Instance().IsCheckWu);
                 EditorGUILayout.EndHorizontal();
                 // 第一组水平排版结束
                 GUILayout.Space(3);
 
                 // 第二组水平排版开始
                 EditorGUILayout.BeginHorizontal();
-                ToolPro.Instance().IsRenameBoxCollider = EditorGUILayout.Toggle(new GUIContent("3：重置新、老碰撞盒名称", 
-                        "将父物体上的碰撞盒移动到子物体，普通碰撞盒改成 Normal Box，倾斜碰撞盒改成 Bevel Box"), ToolPro.Instance().IsRenameBoxCollider);
-                ToolPro.Instance().IsTransformPoint = EditorGUILayout.Toggle(new GUIContent("4：碰撞盒的 Center 转换",
-                    "将碰撞盒的 Center 重置，转换为父物体的 Position "), ToolPro.Instance().IsTransformPoint);
+                ToolPro.Instance().IsCheckBuWei = EditorGUILayout.Toggle(new GUIContent("3：检查《关键部位》",
+                        "是否检查关键部位的 1：比例。2：移除 MeshRenderer 和 MeshFilter 组件。"),
+                    ToolPro.Instance().IsCheckBuWei);
+                ToolPro.Instance().IsCheckBoxCollider = EditorGUILayout.Toggle(new GUIContent("4：检查《碰撞盒》",
+                    "是否检查碰撞盒的 1：Center 转化"), ToolPro.Instance().IsCheckBoxCollider);
                 EditorGUILayout.EndHorizontal();
                 // 第二组水平排版结束
                 GUILayout.Space(3);
 
                 // 第三组水平排版开始
                 EditorGUILayout.BeginHorizontal();
-                ToolPro.Instance().IsRemoveScriptAndComponent = EditorGUILayout.Toggle(new GUIContent("5：移除不用的脚本、刚体",
-                    "所有子物体的 localScale 统一设置为1（除物件_1），移除父物体上原来存在的脚本 KeLiData 和 GranuleModel，以及刚体组件"), 
-                    ToolPro.Instance().IsRemoveScriptAndComponent);
+                ToolPro.Instance().IsRenameBoxCollider = EditorGUILayout.Toggle(new GUIContent("5：设置《碰撞盒大改版》",
+                    "将父物体上的碰撞盒移动到子物体，普通碰撞盒改成 Normal Box，倾斜碰撞盒改成 Bevel Box，该项属于实现功能范围，" +
+                    "只用一次即可"), ToolPro.Instance().IsRenameBoxCollider);
                 EditorGUILayout.EndHorizontal();
                 // 第三组水平排版结束
                 GUILayout.Space(3);
@@ -711,6 +708,36 @@ public class AllenSuTools : EditorWindow
                 #endregion
                 GUILayout.Space(8);
 
+                #endregion
+                GUILayout.Space(8);
+
+                #region 三：批量处理 Hierarchy 上的颗粒大类
+
+                GUILayout.Label("三：批量处理 Hierarchy 上的颗粒大类", TitleStyle());
+                GUILayout.Space(3);
+
+                // ------------ 一：开始垂直画盒子 ------------
+                GUILayout.BeginVertical("box");
+
+                GUILayout.Label("A：选择预设", SetGuiStyle(Color.red, 14));
+                GUILayout.Space(3);
+                ToolPro.Instance().PrefabObj = (GameObject)EditorGUILayout.ObjectField("点击选择预设：", ToolPro.Instance().PrefabObj, typeof(GameObject), true);
+                GUILayout.Space(3);
+
+                // 第二组水平排版开始
+                EditorGUILayout.BeginHorizontal();
+                ToolPro.Instance().IsAddBorder =
+                    EditorGUILayout.Toggle(new GUIContent("1：添加 Border、Main", 
+                        "在每一个颗粒类下新建一个子物体 Border，再新建一个孙物体 Main，处理零件库的 UI 显示"), ToolPro.Instance().IsAddBorder);
+                EditorGUILayout.EndHorizontal();
+                // 第二组水平排版结束
+                GUILayout.Space(3);
+
+                GUILayout.EndVertical();
+                // ------------ 一：结束垂直画盒子 ------------
+               
+                if (GUILayout.Button("点击批量处理颗粒大类")) ToolPro.Instance().ChangeGranuleImage();
+                
                 #endregion
                 GUILayout.Space(8);
 
@@ -761,25 +788,9 @@ public class AllenSuTools : EditorWindow
                 #endregion
                 GUILayout.Space(8);
 
-                #region 三：动态修改零件库 Image
+                #region 三：删除指定后缀名的文件
 
-                GUILayout.Label("三：动态修改零件库 Image", TitleStyle());
-
-                // ------------ 一：开始垂直画盒子 ------------
-                GUILayout.BeginVertical("box");
-                if (GUILayout.Button("点击按钮，动态修改零件库 Image"))
-                {
-                    SelfTools.ChangeGranuleImage();
-                }
-                GUILayout.EndVertical();
-                // ------------ 一：结束垂直画盒子 ------------
-
-                #endregion
-                GUILayout.Space(8);
-
-                #region 四：删除指定后缀名的文件
-
-                GUILayout.Label("四：删除指定后缀名的文件", TitleStyle());
+                GUILayout.Label("三：删除指定后缀名的文件", TitleStyle());
 
                 // ------------ 一：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
@@ -812,9 +823,9 @@ public class AllenSuTools : EditorWindow
                 #endregion
                 GUILayout.Space(8);
 
-                #region 五：从ACE项目移动预设
+                #region 四：从ACE项目移动预设
 
-                GUILayout.Label("五：导出ACE预设", TitleStyle());
+                GUILayout.Label("四：导出ACE预设", TitleStyle());
 
                 // ------------ 一：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");

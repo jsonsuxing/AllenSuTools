@@ -8,9 +8,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using ChinarX;
 using UI.ThreeDimensional;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 using Directory = System.IO.Directory;
 
 
@@ -33,20 +35,22 @@ public class ToolPro : CommonFun
     public int errorPositionNumWu = 0; // 物件位置错误个数
     public int errorRotationNumWu = 0; // 物件旋转位置错误个数
     public int errorScaleNumWu    = 0; // 物件比例错误个数
+    public int errorNoWuName = 0; // 名称不是物件_1的个数
     public int errorBuWeiNum = 0; // 关键部位上有碰撞盒的个数
     public int count         = 0; // 进度表示
     public string strTips = string.Empty;  // 提示批量操作的方式
-    public string strOpenAndClose = string.Empty; // 提示一键开启或者关闭
-
     public bool IsHierarchy = true; // 批量处理预设的方式，默认是从层级面板处理，为 false 代表是直接点击预设处理
     public bool IsOpenAll = false; // 一键开启、关闭，默认全关
-
     public bool IsCheckBlockPrefab = false; // 是否处理 颗粒预设
     public bool IsCheckWu = false; // 是否处理 物件_1
+    public bool IsCheckBoxCollider = false; // 是否处理 碰撞盒
+    public bool IsCheckBuWei = false; // 是否 处理 关键部位
     public bool IsRenameBoxCollider = false; // 是否将父物体上的碰撞盒移动到子物体，普通碰撞盒改成 Normal Box，倾斜碰撞盒改成 Bevel Box
-    public bool IsTransformPoint = false; // 是否将碰撞盒的 Center 重置，转换为父物体的 Position 
-    // 是否将所有子物体的 localScale 统一设置为1（除"物件_1"），移除父物体上原来存在的脚本 KeLiData 和 GranuleModel，以及刚体组件
-    public bool IsRemoveScriptAndComponent = false; 
+
+    // 三：批量处理 Hierarchy 上的颗粒大类
+    public GameObject PrefabObj; // 选择的预设
+    public bool IsAddBorder = false;  // 是否添加 Border
+
     #endregion
 
     #region 一：修改完旧模型的后续操作
@@ -202,7 +206,7 @@ public class ToolPro : CommonFun
         // 每次点击时重置标记数字
         errorPositionNumGranule = errorRotationNumGranule = 0;
         errorPositionNumWu = errorRotationNumWu = 0;
-        errorScaleNumWu = errorBuWeiNum = count = 0;
+        errorScaleNumWu = errorBuWeiNum = count = errorNoWuName = 0;
 
         foreach (var selectObj in Selection.gameObjects)
         {
@@ -212,15 +216,13 @@ public class ToolPro : CommonFun
             // 检查项二：处理 物件
             if (IsCheckWu) CheckWu(selectObj);
 
-            // 检查项三：
+            // 检查项三：处理 碰撞盒
+            if (IsCheckBoxCollider) CheckBoxCollider(selectObj);
 
-            // 检查项四：将碰撞盒的 Center 重置，转换为父物体的 Position 
-            if (IsTransformPoint) CheckBoxCollider(selectObj);
+            // 检查项四：处理 关键部位
+            if(IsCheckBuWei) CheckBuWei(selectObj);
 
-            // 检查项五：所有子物体的 localScale 统一设置为1（除"物件_1"），移除父物体上原来存在的脚本 KeLiData 和 GranuleModel，以及刚体组件
-            if(IsRemoveScriptAndComponent) CheckBuWei(selectObj);
-
-            // 检查项六：将父物体上的碰撞盒移动到子物体，普通碰撞盒改成 Normal Box，倾斜碰撞盒改成 Bevel Box，
+            // 特殊检查：将父物体上的碰撞盒移动到子物体，普通碰撞盒改成 Normal Box，倾斜碰撞盒改成 Bevel Box，
             if (IsRenameBoxCollider) ChangeColliderMode(selectObj);
 
             count++;
@@ -229,16 +231,11 @@ public class ToolPro : CommonFun
 
             // 显示修改进度
             var floatProgress = (float)count / Selection.gameObjects.Length;
-            EditorUtility.DisplayProgressBar("修改进度", count + "/" + Selection.gameObjects.Length + "完成修改", floatProgress);
+            EditorUtility.DisplayProgressBar("修改进度", count + " / " + Selection.gameObjects.Length + "完成修改", floatProgress);
         }
 
         // 清除进度条
         EditorUtility.ClearProgressBar();
-
-        if (File.Exists("D:/Users/suxing/Desktop/没有实例化颗粒成功汇总.txt"))
-        {
-            WindowTips("没有实例化颗粒成功汇总文件已存在，详见路径：D:/Users/suxing/Desktop/没有实例化颗粒成功汇总.txt");
-        }
     }
 
     /// <summary>
@@ -253,14 +250,14 @@ public class ToolPro : CommonFun
         {
             selectObj.transform.position = Vector3.zero;
             errorPositionNumGranule++;
-            WriteToTxt(TxtDirPath, "颗粒位置错误字典", "第 " + errorPositionNumGranule + " 个：" + selectObj.name);
+            WriteToTxt(TxtDirPath, "颗粒《位置错误》汇总", "第 " + errorPositionNumGranule + " 个：" + selectObj.name);
         }
 
         // 2：如果旋转不为 0
         if (selectObj.transform.rotation != Quaternion.identity)
         {
             errorRotationNumGranule++;
-            WriteToTxt(TxtDirPath, "颗粒旋转错误字典", "第 " + errorRotationNumGranule + " 个：" + selectObj.name);
+            WriteToTxt(TxtDirPath, "颗粒《旋转错误》汇总", "第 " + errorRotationNumGranule + " 个：" + selectObj.name);
         }
 
         // 3：移除原来存在的 KeLiData 和 GranuleModel 脚本和刚体。
@@ -270,7 +267,7 @@ public class ToolPro : CommonFun
     }
 
     /// <summary>
-    /// 《检查项二：处理物件》 1：位置、旋转、比例
+    /// 《检查项二：处理物件》 1：位置、旋转、比例、名称
     /// </summary>
     /// <param name="selectObj">所选对象</param>
     public void CheckWu(GameObject selectObj)
@@ -284,7 +281,7 @@ public class ToolPro : CommonFun
             if (wuTrans.position != Vector3.zero)
             {
                 errorPositionNumWu++;
-                WriteToTxt(TxtDirPath, "物件位置汇总", "第 " + errorPositionNumWu + " 个：" + selectObj.name);
+                WriteToTxt(TxtDirPath, "物件《位置错误》汇总", "第 " + errorPositionNumWu + " 个：" + selectObj.name);
 
                 var wuOriginalVector3 = wuTrans.position;
                 for (var i = 0; i < selectObj.transform.childCount; i++)
@@ -305,39 +302,40 @@ public class ToolPro : CommonFun
             {
                 errorRotationNumWu++;
                 // 物件旋转问题，属于建模问题，这里只做记录，不做改动。
-                WriteToTxt(TxtDirPath, "物件旋转错误字典", "第 " + errorRotationNumWu + " 个：" + selectObj.name);
+                WriteToTxt(TxtDirPath, "物件《旋转错误》汇总", "第 " + errorRotationNumWu + " 个：" + selectObj.name);
             }
 
             // 3：比例不为 1
             if (wuTrans.localScale != Vector3.one)
             {
                 errorScaleNumWu++;
-                WriteToTxt(TxtDirPath, "物件比例错误个数", "第 " + errorScaleNumWu + " 个：" + selectObj.name);
+                WriteToTxt(TxtDirPath, "物件《比例错误》汇总", "第 " + errorScaleNumWu + " 个：" + selectObj.name);
             }
         }
         else
         {
-            WindowTips("存在名称不为 物件_1 的颗粒：" + selectObj.gameObject.name);
+            errorNoWuName++;
+            WriteToTxt(TxtDirPath, "物件《名称错误》汇总", "第 " + errorNoWuName + " 个：" + selectObj.name);
+            WindowTips("有名称不是物件_1 的颗粒");
         }
     }
 
     /// <summary>
-    /// 《检查项三：处理关键部位》 1：比例。
+    /// 《检查项三：处理关键部位》 1：比例。2：移除 MeshRenderer 和 MeshFilter 组件。
     /// </summary>
     /// <param name="selectObj">所选物体</param>
     public void CheckBuWei(GameObject selectObj)
     {
         for (var i = 0; i < selectObj.transform.childCount; i++)
         {
-            // 获取到所有子物体
+            // 获取到所有子物体(排除物件_1)
             var childTrans = selectObj.transform.GetChild(i);
-
             if (Equals(childTrans.name,"物件_1")) continue;
 
-            // 1：把所有子物体的 localScale 统一设置为1（除"物件_1"）
+            // 1：把所有子物体的 localScale 统一设置为 1
             if (childTrans.localScale != Vector3.one) childTrans.localScale = Vector3.one;
 
-            // 2：移除掉除物件_1之外所有子物体上的 MeshRenderer 和 MeshFilter 组件
+            // 2：移除掉除所有子物体上的 MeshRenderer 和 MeshFilter 组件
             if (childTrans.GetComponent<MeshRenderer>()) Object.DestroyImmediate(childTrans.GetComponent<MeshRenderer>());
             if (childTrans.GetComponent<MeshFilter>()) Object.DestroyImmediate(childTrans.GetComponent<MeshFilter>());
         }
@@ -358,8 +356,8 @@ public class ToolPro : CommonFun
             // 如果碰撞盒 Center 符合要求，则跳过
             if (boxCollider.center == Vector3.zero) continue;
 
-            // TransformPoint：将相对 “当前游戏对象” 的坐标转化为基于世界坐标系的坐标，与其相反的函数是
-            // InverseTransformPoint：将世界坐标转化为相对 “当前游戏对象” 的基于世界坐标系的坐标
+            // TransformPoint：将相对“当前游戏对象”的坐标转化为基于世界坐标系的坐标，与其相反的函数是
+            // InverseTransformPoint：将世界坐标转化为相对 当前游戏对象”的基于世界坐标系的坐标
             boxCollider.transform.position = boxCollider.transform.TransformPoint(boxCollider.center);
             boxCollider.center             = Vector3.zero;
 
@@ -394,7 +392,7 @@ public class ToolPro : CommonFun
              * 之前碰撞盒的加法是
              * 1：如果是普通盒子，就加到父物体上。
              * 2：如果是倾斜盒子，就新建一个 Box (1) 的子物体，单独把碰撞盒加到该子物体。
-             * 3：属于新增类型，比如围绕小圆棍加了一圈(8个)倾斜碰撞盒，把这8个碰撞盒放到一个名为 环形碰撞盒 (1) 的子物体
+             * 3：属于新增类型，比如围绕小圆棍加了一圈(8个)倾斜碰撞盒，把这8个碰撞盒放到一个名为 环形碰撞盒 的子物体
              */
 
             // 情况一：如果子物体名称含有 Box 
@@ -462,7 +460,7 @@ public class ToolPro : CommonFun
                 else
                 {
                     errorBuWeiNum++;
-                    WriteToTxt(TxtDirPath, "关键部位上有碰撞盒汇总", "第 " + errorBuWeiNum + " 个：" + selectObj.name + "上的 " + box.name);
+                    WriteToTxt(TxtDirPath, "关键部位上有碰撞盒的汇总", "第 " + errorBuWeiNum + " 个：" + selectObj.name + "上的 " + box.name);
 
                     // 删除碰撞盒
                     Object.DestroyImmediate(box);
@@ -474,8 +472,71 @@ public class ToolPro : CommonFun
     // 一键开启、关闭所有选项
     public void OpenAndCloseAll()
     {
-        IsCheckBlockPrefab = IsCheckWu = IsRenameBoxCollider =
-            IsTransformPoint = IsRemoveScriptAndComponent = IsOpenAll;
+        IsOpenAll = !IsOpenAll;
+        IsCheckBlockPrefab = IsCheckWu = IsCheckBoxCollider = IsCheckBuWei = IsOpenAll;
+    }
+
+    #endregion
+
+    #region 三：批量处理 Hierarchy 上的颗粒大类
+
+    /// <summary>
+    /// 批量处理 Hierarchy 上的颗粒大类，如：方高类
+    /// </summary>
+    public void ChangeGranuleImage()
+    {
+        // 存放颗粒大类对象的列表 
+        var granuleList = new List<GameObject>();
+        // 图集中的小图片
+        var content = GameObject.Find("View/Canvas Assembling/Left Tool Panel/Granule Library/Viewport/Content");
+
+        for (var i = 0; i < content.transform.childCount; i++)
+        {
+            if (content.transform.GetChild(i).GetComponent<GranuleUiType>())
+            {
+                granuleList.Add(content.transform.GetChild(i).gameObject);
+            }
+        }
+
+        foreach (var granule in granuleList)
+        {
+            // 1:是否添加 Border
+            if(IsAddBorder) AddBorderAndMain(granule);
+
+//            var prefabObj = Resources.Load<GameObject>("GranuleState");
+//            if (prefabObj)
+//            {
+//                var prefab = Object.Instantiate(prefabObj, granule.transform);
+//                Undo.RegisterCreatedObjectUndo(prefab, "GranuleStatePrefab");
+//                prefab.name = "GranuleState";
+//            }
+
+        }
+    }
+
+    /// <summary>
+    /// 为每个大类下添加一个子物体 Border 以及一个孙物体 Main，负责零件库单个颗粒大类的UI显示
+    /// </summary>
+    /// <param name="granule">某一颗粒大类</param>
+    public void AddBorderAndMain(GameObject granule)
+    {
+//        granule.GetComponent<Image>().color = granuleList[0].GetComponent<Image>().color;
+        var prefabObj = Resources.Load<GameObject>("Border");
+        if (prefabObj)
+        {
+            var prefab = Object.Instantiate(prefabObj, granule.transform);
+            Undo.RegisterCreatedObjectUndo(prefab, "prefab");
+        
+            prefab.name = "Border";
+        
+            // 给 Main 换 Sprite
+            prefab.transform.GetChild(0).GetComponent<Image>().sprite = 
+                ChinarAtlas.LoadSprite("UI/Assembling/Granule Library", "零件库-" + granule.name);
+        
+            //颗粒类原来的 sprite 设置为空
+            granule.GetComponent<Image>().sprite = null;
+            granule.GetComponent<Button>().targetGraphic = granule.transform.GetChild(0).GetChild(0).GetComponent<Image>();
+        }
     }
 
     #endregion

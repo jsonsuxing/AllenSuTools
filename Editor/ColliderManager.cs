@@ -250,7 +250,8 @@ public class ColliderManager:EditorWindow
                 EditorGUILayout.EndHorizontal();
                 // 第一组水平排版结束
                 GUILayout.Space(3);
-                GUILayout.TextField("对称中心：" + SelfTools.Instance().MirrorPoint);
+
+                EditorGUILayout.Vector3Field("对称中心", SelfTools.Instance().MirrorPoint);
 
                 GUILayout.EndVertical();
                 // ------------ 一：结束垂直画盒子 ------------

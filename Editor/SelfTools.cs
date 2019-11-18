@@ -282,49 +282,6 @@ public class SelfTools : CommonFun
 
     #endregion
 
-    #region 动态修改零件库 Image
-
-    /// <summary>
-    /// 动态修改零件库 Image
-    /// </summary>
-    public static void ChangeGranuleImage()
-    {
-        // 存放颗粒大类对象的列表 如：方高类
-        var granuleList = new List<GameObject>();
-        // 图集中的小图片
-        var content = GameObject.Find("View/Canvas Assembling/Left Tool Panel/Granule Library/Viewport/Content");
-        
-        for (var i = 0; i < content.transform.childCount; i++)
-        {
-            if (content.transform.GetChild(i).GetComponent<GranuleUiType>())
-            {
-                granuleList.Add(content.transform.GetChild(i).gameObject);
-            }
-        }
-
-        foreach (var granule in granuleList)
-        {
-            granule.GetComponent<Image>().color = granuleList[0].GetComponent<Image>().color;
-            var prefabObj = Resources.Load<GameObject>("Border");
-            if (prefabObj)
-            {
-                var prefab = Object.Instantiate(prefabObj, granule.transform);
-                Undo.RegisterCreatedObjectUndo(prefab, "prefab");
-
-                prefab.name = "Border";
-               
-                // 给 Main 换 Sprite
-                prefab.transform.GetChild(0).GetComponent<Image>().sprite = ChinarAtlas.LoadSprite("UI/Assembling/Granule Library", "零件库-" +granule.name);
-
-                //颗粒类原来的 sprite 设置为空
-                granule.GetComponent<Image>().sprite         = null;
-                granule.GetComponent<Button>().targetGraphic = granule.transform.GetChild(0).GetChild(0).GetComponent<Image>();
-            }
-        }
-    }
-
-    #endregion
-
     #region 镜像克隆对象
 
     /// <summary>
