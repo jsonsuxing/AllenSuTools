@@ -632,13 +632,15 @@ public class AllenSuTools : EditorWindow
                 GUILayout.Label("二：批量处理颗粒预设", TitleStyle());
                 GUILayout.Space(3);
 
+                #region A：选择处理方式
+
                 GUILayout.Label("A：选择处理方式", SetGuiStyle(Color.red, 14));
                 GUILayout.Space(3);
 
                 // 第一组水平排版开始
                 EditorGUILayout.BeginHorizontal();
                 if (GUILayout.Button("1：Hierarchy")) ToolPro.Instance().IsHierarchy = true;
-                if (GUILayout.Button("2：选择颗粒预设")) ToolPro.Instance().IsHierarchy = false;
+                if (GUILayout.Button("2：选择颗粒预设")) ToolPro.Instance().IsHierarchy    = false;
                 EditorGUILayout.EndHorizontal();
                 // 第一组水平排版结束
 
@@ -651,12 +653,14 @@ public class AllenSuTools : EditorWindow
                 // 第二组水平排版结束
                 GUILayout.Space(3);
 
-                #region 自定义检查面板
+                #endregion
+
+                #region B：自定义检查面板
 
                 // 第零组水平排版开始
                 EditorGUILayout.BeginHorizontal();
-                GUILayout.Label("B：自定义检查面板", SetGuiStyle(Color.red, 14));
-                if(GUILayout.Button("一键 " + (ToolPro.Instance().IsOpenAll ? "关闭" : "开启") + " 所有选项")) ToolPro.Instance().OpenAndCloseAll();
+                GUILayout.Label("B：检查面板", SetGuiStyle(Color.red, 14));
+                if(GUILayout.Button("一键 " + (ToolPro.Instance().IsOpenAll ? "关闭" : "开启") + " 检查面板")) ToolPro.Instance().OpenAndCloseAll();
                 EditorGUILayout.EndHorizontal();
                 // 第零组水平排版结束
                 GUILayout.Space(3);
@@ -687,25 +691,39 @@ public class AllenSuTools : EditorWindow
                 // 第二组水平排版结束
                 GUILayout.Space(3);
 
-                // 第三组水平排版开始
+                GUILayout.EndVertical();
+                // ------------ 一：结束垂直画盒子 ------------
+                #endregion
+
+                #region C：一次性功能区
+
+                GUILayout.Label("C：一次性功能区", SetGuiStyle(Color.red, 14));
+                GUILayout.Space(3);
+
+                // ------------ 一：开始垂直画盒子 ------------
+                GUILayout.BeginVertical("box");
+
+                // 第一组水平排版开始
                 EditorGUILayout.BeginHorizontal();
-                ToolPro.Instance().IsRenameBoxCollider = EditorGUILayout.Toggle(new GUIContent("5：设置《碰撞盒大改版》",
+                ToolPro.Instance().IsRenameBoxCollider = EditorGUILayout.Toggle(new GUIContent("1：碰撞盒大改版",
                     "将父物体上的碰撞盒移动到子物体，普通碰撞盒改成 Normal Box，倾斜碰撞盒改成 Bevel Box，该项属于实现功能范围，" +
                     "只用一次即可"), ToolPro.Instance().IsRenameBoxCollider);
+                ToolPro.Instance().IsAddSoAoCao = EditorGUILayout.Toggle(new GUIContent("2：生成 SonAoCao ",
+                    "将含有小插销的颗粒，在同位置克隆一个 SonAoCao"), ToolPro.Instance().IsAddSoAoCao);
                 EditorGUILayout.EndHorizontal();
-                // 第三组水平排版结束
+                // 第一组水平排版结束
                 GUILayout.Space(3);
 
                 GUILayout.EndVertical();
                 // ------------ 一：结束垂直画盒子 ------------
 
-                // ------------ 二：开始垂直画盒子 ------------
-                GUILayout.BeginVertical("box");
-                if (GUILayout.Button("开始检查")) ToolPro.Instance().CheckGranule();
-                GUILayout.EndVertical();
-                // ------------ 二：结束垂直画盒子 ------------
-
                 #endregion
+
+                // ------------ 一：开始垂直画盒子 ------------
+                GUILayout.BeginVertical("box");
+                if (GUILayout.Button("开始")) ToolPro.Instance().CheckGranule();
+                GUILayout.EndVertical();
+                // ------------ 一：结束垂直画盒子 ------------
                 GUILayout.Space(8);
 
                 #endregion

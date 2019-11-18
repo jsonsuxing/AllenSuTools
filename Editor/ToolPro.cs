@@ -46,6 +46,7 @@ public class ToolPro : CommonFun
     public bool IsCheckBoxCollider = false; // 是否处理 碰撞盒
     public bool IsCheckBuWei = false; // 是否 处理 关键部位
     public bool IsRenameBoxCollider = false; // 是否将父物体上的碰撞盒移动到子物体，普通碰撞盒改成 Normal Box，倾斜碰撞盒改成 Bevel Box
+    public bool IsAddSoAoCao = false; // 是否将含有小插销的颗粒，克隆一个 SoAoCao
 
     // 三：批量处理 Hierarchy 上的颗粒大类
     public GameObject PrefabObj; // 选择的预设
@@ -212,6 +213,8 @@ public class ToolPro : CommonFun
 
         foreach (var selectObj in Selection.gameObjects)
         {
+            //--------------------------------------- 检查区 ---------------------------------------
+
             // 检查项一：处理 颗粒预设
             if (IsCheckBlockPrefab) CheckBlockPrefab(selectObj);
 
@@ -224,8 +227,15 @@ public class ToolPro : CommonFun
             // 检查项四：处理 关键部位
             if(IsCheckBuWei) CheckBuWei(selectObj);
 
-            // 特殊检查：将父物体上的碰撞盒移动到子物体，普通碰撞盒改成 Normal Box，倾斜碰撞盒改成 Bevel Box，
+
+            // ------------------------------------ 一次性功能区 -------------------------------------
+
+            // 功能区一：将父物体上的碰撞盒移动到子物体，普通碰撞盒改成 Normal Box，倾斜碰撞盒改成 Bevel Box，
             if (IsRenameBoxCollider) ChangeColliderMode(selectObj);
+
+            // 功能区二：将含有小插销的颗粒，在同位置克隆一个 SonAoCao
+            if(IsAddSoAoCao) AddSonAoCao(selectObj);
+
 
             count++;
             PrefabUtility.SaveAsPrefabAsset(selectObj, "Assets/Resources/Prefab/ModelPrefabs/" + selectObj.name+ ".prefab");
@@ -240,6 +250,7 @@ public class ToolPro : CommonFun
         EditorUtility.ClearProgressBar();
     }
 
+    //--------------------------------------- 检查区 ---------------------------------------
     /// <summary>
     /// 《检查项一：处理颗粒预设》
     /// 1：位置、旋转。2：移除 KeLiData 和 GranuleModel 脚本和刚体。
@@ -371,8 +382,9 @@ public class ToolPro : CommonFun
         }
     }
 
+    // ------------------------------------ 一次性功能区 -------------------------------------
     /// <summary>
-    /// 《检查项五：将父物体上的碰撞盒移动到子物体，普通碰撞盒改成 Normal Box，倾斜碰撞盒改成 Bevel Box》
+    /// 《功能区一》：将父物体上的碰撞盒移动到子物体，普通碰撞盒改成 Normal Box，倾斜碰撞盒改成 Bevel Box
     /// </summary>
     /// <param name="selectObj">所选对象</param>
     public void ChangeColliderMode(GameObject selectObj)
@@ -471,6 +483,40 @@ public class ToolPro : CommonFun
         }
     }
 
+    /// <summary>
+    /// 《功能区二》：将含有小插销的颗粒，在同位置克隆一个 SonAoCao
+    /// </summary>
+    /// <param name="selectObj">所选对象</param>
+    public void AddSonAoCao(GameObject selectObj)
+    {
+        var selectTrans = selectObj.transform;
+
+        // 先把之前有的 SonAoCao 删除
+        foreach (Transform t in selectTrans)
+        {
+            if (t.name.Contains("SonAoCao"))
+            {
+                Object.DestroyImmediate(t.gameObject);
+            }
+        }
+
+        // 克隆 SonAoCao
+        var number = 1;
+        foreach (Transform t in selectTrans)
+        {
+            if (t.name.Contains("XiaoChaXiao"))
+            {
+                var sonAoCao = Object.Instantiate(t, selectTrans);
+                sonAoCao.name = "SonAoCao " + "(" + (number++) + ")";
+                var buWeiSonAoCao = sonAoCao.GetComponent<GuanJianBuWei>();
+                buWeiSonAoCao.type      = GuanJianType.Grid;
+                buWeiSonAoCao.size      = 0;
+                buWeiSonAoCao.dirVector = Vector3.zero;
+                buWeiSonAoCao.length    = 0;
+            }
+        }
+    }
+
     // 一键开启、关闭所有选项
     public void OpenAndCloseAll()
     {
@@ -525,12 +571,13 @@ public class ToolPro : CommonFun
             var prefab = Object.Instantiate(PrefabObj, granule.transform);
             Undo.RegisterCreatedObjectUndo(prefab, "SingleChildPrefab");
             prefab.name = PrefabObj.name;
+            PrefabObj = null;
         }
         else
         {
             WindowTips("预设不能为空");
-            IsCreateSingleObj = false;
         }
+        IsCreateSingleObj = false;
     }
 
     /// <summary>
@@ -547,12 +594,13 @@ public class ToolPro : CommonFun
             prefab.name = PrefabObj.name;
             //颗粒类原来的 sprite 设置为空
             if (granule.GetComponent<Image>().sprite != null) granule.GetComponent<Image>().sprite = null;
+            PrefabObj = null;
         }
         else
         {
             WindowTips(" Border 的预设不能为空");
-            IsCreateBorder = false;
         }
+        IsCreateBorder = false;
     }
 
     /// <summary>
@@ -570,12 +618,13 @@ public class ToolPro : CommonFun
             // 给 Main 更换 Sprite ，并且直接传值给颗粒大类的 Image；
             prefab.transform.GetComponent<Image>().sprite = ChinarAtlas.LoadSprite("UI/Assembling/Granule Library", "零件库-" + granule.name);
             granule.GetComponent<Button>().targetGraphic = granule.transform.Find("Main").GetComponent<Image>();
+            PrefabObj = null;
         }
         else
         {
             WindowTips(" Main 的预设不能为空");
-            IsCreateMain = false;
         }
+        IsCreateMain = false;
     }
 
     #endregion
