@@ -143,4 +143,30 @@ public class CommonFun
         };
         return style;
     }
+
+    /// <summary>
+    /// 返回关键部位的纯汉字名称
+    /// </summary>
+    /// <param name="selectObj"></param>
+    /// <returns></returns>
+    public string GetBuWeiChineseName(GameObject selectObj)
+    {
+        // 括号里的数字分为 A:1~9，B:10 以上，位数不一样，获取到的关键部位名称会不同
+        var buWeiName = Equals(selectObj.name.Substring(selectObj.name.Length - 3)[0].ToString(), "(")
+            ? selectObj.name.Substring(0, selectObj.name.Length - 4)
+            : selectObj.name.Substring(0, selectObj.name.Length - 5);
+        return buWeiName;
+    }
+
+    /// <summary>
+    /// 返回关键部位括号内的数字
+    /// </summary>
+    /// <param name="selectObj"></param>
+    /// <returns></returns>
+    public char GetBuWeiNameIndex(GameObject selectObj)
+    {
+        // 所选名称括号内的数字下标
+        var nameIndex = selectObj.name.Substring(selectObj.name.Length - 2)[0];
+        return nameIndex;
+    }
 }

@@ -91,9 +91,9 @@ public class ColliderManager:EditorWindow
 
                 GUILayout.Label("二：自定义操作碰撞盒", TitleStyle());
                 GUILayout.Space(3);
-                GUILayout.Label("A：旋转", SetGuiStyle(Color.red, 16));
+                GUILayout.Label(" A：旋转", SetGuiStyle(Color.red, 16));
                 GUILayout.Space(3);
-                GUILayout.Label("提示：默认沿 Y 轴，同步环形碰撞盒的轴心", SetGuiStyle(Color.black, 14));
+                GUILayout.Label(" 提示：默认沿 Y 轴，同步环形碰撞盒的轴心", SetGuiStyle(Color.black, 14));
 
                 // ------------ 一：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
@@ -101,11 +101,11 @@ public class ColliderManager:EditorWindow
 
                 // 第一组水平排版开始
                 EditorGUILayout.BeginHorizontal();
-                GUILayout.Label("1:旋转中心(默认为原点)", SetGuiStyle(Color.black, 14));
+                GUILayout.Label("1：旋转中心(默认为原点)", SetGuiStyle(Color.black, 14));
                 if (GUILayout.Button("可点击物体，自动传值")) SelfCollider.Instance().SetMyPivot();
                 EditorGUILayout.EndHorizontal();
                 // 第一组水平排版结束
-                GUILayout.Space(3);
+                GUILayout.Space(5);
 
                 // 第二组水平排版开始
                 EditorGUILayout.BeginHorizontal();
@@ -119,7 +119,9 @@ public class ColliderManager:EditorWindow
                 // 第二组水平排版结束
                 GUILayout.Space(5);
 
-                GUILayout.Label("2:快捷设置克隆个数", SetGuiStyle(Color.black, 14));
+                GUILayout.Label("2：快捷设置克隆个数(含自身，且会删除所选对象)", SetGuiStyle(Color.black, 14));
+                GUILayout.Space(5);
+
                 // 第四组水平排版开始
                 EditorGUILayout.BeginHorizontal();
                 if (GUILayout.Button("4")) { SelfCollider.Instance().CustomBoxCollNum = 4; }
@@ -130,7 +132,7 @@ public class ColliderManager:EditorWindow
                 if (GUILayout.Button("x2")) { SelfCollider.Instance().CustomBoxCollNum = SelfCollider.Instance().CustomBoxCollNum * 2; }
                 EditorGUILayout.EndHorizontal();
                 // 第四组水平排版结束
-                GUILayout.Space(3);
+                GUILayout.Space(5);
 
                 // 第三组水平排版开始
                 EditorGUILayout.BeginHorizontal();
@@ -151,7 +153,7 @@ public class ColliderManager:EditorWindow
 
                 #region 二：平移
 
-                GUILayout.Label("B：平移", SetGuiStyle(Color.red, 16));
+                GUILayout.Label(" B：平移", SetGuiStyle(Color.red, 16));
 
                 // ------------ 二：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
@@ -163,20 +165,15 @@ public class ColliderManager:EditorWindow
                 // 第一组垂直排版结束
                 GUILayout.Space(3);
 
-                // 第二组水平排版开始
-                EditorGUILayout.BeginHorizontal();
-                GUILayout.Label("设置克隆个数：", SetGuiStyle(Color.black, 14));
-                SelfCollider.Instance().CustomBoxCollNum = int.Parse(EditorGUILayout.TextField(SelfCollider.Instance().CustomBoxCollNum.ToString()));
-                EditorGUILayout.EndHorizontal();
-                // 第二组水平排版结束
+                SelfCollider.Instance().CustomBoxCollNum = EditorGUILayout.IntSlider("设置克隆个数", SelfCollider.Instance().CustomBoxCollNum, 1, 64);
                 GUILayout.Space(3);
 
-                // 第三组水平排版开始
+                // 第二组水平排版开始
                 EditorGUILayout.BeginHorizontal();
-                GUILayout.Label("设置克隆间隔：", SetGuiStyle(Color.black, 14));
+                GUILayout.Label(" 设置克隆间隔", SetGuiStyle(Color.black, 11));
                 SelfCollider.Instance().CloneSpace = float.Parse(EditorGUILayout.TextField(SelfCollider.Instance().CloneSpace.ToString()));
                 EditorGUILayout.EndHorizontal();
-                // 第三组水平排版结束
+                // 第二组水平排版结束
                 GUILayout.Space(3);
 
                 if (GUILayout.Button("开始克隆")) SelfCollider.Instance().PanBoxCollider();
@@ -307,7 +304,6 @@ public class ColliderManager:EditorWindow
                 GUILayout.TextField("凸起 Y 轴坐标：" + SelfCollider.Instance().TuQiY);
                 EditorGUILayout.EndHorizontal();
                 // ------------ 第二组水平排版结束 ------------
-
                 GUILayout.Space(3);
 
                 GUILayout.EndVertical();
@@ -325,6 +321,7 @@ public class ColliderManager:EditorWindow
                 GUILayout.TextField("X轴 最大坐标是：" + SelfCollider.Instance().MaxX);
                 EditorGUILayout.EndHorizontal();
                 // 第一组水平排版结束
+                GUILayout.Space(3);
 
                 // 第二组水平排版开始
                 EditorGUILayout.BeginHorizontal();
@@ -333,6 +330,7 @@ public class ColliderManager:EditorWindow
                 GUILayout.TextField("Y轴 最大坐标是：" + SelfCollider.Instance().MaxY);
                 EditorGUILayout.EndHorizontal();
                 // 第二组水平排版结束
+                GUILayout.Space(3);
 
                 // 第三组水平排版开始
                 EditorGUILayout.BeginHorizontal();
@@ -341,6 +339,7 @@ public class ColliderManager:EditorWindow
                 GUILayout.TextField("Z轴 最大坐标是：" + SelfCollider.Instance().MaxZ);
                 EditorGUILayout.EndHorizontal();
                 // 第三组水平排版结束
+                GUILayout.Space(3);
 
                 GUILayout.EndVertical();
                 // ------------ 二：结束垂直画盒子 ------------

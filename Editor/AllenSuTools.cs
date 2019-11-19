@@ -5,6 +5,7 @@
 // ========================================================
 
 using System;
+using System.Windows.Forms;
 using UnityEditor;
 using UnityEngine;
 
@@ -17,7 +18,7 @@ public class AllenSuTools : EditorWindow
     #region MenuItem
 
     // 1--新建窗口
-    [MenuItem("GameObject/1、打开苏醒工程窗口", false, CommonFun.INDEXNUM)]
+    [UnityEditor.MenuItem("AllenSu/2、打开苏醒工程窗口", false, CommonFun.INDEXNUM)]
     static void ToolWindows()
     {
         var allenSuTools = GetWindow<AllenSuTools>(false, "苏醒工程窗口");
@@ -55,10 +56,11 @@ public class AllenSuTools : EditorWindow
                 #region 一：克隆关键部位
 
                 GUILayout.Label("一：克隆关键部位", TitleStyle());
+                GUILayout.Space(3);
 
                 // 默认间隔
                 SelfBuWei.Instance().ModelSpace = SelfBuWei.Instance().GeneralSpace;
-                GUILayout.Label("            A：选择关键部位间隔", SetGuiStyle(Color.gray, 14));
+                GUILayout.Label("A：选择关键部位间隔", SetGuiStyle(Color.gray, 14));
 
                 // ------------ 一：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
@@ -82,14 +84,14 @@ public class AllenSuTools : EditorWindow
                 EditorGUILayout.BeginHorizontal();
                 GUILayout.Label("提示：当前关键部位间隔的值是", SetGuiStyle(Color.black, 14));
                 SelfBuWei.Instance().ModelSpace = SelfBuWei.Instance().IsClickChangeSpace ? SelfBuWei.Instance().MediumSpace : SelfBuWei.Instance().GeneralSpace;
-                GUILayout.TextField(SelfBuWei.Instance().ModelSpace.ToString());
+                GUILayout.TextField(SelfBuWei.Instance().ModelSpace+"");
                 EditorGUILayout.EndHorizontal();
                 // 第一组水平排版结束
 
                 GUILayout.EndVertical();
                 // ------------ 二：结束垂直画盒子 ------------
 
-                GUILayout.Label("            B：选择克隆关键部位方式", SetGuiStyle(Color.gray, 14));
+                GUILayout.Label("B：选择克隆关键部位方式", SetGuiStyle(Color.gray, 14));
 
                 // ------------ 三：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
@@ -113,7 +115,6 @@ public class AllenSuTools : EditorWindow
                 GUILayout.EndVertical();
                 // ------------ 三：结束垂直画盒子 ------------
 
-
                 // ------------ 四：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
 
@@ -127,54 +128,45 @@ public class AllenSuTools : EditorWindow
                 GUILayout.EndVertical();
                 // ------------ 四：结束垂直画盒子 ------------
 
-                GUILayout.Label("一：沿着 坐标轴正方向 克隆多少个", SetGuiStyle(Color.red, 14));
-
                 // ------------ 五：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
 
-                // 第一组垂直排版开始
-                EditorGUILayout.BeginVertical();
-                GUILayout.Label("1、x 轴正方向", SetGuiStyle(Color.black, 14));
+                GUILayout.Label("沿着坐标轴 正 / 负 方向克隆多少个(不含自身)", SetGuiStyle(Color.red, 14));
                 GUILayout.Space(5);
+
+                // 第一组水平排版开始
+                EditorGUILayout.BeginHorizontal();
+                GUILayout.Label("x 轴正方向", SetGuiStyle(Color.black, 14));
                 SelfBuWei.Instance().CloneNumByAxisX = int.Parse(GUILayout.TextField(SelfBuWei.Instance().CloneNumByAxisX.ToString()));
-                EditorGUILayout.EndVertical();
-                // 第一组垂直排版结束
-
-                // 第二组垂直排版开始
-                EditorGUILayout.BeginVertical();
-                GUILayout.Label("2、z 轴正方向", SetGuiStyle(Color.black, 14));
+                GUILayout.Space(50);
+                GUILayout.Label("z 轴正方向", SetGuiStyle(Color.black, 14));
                 SelfBuWei.Instance().CloneNumByAxisZ = int.Parse(GUILayout.TextField(SelfBuWei.Instance().CloneNumByAxisZ.ToString()));
-                EditorGUILayout.EndVertical();
-                // 第二组垂直排版结束
-
-                GUILayout.Label("二：沿着 坐标轴负方向 克隆多少个", SetGuiStyle(Color.red, 14));
+                EditorGUILayout.EndHorizontal();
+                // 第一组水平排版结束
                 GUILayout.Space(5);
 
-                // 第三组垂直排版开始
-                EditorGUILayout.BeginVertical();
-                GUILayout.Label("3、x 轴负方向", SetGuiStyle(Color.black, 14));
+                // 第二组水平排版开始
+                EditorGUILayout.BeginHorizontal();
+                GUILayout.Label("x 轴负方向", SetGuiStyle(Color.black, 14));
                 SelfBuWei.Instance().CloneNumByAxisXFu = int.Parse(GUILayout.TextField(SelfBuWei.Instance().CloneNumByAxisXFu.ToString()));
-                EditorGUILayout.EndVertical();
-                // 第三组垂直排版结束
-
-                // 第四组垂直排版开始
-                EditorGUILayout.BeginVertical();
-                GUILayout.Label("4、z 轴负方向", SetGuiStyle(Color.black, 14));
+                GUILayout.Space(50);
+                GUILayout.Label("z 轴负方向", SetGuiStyle(Color.black, 14));
                 SelfBuWei.Instance().CloneNumByAxisZFu = int.Parse(GUILayout.TextField(SelfBuWei.Instance().CloneNumByAxisZFu.ToString()));
-                EditorGUILayout.EndVertical();
-                // 第四组垂直排版结束
+                EditorGUILayout.EndHorizontal();
+                // 第二组水平排版结束
+                GUILayout.Space(3);
 
                 GUILayout.EndVertical();
                 // ------------ 五：结束垂直画盒子 ------------
 
-                if (GUILayout.Button("点击按钮，开始克隆关键部位")) SelfBuWei.Instance().CloneBuWeiOneByOne();
+                if (GUILayout.Button("开始克隆关键部位")) SelfBuWei.Instance().CloneBuWeiOneByOne();
 
                 // ------------ 六：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
 
                 // 第一组水平排版开始
                 EditorGUILayout.BeginHorizontal();
-                GUILayout.Label("注：可以手动改变 i 的值", SetGuiStyle(Color.black, 14));
+                GUILayout.Label("注：可以手动改变关键部位名称下标的值", SetGuiStyle(Color.black, 14));
                 CommonFun.CurrentIndexNum = int.Parse(GUILayout.TextField(CommonFun.CurrentIndexNum.ToString()));
                 EditorGUILayout.EndHorizontal();
                 // 第一组水平排版结束
@@ -191,7 +183,6 @@ public class AllenSuTools : EditorWindow
 
                 // ------------ 一：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
-
                 //第一组水平排版开始
                 EditorGUILayout.BeginHorizontal();
                 if (GUILayout.Button("x轴"))
@@ -222,16 +213,19 @@ public class AllenSuTools : EditorWindow
                 if (GUILayout.Button("都减0.4")) SelfBuWei.Instance().SubtractAllValue();
                 EditorGUILayout.EndHorizontal();
                 // 第一组水平排版结束
+                GUILayout.Space(5);
 
                 // 第二组垂直排版开始
                 EditorGUILayout.BeginVertical();
                 GUILayout.TextField("当前操作方式：" + SelfBuWei.Instance().ShowClickAxis + "    " + SelfBuWei.Instance().ShowValueNum);
-                if (GUILayout.Button("点击设定新坐标")) SelfBuWei.Instance().SpecialAxis();
                 EditorGUILayout.EndVertical();
                 // 第二组垂直排版结束
+                GUILayout.Space(3);
 
                 GUILayout.EndVertical();
                 //------------ 一：结束垂直画盒子 ------------
+
+                if (GUILayout.Button("点击设定新坐标")) SelfBuWei.Instance().SpecialAxis();
 
                 #endregion
                 GUILayout.Space(8);
@@ -257,15 +251,15 @@ public class AllenSuTools : EditorWindow
 
                 #region 四：生成默认关键部位、Box
 
-                GUILayout.Label("四：默认关键部位、Box", TitleStyle());
+                GUILayout.Label("四：生成空物体、Normal Box", TitleStyle());
 
                 // ------------ 一：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
 
                 // 第一组水平排版开始
                 EditorGUILayout.BeginHorizontal();
-                if (GUILayout.Button("1：生成默认的关键部位")) SelfBuWei.Instance().CreateDefaultBuWei();
-                if (GUILayout.Button("2：生成 Normal Box (1)")) SelfBuWei.Instance().CreateEmptyBox();
+                if (GUILayout.Button("1：GameObject")) SelfBuWei.Instance().CreateDefaultObj();
+                if (GUILayout.Button("2：Normal Box")) SelfBuWei.Instance().CreateDefaultNormalBox();
                 EditorGUILayout.EndHorizontal();
                 // 第一组水平排版结束
 
@@ -450,7 +444,7 @@ public class AllenSuTools : EditorWindow
             case 2:
                 #region 常用工具
 
-                #region 一：三个顶点确定圆心
+                #region 一：3 个顶点确定圆心
 
                 GUILayout.Label("一：三个顶点确定圆心", TitleStyle());
                 GUILayout.Space(3);
@@ -466,7 +460,7 @@ public class AllenSuTools : EditorWindow
                 // 第一组水平排版结束
                 GUILayout.Space(3);
 
-                if (GUILayout.Button("点击3次按钮，获取圆心")) SelfCollider.Instance().CreateCenterOfCircle();
+                if (GUILayout.Button("点击 3 次按钮，获取圆心")) SelfCollider.Instance().CreateCenterOfCircle();
 
                 GUILayout.EndVertical();
                 // ------------ 一：结束垂直画盒子 ------------
@@ -749,11 +743,10 @@ public class AllenSuTools : EditorWindow
                 EditorGUILayout.BeginHorizontal();
                 ToolPro.Instance().IsCreateSingleObj =
                     EditorGUILayout.Toggle(new GUIContent("1：添加单个子物体",
-                        "在每一个颗粒类下新建一个子物体 Back Ground"), ToolPro.Instance().IsCreateSingleObj);
+                        "在某一颗粒大类下直接添加一个子物体"), ToolPro.Instance().IsCreateSingleObj);
                 ToolPro.Instance().IsCreateBorder =
-                    EditorGUILayout.Toggle(new GUIContent("2：添加 《Border》", 
-                        "在每一个颗粒类下新建一个子物体 Border，再新建一个孙物体 Main，处理零件库的 UI 显示"), ToolPro.Instance().IsCreateBorder);
-                
+                    EditorGUILayout.Toggle(new GUIContent("2：添加 《Border》",
+                        "在某一颗粒大类下添加一个 Border 子物体，负责鼠标经过移出时的边框显示"), ToolPro.Instance().IsCreateBorder);
                 EditorGUILayout.EndHorizontal();
                 // 第一组水平排版结束
                 GUILayout.Space(3);
@@ -762,7 +755,7 @@ public class AllenSuTools : EditorWindow
                 EditorGUILayout.BeginHorizontal();
                 ToolPro.Instance().IsCreateMain =
                     EditorGUILayout.Toggle(new GUIContent("3：添加 《Main》",
-                        "在每一个颗粒类下新建一个子物体 Back Ground"), ToolPro.Instance().IsCreateMain);
+                        "在某一颗粒大类下添加一个 Main 子物体，负责鼠标经过移出时颗粒大类 UI 的放大与缩小"), ToolPro.Instance().IsCreateMain);
                 EditorGUILayout.EndHorizontal();
                 // 第二组水平排版结束
                 GUILayout.Space(3);
@@ -870,6 +863,34 @@ public class AllenSuTools : EditorWindow
                 if (GUILayout.Button("2：删除QD下的预设")) SelfCollider.Instance().DeletePrefab();
                 EditorGUILayout.EndHorizontal();
                 // 第一组水平排版结束
+
+                GUILayout.EndVertical();
+                // ------------ 一：结束垂直画盒子 ------------
+
+                #endregion
+                GUILayout.Space(8);
+
+                #region 五：复制模型全称、半称
+
+                GUILayout.Label("五：复制模型名全称、半称", TitleStyle());
+
+                // ------------ 一：开始垂直画盒子 ------------
+                GUILayout.BeginVertical("box");
+
+                // 第一组水平排版开始
+                EditorGUILayout.BeginHorizontal();
+                if(GUILayout.Button("1：全称")) Clipboard.SetText(Selection.activeGameObject.name);
+                if (GUILayout.Button("2：半称"))
+                {
+                    var str  = Selection.activeGameObject.name;
+                    var flag = '&';
+                    // 获取到 & 后面的内容
+                    var text = str.Substring(str.IndexOf(flag) + 1);
+                    Clipboard.SetText(text);
+                }
+                EditorGUILayout.EndHorizontal();
+                // 第一组水平排版结束
+                GUILayout.Space(3);
 
                 GUILayout.EndVertical();
                 // ------------ 一：结束垂直画盒子 ------------

@@ -96,152 +96,152 @@ public class SelfBuWei : CommonFun
     public static void FlagTypeGrid() { }
 
     //0--凹槽
-    [MenuItem("GameObject/0、更改关键部位名字/AoCao", false, INDEXNUM + 1)]
+    [MenuItem("AllenSu/0、更改关键部位名字/AoCao", false, INDEXNUM + 1)]
     public static void Fun_AoCao() { ChangeKeyName(AoCao, GuanJianType.Grid, 0, 0); }
 
     //1--凸起
-    [MenuItem("GameObject/0、更改关键部位名字/TuQi", false, INDEXNUM + 2)]
+    [MenuItem("AllenSu/0、更改关键部位名字/TuQi", false, INDEXNUM + 2)]
     public static void Fun_TuQi() { ChangeKeyName(TuQi, GuanJianType.Grid, 1, 0); }
 
     //2--不能和 AoCao 重名
-    [MenuItem("GameObject/0、更改关键部位名字/SonAoCao", false, INDEXNUM + 3)]
+    [MenuItem("AllenSu/0、更改关键部位名字/SonAoCao", false, INDEXNUM + 3)]
     public static void Fun_SonTuQi() { ChangeKeyName(SonAoCao, GuanJianType.Grid, 0, 0); }
 
     #endregion
 
     #region Axle 轴洞类型
 
-    [MenuItem("GameObject/0、更改关键部位名字/----------轴洞类型----------", false, INDEXNUM + 4)]
+    [MenuItem("AllenSu/0、更改关键部位名字/----------轴洞类型----------", false, INDEXNUM + 4)]
     public static void FlagTypeAxle() { }
 
     //0--不穿透槽
-    [MenuItem("GameObject/0、更改关键部位名字/BuChuanTouCao", false, INDEXNUM + 5)]
+    [MenuItem("AllenSu/0、更改关键部位名字/BuChuanTouCao", false, INDEXNUM + 5)]
     public static void Fun_BuChuanTouCao() { ChangeKeyName(BuChuanTouCao, GuanJianType.Axle, 0, 0.17f); }
 
     //1--不穿透插
-    [MenuItem("GameObject/0、更改关键部位名字/BuChuanTouCha", false, INDEXNUM + 6)]
+    [MenuItem("AllenSu/0、更改关键部位名字/BuChuanTouCha", false, INDEXNUM + 6)]
     public static void Fun_BuChuanTouCha() { ChangeKeyName(BuChuanTouCha, GuanJianType.Axle, 1, 0.17f); }
   
     //2--小插槽
-    [MenuItem("GameObject/0、更改关键部位名字/XiaoChaCao", false, INDEXNUM + 7)]
+    [MenuItem("AllenSu/0、更改关键部位名字/XiaoChaCao", false, INDEXNUM + 7)]
     public static void Fun_XiaoChaCao() { ChangeKeyName(XiaoChaCao, GuanJianType.Axle, 2, 0.17f); }
 
     //3--小插销
-    [MenuItem("GameObject/0、更改关键部位名字/XiaoChaXiao", false, INDEXNUM + 8)]
+    [MenuItem("AllenSu/0、更改关键部位名字/XiaoChaXiao", false, INDEXNUM + 8)]
     public static void Fun_XiaoChaXiao() { ChangeKeyName(XiaoChaXiao, GuanJianType.Axle, 3, 0.17f); }
 
     //4--插槽
-    [MenuItem("GameObject/0、更改关键部位名字/ChaCao", false, INDEXNUM + 9)]
+    [MenuItem("AllenSu/0、更改关键部位名字/ChaCao", false, INDEXNUM + 9)]
     public static void Fun_ChaCao() { ChangeKeyName(ChaCao, GuanJianType.Axle, 4, 0.17f); }
 
     //5--插销
-    [MenuItem("GameObject/0、更改关键部位名字/ChaXiao", false, INDEXNUM + 10)]
+    [MenuItem("AllenSu/0、更改关键部位名字/ChaXiao", false, INDEXNUM + 10)]
     public static void Fun_ChaXiao() { ChangeKeyName(ChaXiao, GuanJianType.Axle, 5, 0.17f); }
 
     //6--插槽十字
-    [MenuItem("GameObject/0、更改关键部位名字/ChaCaoShiZi", false, INDEXNUM + 11)]
+    [MenuItem("AllenSu/0、更改关键部位名字/ChaCaoShiZi", false, INDEXNUM + 11)]
     public static void Fun_ChaCaoShiZi() { ChangeKeyName(ChaCaoShiZi, GuanJianType.Axle, 6, 0); }
 
     //7-插销十字
-    [MenuItem("GameObject/0、更改关键部位名字/ChaXiaoShiZi", false, INDEXNUM + 12)]
+    [MenuItem("AllenSu/0、更改关键部位名字/ChaXiaoShiZi", false, INDEXNUM + 12)]
     public static void Fun_ChaXiaoShiZi() { ChangeKeyName(ChaXiaoShiZi, GuanJianType.Axle, 7, 0); }
   
     //特殊-皮轮外
-    [MenuItem("GameObject/0、更改关键部位名字/PiLunWai", false, INDEXNUM + 15)]
+    [MenuItem("AllenSu/0、更改关键部位名字/PiLunWai", false, INDEXNUM + 15)]
     public static void Fun_PiLunWai() { ChangeKeyName(PiLunWai, GuanJianType.Axle, -2, 0); }
 
     //特殊-皮轮内
-    [MenuItem("GameObject/0、更改关键部位名字/PiLunNei", false, INDEXNUM + 16)]
+    [MenuItem("AllenSu/0、更改关键部位名字/PiLunNei", false, INDEXNUM + 16)]
     public static void Fun_PiLunNei() { ChangeKeyName(PiLunNei, GuanJianType.Axle, -3, 0); }
 
     #endregion
 
     #region Hinge 合页类型
 
-    [MenuItem("GameObject/0、更改关键部位名字/----------合页类型----------", false, INDEXNUM + 17)]
+    [MenuItem("AllenSu/0、更改关键部位名字/----------合页类型----------", false, INDEXNUM + 17)]
     public static void FlagTypeHinge() { }
 
     //0--插槽门窗
-    [MenuItem("GameObject/0、更改关键部位名字/ChaCaoMenChuang", false, INDEXNUM + 18)]
+    [MenuItem("AllenSu/0、更改关键部位名字/ChaCaoMenChuang", false, INDEXNUM + 18)]
     public static void Fun_ChaCaoMenChuang() { ChangeKeyName(ChaCaoMenChuang, GuanJianType.Hinge, 0, 0); }
   
     //1--插销门窗
-    [MenuItem("GameObject/0、更改关键部位名字/ChaXiaoMenChuang", false, INDEXNUM + 19)]
+    [MenuItem("AllenSu/0、更改关键部位名字/ChaXiaoMenChuang", false, INDEXNUM + 19)]
     public static void Fun_ChaXiaoMenChuang() { ChangeKeyName(ChaXiaoMenChuang, GuanJianType.Hinge, 1, 0); }
   
     //2--转牙插槽
-    [MenuItem("GameObject/0、更改关键部位名字/ZhuanYaChaCao", false, INDEXNUM + 20)]
+    [MenuItem("AllenSu/0、更改关键部位名字/ZhuanYaChaCao", false, INDEXNUM + 20)]
     public static void Fun_ZhuanYaChaCao() { ChangeKeyName(ZhuanYaChaCao, GuanJianType.Hinge, 2, 0); }
 
     //3--转牙插销
-    [MenuItem("GameObject/0、更改关键部位名字/ZhuanYaChaxiao", false, INDEXNUM + 21)]
+    [MenuItem("AllenSu/0、更改关键部位名字/ZhuanYaChaxiao", false, INDEXNUM + 21)]
     public static void Fun_ZhuanYaChaxiao() { ChangeKeyName(ZhuanYaChaxiao, GuanJianType.Hinge, 3, 0); }
 
     #endregion
 
     #region Sphere 球类型
 
-    [MenuItem("GameObject/0、更改关键部位名字/----------球类型----------", false, INDEXNUM + 22)]
+    [MenuItem("AllenSu/0、更改关键部位名字/----------球类型----------", false, INDEXNUM + 22)]
     public static void FlagTypeSphere() { }
 
     //0--圆球洞
-    [MenuItem("GameObject/0、更改关键部位名字/YuanQiuDong", false, INDEXNUM + 23)]
+    [MenuItem("AllenSu/0、更改关键部位名字/YuanQiuDong", false, INDEXNUM + 23)]
     public static void Fun_YuanQiuDong() { ChangeKeyName(YuanQiuDong, GuanJianType.Sphere, 0, 0); }
 
     //1--圆球珠
-    [MenuItem("GameObject/0、更改关键部位名字/YuanQiuZhu", false, INDEXNUM + 24)]
+    [MenuItem("AllenSu/0、更改关键部位名字/YuanQiuZhu", false, INDEXNUM + 24)]
     public static void Fun_YuanQiuZhu() { ChangeKeyName(YuanQiuZhu, GuanJianType.Sphere, 1, 0); }
 
     #endregion
 
     #region Fixure 固定类型
 
-    [MenuItem("GameObject/0、更改关键部位名字/----------固定类型----------", false, INDEXNUM + 25)]
+    [MenuItem("AllenSu/0、更改关键部位名字/----------固定类型----------", false, INDEXNUM + 25)]
     public static void FlagTypeFixure() { }
 
     //0--工具箱盖
-    [MenuItem("GameObject/0、更改关键部位名字/GongJuxiangGai", false, INDEXNUM + 26)]
+    [MenuItem("AllenSu/0、更改关键部位名字/GongJuxiangGai", false, INDEXNUM + 26)]
     public static void Fun_GongJuxiangGai() { ChangeKeyName(GongJuxiangGai, GuanJianType.Fixure, 0, 0); }
     
     //1--工具箱底
-    [MenuItem("GameObject/0、更改关键部位名字/GongJuxiangDi", false, INDEXNUM + 27)]
+    [MenuItem("AllenSu/0、更改关键部位名字/GongJuxiangDi", false, INDEXNUM + 27)]
     public static void Fun_GongJuxiangDi() { ChangeKeyName(GongJuxiangDi, GuanJianType.Fixure, 1, 0); }
 
     #endregion
 
     #region Slide 滑动类型
 
-    [MenuItem("GameObject/0、更改关键部位名字/----------滑动类型----------", false, INDEXNUM + 28)]
+    [MenuItem("AllenSu/0、更改关键部位名字/----------滑动类型----------", false, INDEXNUM + 28)]
     public static void FlagTypeSlide() { }
 
     //0--滑动槽
-    [MenuItem("GameObject/0、更改关键部位名字/HuaDongCao", false, INDEXNUM + 29)]
+    [MenuItem("AllenSu/0、更改关键部位名字/HuaDongCao", false, INDEXNUM + 29)]
     public static void Fun_HuaDongCao() { ChangeKeyName(HuaDongCao, GuanJianType.Slide, 0, 0); }
    
     //1--滑动销
-    [MenuItem("GameObject/0、更改关键部位名字/HuaDongXiao", false, INDEXNUM + 30)]
+    [MenuItem("AllenSu/0、更改关键部位名字/HuaDongXiao", false, INDEXNUM + 30)]
     public static void Fun_HuaDongXiao() { ChangeKeyName(HuaDongXiao, GuanJianType.Slide, 1, 0); }
 
     #endregion
 
     #region 管道类型
 
-    [MenuItem("GameObject/0、更改关键部位名字/----------管道类型----------", false, INDEXNUM + 31)]
+    [MenuItem("AllenSu/0、更改关键部位名字/----------管道类型----------", false, INDEXNUM + 31)]
     public static void FlagTypeGuanDao() { }
 
     //0--管道槽
-    [MenuItem("GameObject/0、更改关键部位名字/GuanDaoCao", false, INDEXNUM + 32)]
+    [MenuItem("AllenSu/0、更改关键部位名字/GuanDaoCao", false, INDEXNUM + 32)]
     public static void Fun_GuanDaoCao() { ChangeKeyName(GuanDaoCao, GuanJianType.Grid, 0, 0); }
 
     //1--管道销
-    [MenuItem("GameObject/0、更改关键部位名字/GuanDaoXiao", false, INDEXNUM + 33)]
+    [MenuItem("AllenSu/0、更改关键部位名字/GuanDaoXiao", false, INDEXNUM + 33)]
     public static void Fun_GuanDaoXiao() { ChangeKeyName(GuanDaoXiao, GuanJianType.Grid, 1, 0); }
 
     #endregion
 
     #region 更改碰撞盒名称
 
-    [MenuItem("GameObject/2、更改为 Bevel Box名字", false, INDEXNUM)]
+    [MenuItem("AllenSu/1、更改碰撞盒名称/Bevel Box", false, INDEXNUM)]
     public static void BevelBox()
     {
         ISBevelBox = true;
@@ -249,7 +249,7 @@ public class SelfBuWei : CommonFun
     }
 
 
-    [MenuItem("GameObject/3、更改为 Normal Box名字", false, INDEXNUM)]
+    [MenuItem("AllenSu/1、更改碰撞盒名称/Normal Box", false, INDEXNUM)]
     public static void NormalBox()
     {
         ISBevelBox = false;
@@ -290,12 +290,13 @@ public class SelfBuWei : CommonFun
     public static void ChangeBoxName()
     {
         var i = 1;
-        foreach (var selectObj in Selection.gameObjects)
+        var siblingObjects = Selection.gameObjects.OrderBy(_ => _.transform.GetSiblingIndex());
+        siblingObjects.ForEach(obj =>
         {
-            selectObj.name = ISBevelBox ? "Bevel Box " + "(" + i + ")": "Normal Box " + "(" + i + ")";
-            selectObj.transform.SetAsLastSibling();
+            Undo.RecordObject(obj, "siblingBoxCollObjects");
+            obj.name= ISBevelBox ? "Bevel Box " + "(" + i + ")" : "Normal Box " + "(" + i + ")";
             i++;
-        }
+        });
     }
 
     #endregion
@@ -411,17 +412,18 @@ public class SelfBuWei : CommonFun
     public void CloneMethod(GameObject go, string buWeiName, Vector3 v)
     {
         CurrentIndexNum++;
-        GuanJianBuWei buWei = go.GetComponent<GuanJianBuWei>();
+        var buWei = go.GetComponent<GuanJianBuWei>();
 
         //克隆关键部位,设置父物体，重新命名
-        GameObject obj = new GameObject();
+        var obj = new GameObject();
+        Undo.RegisterCreatedObjectUndo(obj,"CloneBuWei");
         obj.transform.parent = go.transform.parent.transform;
         obj.AddComponent<GuanJianBuWei>();
-        GuanJianBuWei objGuanJian = obj.GetComponent<GuanJianBuWei>();
-        objGuanJian.type            =  buWei.type;
-        objGuanJian.size            =  buWei.size;
-        objGuanJian.director        =  buWei.director;
-        objGuanJian.length          =  buWei.length;
+        var objBuWei = obj.GetComponent<GuanJianBuWei>();
+        objBuWei.type            =  buWei.type;
+        objBuWei.size            =  buWei.size;
+        objBuWei.director        =  buWei.director;
+        objBuWei.length          =  buWei.length;
         obj.name                    =  buWeiName + " (" + (CurrentIndexNum) + ")";
         obj.transform.localPosition += new Vector3(v.x, v.y, v.z);
     }
@@ -453,6 +455,7 @@ public class SelfBuWei : CommonFun
         {
             // 克隆关键部位,设置父物体，重新命名
             var obj = new GameObject();
+            Undo.RegisterCreatedObjectUndo(obj, "SymmetryCloneBuWei");
             obj.transform.parent = selectObj.transform.parent.transform;
             var buWei = obj.AddComponent<GuanJianBuWei>();
             buWei.type     = selectBuWei.type;
@@ -480,27 +483,29 @@ public class SelfBuWei : CommonFun
 
     #endregion
 
-    #region 三：生成默认的关键部位
+    #region 三：生成默认的 GameObject
 
     /// <summary>
-    /// 生成默认的关键部位
+    /// 生成默认的 GameObject
     /// </summary>
-    public void CreateDefaultBuWei()
+    public void CreateDefaultObj()
     {
         IfSelectionIsNull("没有选中颗粒作为父物体");
-        var selectObj = new GameObject("待修改的关键部位名称");
+        var selectObj = new GameObject("默认 GameObject");
+        Undo.RegisterCreatedObjectUndo(selectObj,"CreateDefaultGameObject");
+        selectObj.transform.position = Vector3.zero;
         selectObj.transform.parent = Selection.activeGameObject.transform;
-        selectObj.AddComponent<GuanJianBuWei>();
     }
 
     #endregion
 
     #region 四：生成空物体 NormalBox (1)
 
-    public void CreateEmptyBox()
+    public void CreateDefaultNormalBox()
     {
         IfSelectionIsNull("没有选中颗粒作为父物体");
         var obj = new GameObject("Normal Box (1)");
+        Undo.RegisterCreatedObjectUndo(obj, "CreateDefaultNormalBox");
         obj.transform.parent = Selection.activeGameObject.transform;
         obj.AddComponent<BoxCollider>();
         var box = obj.GetComponent<BoxCollider>();

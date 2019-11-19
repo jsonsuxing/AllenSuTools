@@ -160,7 +160,7 @@ public class SelfCollider : CommonFun
 
     #region 一：克隆碰撞盒
 
-    #region 一：一：对角线两顶点确定碰撞盒
+    #region 一：对角线两顶点确定碰撞盒
 
     public void VertexBox()
     {
@@ -274,6 +274,7 @@ public class SelfCollider : CommonFun
         // ------------ 一：开始垂直画盒子 ------------
         GUILayout.BeginVertical("box");
         GUILayout.Label("快捷设置数据", SetGuiStyle(Color.red, 16));
+        GUILayout.Space(3);
 
         // 第一组水平排版开始
         EditorGUILayout.BeginHorizontal();
@@ -331,10 +332,11 @@ public class SelfCollider : CommonFun
         }
         EditorGUILayout.EndHorizontal();
         // 第二组水平排版结束
+        GUILayout.Space(3);
 
         // 第N组水平排版开始
         EditorGUILayout.BeginHorizontal();
-        GUILayout.Label("提示：当前所选快捷数据是：", SetGuiStyle(Color.black, 14));
+        GUILayout.Label("提示：当前所选快捷数据是", SetGuiStyle(Color.black, 14));
         GUILayout.TextField(ChoseQuickData);
         EditorGUILayout.EndHorizontal();
         // 第N组水平排版结束
@@ -601,14 +603,14 @@ public class SelfCollider : CommonFun
         for (var i = 0; i < CustomBoxCollNum; i++)
         {
             var cloneObj = Object.Instantiate(selectObj);
-            cloneObj.name = "Bevel Box " + "(" + (i + 1) + ")";
+            Undo.RegisterCreatedObjectUndo(cloneObj, "RotateBoxCollider");
 
+            cloneObj.name = "Bevel Box " + "(" + (i + 1) + ")";
             // 克隆的角度
             var cloneAngle = i * (360f / CustomBoxCollNum);
-            
+
             cloneObj.transform.RotateAround(new Vector3(SelfPivotAxisX, SelfPivotAxisY, SelfPivotAxisZ), pivot, cloneAngle);
             cloneObj.transform.SetParent(selectObj.transform.parent, true);
-            Undo.RegisterCreatedObjectUndo(cloneObj, "MyCloneObj");
         }
         Undo.DestroyObjectImmediate(selectObj);
     }
@@ -654,10 +656,15 @@ public class SelfCollider : CommonFun
         var selectObjX = selectObj.transform.localPosition.x;
         var selectObjY = selectObj.transform.localPosition.y;
         var selectObjZ = selectObj.transform.localPosition.z;
+       
+        // 所选名称括号内的数字下标(返回值无法自增，特用变量接收)
+        var nameIndex = GetBuWeiNameIndex(selectObj);
+
         for (var i = 1; i <= CustomBoxCollNum; i++)
         {
             var cloneObj = Object.Instantiate(selectObj);
-            cloneObj.name = "Normal Box " + "(" + i + ")";
+            Undo.RegisterCreatedObjectUndo(cloneObj, "PanBoxCollider");
+            cloneObj.name = GetBuWeiChineseName(selectObj) + " (" + (++nameIndex) + ")";
             switch (SelfPivotAxis)
             {
                 case SelfPivotAxis.X轴正方向:
@@ -711,7 +718,7 @@ public class SelfCollider : CommonFun
         var sizeY  = bounds.size.y * cloneObj.transform.localScale.y - TuQiHeight - DiffValue;
         var scaleZ = bounds.size.z * cloneObj.transform.localScale.z              - DiffValue;
 
-        var normalBox=new GameObject("Normal Box (1)");
+        var normalBox = new GameObject("Normal Box (1)");
         normalBox.transform.SetParent(cloneObj.transform);
         // 添加碰撞盒，并设置大小及中心点
         var boxCollider = normalBox.AddComponent<BoxCollider>();
