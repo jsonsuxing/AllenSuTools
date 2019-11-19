@@ -423,21 +423,33 @@ public class AllenSuTools : EditorWindow
                 #endregion
                 GUILayout.Space(8);
 
-                #region 省事功能
+                #region 功能一：复制模型全称、半称
 
-                GUILayout.Label("省事功能", TitleStyle());
-            
-                #region 3：批量检查指定功能
+                GUILayout.Label("一：复制模型名全称、半称", TitleStyle());
 
                 // ------------ 一：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
-                if (GUILayout.Button("三：批量检查指 物件_1")) SelfModel.Instance().CheckFunction();
-                // ------------ 一：结束垂直画盒子 ------------
+
+                // 第一组水平排版开始
+                EditorGUILayout.BeginHorizontal();
+                if (GUILayout.Button("1：全称")) Clipboard.SetText(Selection.activeGameObject.name);
+                if (GUILayout.Button("2：半称"))
+                {
+                    var str  = Selection.activeGameObject.name;
+                    var flag = '&';
+                    // 获取到 & 后面的内容
+                    var text = str.Substring(str.IndexOf(flag) + 1);
+                    Clipboard.SetText(text);
+                }
+                EditorGUILayout.EndHorizontal();
+                // 第一组水平排版结束
+                GUILayout.Space(3);
+
                 GUILayout.EndVertical();
+                // ------------ 一：结束垂直画盒子 ------------
 
                 #endregion
-
-                #endregion
+                GUILayout.Space(8);
 
                 #endregion
                 break;
@@ -760,6 +772,17 @@ public class AllenSuTools : EditorWindow
                 // 第二组水平排版结束
                 GUILayout.Space(3);
 
+                GUILayout.Label("C：删除子物体", SetGuiStyle(Color.red, 14));
+                GUILayout.Space(3);
+
+                // 第一组水平排版开始
+                EditorGUILayout.BeginHorizontal();
+                GUILayout.Label(" 指定子物体名称",SetGuiStyle(Color.black, 14));
+                ToolPro.Instance().DeleteChildName = GUILayout.TextField(ToolPro.Instance().DeleteChildName);
+                EditorGUILayout.EndHorizontal();
+                // 第一组水平排版结束
+                GUILayout.Space(3);
+
                 GUILayout.EndVertical();
                 // ------------ 一：结束垂直画盒子 ------------
                
@@ -863,34 +886,6 @@ public class AllenSuTools : EditorWindow
                 if (GUILayout.Button("2：删除QD下的预设")) SelfCollider.Instance().DeletePrefab();
                 EditorGUILayout.EndHorizontal();
                 // 第一组水平排版结束
-
-                GUILayout.EndVertical();
-                // ------------ 一：结束垂直画盒子 ------------
-
-                #endregion
-                GUILayout.Space(8);
-
-                #region 五：复制模型全称、半称
-
-                GUILayout.Label("五：复制模型名全称、半称", TitleStyle());
-
-                // ------------ 一：开始垂直画盒子 ------------
-                GUILayout.BeginVertical("box");
-
-                // 第一组水平排版开始
-                EditorGUILayout.BeginHorizontal();
-                if(GUILayout.Button("1：全称")) Clipboard.SetText(Selection.activeGameObject.name);
-                if (GUILayout.Button("2：半称"))
-                {
-                    var str  = Selection.activeGameObject.name;
-                    var flag = '&';
-                    // 获取到 & 后面的内容
-                    var text = str.Substring(str.IndexOf(flag) + 1);
-                    Clipboard.SetText(text);
-                }
-                EditorGUILayout.EndHorizontal();
-                // 第一组水平排版结束
-                GUILayout.Space(3);
 
                 GUILayout.EndVertical();
                 // ------------ 一：结束垂直画盒子 ------------

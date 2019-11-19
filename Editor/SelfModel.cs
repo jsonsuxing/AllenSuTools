@@ -321,65 +321,6 @@ public class SelfModel : CommonFun
 
     #endregion
 
-    #region 省事功能
-
-    #region 一：自动定位层级面板所选颗粒类别
-
-    #endregion
-
-    #region 批量检查指定功能
-
-    /// <summary>
-    /// 检查功能
-    /// </summary>
-    public void CheckFunction()
-    {
-        GameObject[] selectObjects = Selection.gameObjects;
-        if (selectObjects.Length == 0)
-        {
-            WindowTips("至少选择一个物体");
-            return;
-        }
-
-        // 物件_1上的Mesh为空的个数
-        int emptyMeshNum = 0;
-        // 名称不是物件_1的个数
-        int notWuJianOne = 0;
-        // 文件夹路径
-        string txtEmptyMesh = "物件_1上的Mesh为空的颗粒名称汇总";
-        string txtNotWuJian = "名称不是物件_1的颗粒名称汇总";
-        for (int i = 0; i < selectObjects.Length; i++)
-        {
-            if (Equals(selectObjects[i].transform.GetChild(0).name, "物件_1"))
-            {
-                if (selectObjects[i].transform.GetChild(0).GetComponent<MeshFilter>().sharedMesh == null)
-                {
-                    emptyMeshNum++;
-                    WriteToTxt(TxtDirPath, txtEmptyMesh, "第 " + emptyMeshNum + " 个物件_1上没有Mesh的模型名称是：" + selectObjects[i].name);
-                }
-            }
-            else
-            {
-                notWuJianOne++;
-                WriteToTxt(TxtDirPath, txtNotWuJian, "第 " + notWuJianOne + " 个名称不是物件_1的模型名称是：" + selectObjects[i].name);
-            }
-        }
-
-        if (File.Exists(TxtDirPath + txtEmptyMesh))
-        {
-            WindowTips("物件_1 上的 Mesh 为空的文件已存在，详见路径：" + TxtDirPath + txtEmptyMesh);
-        }
-
-        if (File.Exists(TxtDirPath + txtNotWuJian))
-        {
-            WindowTips("名称不是 物件_1 的文件已存在，详见路径：" + TxtDirPath + txtNotWuJian);
-        }
-    }
-
-    #endregion
-
-    #endregion
-
     #region 其它函数
 
     #region 一：修改模型导入工程后，用该模型的Mesh,替换预设上丢失的Mesh

@@ -90,36 +90,15 @@ public class ColliderManager:EditorWindow
                 #region 一：旋转
 
                 GUILayout.Label("二：自定义操作碰撞盒", TitleStyle());
-                GUILayout.Space(3);
+                GUILayout.Space(5);
                 GUILayout.Label(" A：旋转", SetGuiStyle(Color.red, 16));
                 GUILayout.Space(3);
-                GUILayout.Label(" 提示：默认沿 Y 轴，同步环形碰撞盒的轴心", SetGuiStyle(Color.black, 14));
 
                 // ------------ 一：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
                 GUILayout.Space(3);
 
-                // 第一组水平排版开始
-                EditorGUILayout.BeginHorizontal();
-                GUILayout.Label("1：旋转中心(默认为原点)", SetGuiStyle(Color.black, 14));
-                if (GUILayout.Button("可点击物体，自动传值")) SelfCollider.Instance().SetMyPivot();
-                EditorGUILayout.EndHorizontal();
-                // 第一组水平排版结束
-                GUILayout.Space(5);
-
-                // 第二组水平排版开始
-                EditorGUILayout.BeginHorizontal();
-                GUILayout.Label("x:", SetGuiStyle(Color.black, 14));
-                SelfCollider.Instance().SelfPivotAxisX = float.Parse(EditorGUILayout.TextField(SelfCollider.Instance().SelfPivotAxisX.ToString()));
-                GUILayout.Label("y:", SetGuiStyle(Color.black, 14));
-                SelfCollider.Instance().SelfPivotAxisY = float.Parse(EditorGUILayout.TextField(SelfCollider.Instance().SelfPivotAxisY.ToString()));
-                GUILayout.Label("z:", SetGuiStyle(Color.black, 14));
-                SelfCollider.Instance().SelfPivotAxisZ = float.Parse(EditorGUILayout.TextField(SelfCollider.Instance().SelfPivotAxisZ.ToString()));
-                EditorGUILayout.EndHorizontal();
-                // 第二组水平排版结束
-                GUILayout.Space(5);
-
-                GUILayout.Label("2：快捷设置克隆个数(含自身，且会删除所选对象)", SetGuiStyle(Color.black, 14));
+                GUILayout.Label("1：快捷设置克隆个数(含自身，且会删除所选对象)", SetGuiStyle(Color.black, 14));
                 GUILayout.Space(5);
 
                 // 第四组水平排版开始
@@ -136,7 +115,7 @@ public class ColliderManager:EditorWindow
 
                 // 第三组水平排版开始
                 EditorGUILayout.BeginHorizontal();
-                GUILayout.Label("3:选中已做好物体，设置克隆个数：", SetGuiStyle(Color.black, 14));
+                GUILayout.Label("2：选中已做好物体，设置克隆个数：", SetGuiStyle(Color.black, 14));
                 SelfCollider.Instance().CustomBoxCollNum = int.Parse(GUILayout.TextField(SelfCollider.Instance().CustomBoxCollNum.ToString()));
                 EditorGUILayout.EndHorizontal();
                 // 第三组水平排版结束
@@ -224,7 +203,7 @@ public class ColliderManager:EditorWindow
 
                 // 第一组水平排版开始
                 EditorGUILayout.BeginHorizontal();
-                GUILayout.Label("一：选择对称轴 ",                         SetGuiStyle(Color.red,   14));
+                GUILayout.Label("一：选择轴心 ",                         SetGuiStyle(Color.red,   14));
                 GUILayout.Label(SelfTools.Instance().SetMirrorAxis, SetGuiStyle(Color.black, 14));
                 GUILayout.Label("");
                 EditorGUILayout.EndHorizontal();
@@ -368,11 +347,24 @@ public class ColliderManager:EditorWindow
                 #endregion
                 GUILayout.Space(8);
 
-                #region 二：隐藏碰撞盒
+                #region 二：碰撞盒Center转换
 
-                GUILayout.Label("二：隐藏,移除全部碰撞盒", TitleStyle());
+                GUILayout.Label("二：碰撞盒 Center 转换", TitleStyle());
 
-                // ------------ 一：开始水平画盒子 ------------
+                // ------------ 一：开始垂直画盒子 ------------
+                GUILayout.BeginVertical("box");
+                if(GUILayout.Button("碰撞盒 Center 转换")) ToolPro.Instance().CheckBoxCollider(Selection.activeGameObject);
+                GUILayout.EndVertical();
+                // ------------ 一：结束垂直画盒子 ------------
+
+                #endregion
+                GUILayout.Space(8);
+
+                #region 三：隐藏碰撞盒
+
+                GUILayout.Label("三：隐藏,移除全部碰撞盒", TitleStyle());
+
+                // ------------ 一：开始画盒子 ------------
                 GUILayout.BeginVertical("box");
 
                 // 第一组水平排版开始
@@ -392,7 +384,7 @@ public class ColliderManager:EditorWindow
                 // 第一组水平排版结束
 
                 GUILayout.EndVertical();
-                //------------ 一：结束水平画盒子 ------------
+                //------------ 一：结束画盒子 ------------
 
                 #endregion
                 GUILayout.Space(8);

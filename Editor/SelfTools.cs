@@ -297,6 +297,7 @@ public class SelfTools : CommonFun
         }
         else
         {
+            List<GameObject> cloneObjList = new List<GameObject>();
             foreach (var obj in gameObjects)
             {
                 var boxCollider = obj.GetComponent<BoxCollider>();
@@ -305,40 +306,43 @@ public class SelfTools : CommonFun
                 var newObject = Object.Instantiate(obj, obj.transform.parent);
                 Undo.RegisterCreatedObjectUndo(newObject,"MirrorObjects");
                 newObject.name = newObject.name.Replace("(Clone)", "(Mirror)");
+                cloneObjList.Add(newObject);
             }
           
             switch (SetMirrorAxis)
             {
                 case "x":
-                    foreach (var obj in gameObjects)
+                    foreach (var cloneObj in cloneObjList)
                     {
-                        obj.transform.position = new Vector3(obj.transform.position.x, obj.transform.position.y, obj.transform.position.z - 2 * (obj.transform.position.z - MirrorPoint.z));
-                        var vector3Rotation = obj.transform.rotation.eulerAngles;
-                        var newEulerAngles  = new Vector3(-vector3Rotation.x, -vector3Rotation.y, vector3Rotation.z);
-                        obj.transform.rotation = Quaternion.Euler(newEulerAngles);
+                        cloneObj.transform.position = new Vector3(cloneObj.transform.position.x - 2 * (cloneObj.transform.position.x - MirrorPoint.x), cloneObj.transform.position.y, cloneObj.transform.position.z);
+                        var vector3Rotation = cloneObj.transform.rotation.eulerAngles;
+                        var newEulerAngles  = new Vector3(vector3Rotation.x, -vector3Rotation.y, -vector3Rotation.z);
+                        cloneObj.transform.rotation = Quaternion.Euler(newEulerAngles);
                     }
                     break;
                 case "y":
-                    foreach (var obj in gameObjects)
+                    foreach (var cloneObj in cloneObjList)
                     {
-                        obj.transform.position = new Vector3(obj.transform.position.x, obj.transform.position.y - 2 * (obj.transform.position.y - MirrorPoint.y), obj.transform.position.z);
-                        var vector3Rotation = obj.transform.rotation.eulerAngles;
+                        cloneObj.transform.position = new Vector3(cloneObj.transform.position.x, cloneObj.transform.position.y - 2 * (cloneObj.transform.position.y - MirrorPoint.y), cloneObj.transform.position.z);
+                        var vector3Rotation = cloneObj.transform.rotation.eulerAngles;
                         var newEulerAngles  = new Vector3(-vector3Rotation.x, -vector3Rotation.y, -vector3Rotation.z);
-                        obj.transform.rotation = Quaternion.Euler(newEulerAngles);
+                        cloneObj.transform.rotation = Quaternion.Euler(newEulerAngles);
                     }
                     break;
                 case "z":
-                    foreach (var obj in gameObjects)
+                    foreach (var cloneObj in cloneObjList)
                     {
-                        obj.transform.position = new Vector3(obj.transform.position.x - 2 * (obj.transform.position.x - MirrorPoint.x), obj.transform.position.y, obj.transform.position.z);
-                        var vector3Rotation = obj.transform.rotation.eulerAngles;
-                        var newEulerAngles  = new Vector3(vector3Rotation.x, -vector3Rotation.y, -vector3Rotation.z);
-                        obj.transform.rotation = Quaternion.Euler(newEulerAngles);
+                        cloneObj.transform.position = new Vector3(cloneObj.transform.position.x, cloneObj.transform.position.y, cloneObj.transform.position.z - 2 * (cloneObj.transform.position.z - MirrorPoint.z));
+                        var vector3Rotation = cloneObj.transform.rotation.eulerAngles;
+                        var newEulerAngles  = new Vector3(-vector3Rotation.x, -vector3Rotation.y, vector3Rotation.z);
+                        cloneObj.transform.rotation = Quaternion.Euler(newEulerAngles);
                     }
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+
+            cloneObjList.Clear();
         }
     }
 

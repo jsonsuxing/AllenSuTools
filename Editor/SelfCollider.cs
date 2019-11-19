@@ -94,6 +94,7 @@ public class SelfCollider : CommonFun
 
     // 添加轮胎类的碰撞盒
     public PivotAxis    PivotAxis          = PivotAxis.Y;        // 碰撞盒以哪个轴生成，默认以Y轴
+    public Vector3 SelfRoundPivotAxis = Vector3.zero; // 自定义轴心x，y，z
     public EditorStatus EditorStatus       = EditorStatus.无效的选择; // 默认编辑状态
     public int          BoxCollNumGenerate = 8;                  // 生成多少个碰撞盒，默认为8个
     public float        OuterRadius        = 0.14f;              // 碰撞盒外半径
@@ -108,9 +109,6 @@ public class SelfCollider : CommonFun
     // 自定义倾斜环形碰撞盒
     // 旋转
     public int   CustomBoxCollNum = 8; // 生成多少个碰撞盒，默认为8个
-    public float SelfPivotAxisX   = 0; // 自定义轴心x，y，z
-    public float SelfPivotAxisY   = 0;
-    public float SelfPivotAxisZ   = 0;
     // 平移
     public SelfPivotAxis SelfPivotAxis = SelfPivotAxis.X轴正方向; // 选择轴向
     public float         CloneSpace    = 0.8f;                   // 克隆的间隔
@@ -240,15 +238,30 @@ public class SelfCollider : CommonFun
 
         // 第一组垂直排版开始
         EditorGUILayout.BeginVertical();
+
+        GUILayout.Label("Tips：轴心、对称中心 同步下方的《自定义操作碰撞盒》");
+        GUILayout.Space(3);
+
         // 选择轴心
-        PivotAxis = (PivotAxis) EditorGUILayout.EnumPopup("轴心", PivotAxis);
-        GUILayout.Label("提示：可自定义旋转中心，同《自定义操作碰撞盒》的旋转");
+        PivotAxis = (PivotAxis) EditorGUILayout.EnumPopup("1：轴心", PivotAxis);
+        GUILayout.Space(3);
+
+        // 选择对称中心
+        SelfRoundPivotAxis = EditorGUILayout.Vector3Field("2：对称中心(默认原点)", SelfRoundPivotAxis);
+        GUILayout.Space(3);
+
+        if (GUILayout.Button("选择对象，设置对称中心")) SetMyPivot();
+        GUILayout.Space(3);
+
         // 设置边数，最小3，最大64
-        BoxCollNumGenerate = EditorGUILayout.IntSlider("设置边数", BoxCollNumGenerate, 3, 64);
+        BoxCollNumGenerate = EditorGUILayout.IntSlider("3：设置边数", BoxCollNumGenerate, 3, 64);
+        GUILayout.Space(3);
+
         // 外半径（从指定外半径的值到无穷大。0.011f,无穷大）
-        OuterRadius = Mathf.Max(EditorGUILayout.FloatField("外半径", OuterRadius), 0.011f);
+        OuterRadius = Mathf.Max(EditorGUILayout.FloatField("4：外半径", OuterRadius), 0.011f);
         EditorGUILayout.EndVertical();
         // 第一组垂直排版结束
+        GUILayout.Space(3);
 
         // 第二组水平排版开始
         EditorGUILayout.BeginHorizontal();
@@ -402,7 +415,7 @@ public class SelfCollider : CommonFun
         // 移动对撞机，使其位置相对于选定的游戏对象
         // 修改前：compoundCollider.transform.position += selectedGameObject.transform.position;
         // 修改后：将生成位置设置为自定义的位置
-        compoundCollider.transform.position += new Vector3(SelfPivotAxisX,SelfPivotAxisY,SelfPivotAxisZ);
+        compoundCollider.transform.position += SelfRoundPivotAxis;
 
         // 暂时将所选游戏对象的旋转设置为零，以避免对撞机的父级设置时对撞机被扭曲
         var originalRotation = selectedGameObject.transform.rotation;
@@ -609,7 +622,7 @@ public class SelfCollider : CommonFun
             // 克隆的角度
             var cloneAngle = i * (360f / CustomBoxCollNum);
 
-            cloneObj.transform.RotateAround(new Vector3(SelfPivotAxisX, SelfPivotAxisY, SelfPivotAxisZ), pivot, cloneAngle);
+            cloneObj.transform.RotateAround(SelfRoundPivotAxis, pivot, cloneAngle);
             cloneObj.transform.SetParent(selectObj.transform.parent, true);
         }
         Undo.DestroyObjectImmediate(selectObj);
@@ -629,9 +642,7 @@ public class SelfCollider : CommonFun
         }
 
         var localPosition = selectObj.transform.localPosition;
-        SelfPivotAxisX = localPosition.x;
-        SelfPivotAxisY = localPosition.y;
-        SelfPivotAxisZ = localPosition.z;
+        SelfRoundPivotAxis = new Vector3(localPosition.x, localPosition.y, localPosition.z);
     }
 
 

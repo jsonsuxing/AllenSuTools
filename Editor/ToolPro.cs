@@ -4,6 +4,7 @@
 // 创建时间：2019-10-25 17:06:08
 // 版 本：1.0
 // ========================================================
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -14,6 +15,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 using Directory = System.IO.Directory;
+using Object = UnityEngine.Object;
 
 
 public class ToolPro : CommonFun
@@ -53,6 +55,7 @@ public class ToolPro : CommonFun
     public bool IsCreateBorder = false;  // 是否添加 Border
     public bool IsCreateMain = false; // 是否添加 Main
     public bool IsCreateSingleObj = false; // 是否添加指定的单个子物体
+    public string DeleteChildName = string.Empty;
 
     #endregion
 
@@ -557,7 +560,15 @@ public class ToolPro : CommonFun
 
             // 3：是否添加 Main
             if(IsCreateMain) CreateMain(granule);
+
+            if(!Equals(DeleteChildName,string.Empty)) DeleteGranuleChild(granule);
         }
+
+        PrefabObj       = null;
+        IsCreateSingleObj = false;
+        IsCreateBorder = false;
+        IsCreateMain    = false;
+        DeleteChildName = string.Empty;
     }
 
     /// <summary>
@@ -571,13 +582,11 @@ public class ToolPro : CommonFun
             var prefab = Object.Instantiate(PrefabObj, granule.transform);
             Undo.RegisterCreatedObjectUndo(prefab, "SingleChildPrefab");
             prefab.name = PrefabObj.name;
-            PrefabObj = null;
         }
         else
         {
             WindowTips("预设不能为空");
         }
-        IsCreateSingleObj = false;
     }
 
     /// <summary>
@@ -594,13 +603,11 @@ public class ToolPro : CommonFun
             prefab.name = PrefabObj.name;
             //颗粒类原来的 sprite 设置为空
             if (granule.GetComponent<Image>().sprite != null) granule.GetComponent<Image>().sprite = null;
-            PrefabObj = null;
         }
         else
         {
             WindowTips(" Border 的预设不能为空");
         }
-        IsCreateBorder = false;
     }
 
     /// <summary>
@@ -618,13 +625,23 @@ public class ToolPro : CommonFun
             // 给 Main 更换 Sprite ，并且直接传值给颗粒大类的 Image；
             prefab.transform.GetComponent<Image>().sprite = ChinarAtlas.LoadSprite("UI/Assembling/Granule Library", "零件库-" + granule.name);
             granule.GetComponent<Button>().targetGraphic = granule.transform.Find("Main").GetComponent<Image>();
-            PrefabObj = null;
         }
         else
         {
             WindowTips(" Main 的预设不能为空");
         }
-        IsCreateMain = false;
+    }
+
+    /// <summary>
+    /// 根据指定名称，删除子物体
+    /// </summary>
+    /// <param name="granule">所选对象</param>
+    public void DeleteGranuleChild(GameObject granule)
+    {
+        if (granule.transform.Find(DeleteChildName))
+        {
+            Undo.DestroyObjectImmediate(granule.transform.Find(DeleteChildName).gameObject);
+        }
     }
 
     #endregion

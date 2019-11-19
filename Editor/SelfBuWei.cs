@@ -128,23 +128,23 @@ public class SelfBuWei : CommonFun
 
     //3--小插销
     [MenuItem("AllenSu/0、更改关键部位名字/XiaoChaXiao", false, INDEXNUM + 8)]
-    public static void Fun_XiaoChaXiao() { ChangeKeyName(XiaoChaXiao, GuanJianType.Axle, 3, 0.17f); }
+    public static void Fun_XiaoChaXiao() { ChangeKeyName(XiaoChaXiao, GuanJianType.Axle, 3, 0.8f); }
 
     //4--插槽
     [MenuItem("AllenSu/0、更改关键部位名字/ChaCao", false, INDEXNUM + 9)]
-    public static void Fun_ChaCao() { ChangeKeyName(ChaCao, GuanJianType.Axle, 4, 0.17f); }
+    public static void Fun_ChaCao() { ChangeKeyName(ChaCao, GuanJianType.Axle, 4, 0.8f); }
 
     //5--插销
     [MenuItem("AllenSu/0、更改关键部位名字/ChaXiao", false, INDEXNUM + 10)]
-    public static void Fun_ChaXiao() { ChangeKeyName(ChaXiao, GuanJianType.Axle, 5, 0.17f); }
+    public static void Fun_ChaXiao() { ChangeKeyName(ChaXiao, GuanJianType.Axle, 5, 0.8f); }
 
     //6--插槽十字
     [MenuItem("AllenSu/0、更改关键部位名字/ChaCaoShiZi", false, INDEXNUM + 11)]
-    public static void Fun_ChaCaoShiZi() { ChangeKeyName(ChaCaoShiZi, GuanJianType.Axle, 6, 0); }
+    public static void Fun_ChaCaoShiZi() { ChangeKeyName(ChaCaoShiZi, GuanJianType.Axle, 6, 0.8f); }
 
     //7-插销十字
     [MenuItem("AllenSu/0、更改关键部位名字/ChaXiaoShiZi", false, INDEXNUM + 12)]
-    public static void Fun_ChaXiaoShiZi() { ChangeKeyName(ChaXiaoShiZi, GuanJianType.Axle, 7, 0); }
+    public static void Fun_ChaXiaoShiZi() { ChangeKeyName(ChaXiaoShiZi, GuanJianType.Axle, 7, 0.8f); }
   
     //特殊-皮轮外
     [MenuItem("AllenSu/0、更改关键部位名字/PiLunWai", false, INDEXNUM + 15)]
@@ -241,18 +241,17 @@ public class SelfBuWei : CommonFun
 
     #region 更改碰撞盒名称
 
-    [MenuItem("AllenSu/1、更改碰撞盒名称/Bevel Box", false, INDEXNUM)]
-    public static void BevelBox()
-    {
-        ISBevelBox = true;
-        ChangeBoxName();
-    }
-
-
     [MenuItem("AllenSu/1、更改碰撞盒名称/Normal Box", false, INDEXNUM)]
     public static void NormalBox()
     {
         ISBevelBox = false;
+        ChangeBoxName();
+    }
+
+    [MenuItem("AllenSu/1、更改碰撞盒名称/Bevel Box", false, INDEXNUM)]
+    public static void BevelBox()
+    {
+        ISBevelBox = true;
         ChangeBoxName();
     }
 
