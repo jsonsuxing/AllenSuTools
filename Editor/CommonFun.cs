@@ -23,7 +23,7 @@ public class CommonFun
     public static string ShowGranuleType = string.Empty; // 颗粒所属类别
     public const  int    INDEXNUM        = -100;         // 暂时定右击鼠标面板的下标是100
 
-    public string TxtDirPath = "D:/Users/suxing/Desktop/编辑器生成的txt文件汇总/";
+    public string TxtDirPath = "D:/编辑器生成的txt文件汇总/";
 
     // 小颗粒类型汇总
     public string[] AllGranuleTypeGroup =

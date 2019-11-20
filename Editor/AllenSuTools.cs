@@ -689,7 +689,7 @@ public class AllenSuTools : EditorWindow
                 // 第二组水平排版开始
                 EditorGUILayout.BeginHorizontal();
                 ToolPro.Instance().IsCheckBuWei = EditorGUILayout.Toggle(new GUIContent("3：检查《关键部位》",
-                        "是否检查关键部位的 1：比例。2：移除 MeshRenderer 和 MeshFilter 组件。"),
+                        "是否检查关键部位的 1：旋转。2：移除 MeshRenderer 和 MeshFilter 组件。3：所有子物体的比例。"),
                     ToolPro.Instance().IsCheckBuWei);
                 ToolPro.Instance().IsCheckBoxCollider = EditorGUILayout.Toggle(new GUIContent("4：检查《碰撞盒》",
                     "是否检查碰撞盒的 1：Center 转化"), ToolPro.Instance().IsCheckBoxCollider);

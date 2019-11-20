@@ -38,8 +38,10 @@ public class ToolPro : CommonFun
     public int errorRotationNumWu = 0; // 物件旋转位置错误个数
     public int errorScaleNumWu    = 0; // 物件比例错误个数
     public int errorNoWuName = 0; // 名称不是物件_1的个数
-    public int errorBuWeiNum = 0; // 关键部位上有碰撞盒的个数
+    public int errorBuWeiBoxNum = 0; // 关键部位上有碰撞盒的个数
+    public int errorBuWeiRotationNum = 0; // 关键部位上旋转角度不正确的个数
     public int count         = 0; // 进度表示
+    public int AllProblemCount = 0; // 所有问题个数
     public string strTips = string.Empty;  // 提示批量操作的方式
     public bool IsHierarchy = true; // 批量处理预设的方式，默认是从层级面板处理，为 false 代表是直接点击预设处理
     public bool IsOpenAll = false; // 一键开启、关闭，默认全关
@@ -208,11 +210,14 @@ public class ToolPro : CommonFun
             WindowTips("至少选择一个物体");
             return;
         }
+        // 总进度显示
+        var allCount = Selection.gameObjects.Length;
 
         // 每次点击时重置标记数字
         errorPositionNumGranule = errorRotationNumGranule = 0;
-        errorPositionNumWu = errorRotationNumWu = 0;
-        errorScaleNumWu = errorBuWeiNum = count = errorNoWuName = 0;
+        errorPositionNumWu = errorRotationNumWu = errorScaleNumWu = 0;
+        errorBuWeiBoxNum = errorNoWuName = errorBuWeiRotationNum = 0;
+        count = AllProblemCount = 0;
 
         foreach (var selectObj in Selection.gameObjects)
         {
@@ -244,13 +249,29 @@ public class ToolPro : CommonFun
             PrefabUtility.SaveAsPrefabAsset(selectObj, "Assets/Resources/Prefab/ModelPrefabs/" + selectObj.name+ ".prefab");
             if(IsHierarchy) Object.DestroyImmediate(selectObj);
 
+            //检测出来的问题个数
+            AllProblemCount = errorPositionNumGranule + errorRotationNumGranule + errorPositionNumWu + errorRotationNumWu + errorScaleNumWu +
+                              errorBuWeiBoxNum        + errorNoWuName           + errorBuWeiRotationNum;
+
             // 显示修改进度
-            var floatProgress = (float)count / Selection.gameObjects.Length;
-            EditorUtility.DisplayProgressBar("修改进度", count + " / " + Selection.gameObjects.Length + "完成修改", floatProgress);
+            var floatProgress = (float)count / allCount;
+            EditorUtility.DisplayProgressBar("腾讯管家病毒检测", "已检查个数：" + count + " / " +" 未检查个数："+ Selection.gameObjects.Length
+                +" / " + "已检测出 "+ AllProblemCount + " 个病毒", floatProgress);
         }
 
         // 清除进度条
         EditorUtility.ClearProgressBar();
+
+        if (errorPositionNumGranule != 0 || errorRotationNumGranule != 0 || errorPositionNumWu !=0 || errorRotationNumWu != 0
+            || errorScaleNumWu != 0 || errorBuWeiBoxNum != 0 || errorNoWuName != 0 || errorBuWeiRotationNum != 0)
+        {
+            WindowTips("已检查出 "+ AllProblemCount +" 个问题，详见 《 D:/ 编辑器生成的txt文件汇总 》 文件夹");
+        }
+        else if (errorPositionNumGranule == 0 || errorRotationNumGranule == 0 || errorPositionNumWu == 0 || errorRotationNumWu == 0
+                 || errorScaleNumWu == 0 || errorBuWeiBoxNum == 0 || errorNoWuName == 0 || errorBuWeiRotationNum == 0)
+        {
+            WindowTips("恭喜你，已经没有问题了！！！");
+        }
     }
 
     //--------------------------------------- 检查区 ---------------------------------------
@@ -266,14 +287,14 @@ public class ToolPro : CommonFun
         {
             selectObj.transform.position = Vector3.zero;
             errorPositionNumGranule++;
-            WriteToTxt(TxtDirPath, "颗粒《位置错误》汇总", "第 " + errorPositionNumGranule + " 个：" + selectObj.name);
+            WriteToTxt(TxtDirPath, "颗粒《位置错误》汇总（已自动修正）", "第 " + errorPositionNumGranule + " 个：" + selectObj.name);
         }
 
         // 2：如果旋转不为 0
         if (selectObj.transform.rotation != Quaternion.identity)
         {
             errorRotationNumGranule++;
-            WriteToTxt(TxtDirPath, "颗粒《旋转错误》汇总", "第 " + errorRotationNumGranule + " 个：" + selectObj.name);
+            WriteToTxt(TxtDirPath, "颗粒《旋转错误》汇总（仅记录）", "第 " + errorRotationNumGranule + " 个：" + selectObj.name);
         }
 
         // 3：移除原来存在的 KeLiData 和 GranuleModel 脚本和刚体。
@@ -297,7 +318,7 @@ public class ToolPro : CommonFun
             if (wuTrans.position != Vector3.zero)
             {
                 errorPositionNumWu++;
-                WriteToTxt(TxtDirPath, "物件《位置错误》汇总", "第 " + errorPositionNumWu + " 个：" + selectObj.name);
+                WriteToTxt(TxtDirPath, "物件《位置错误》汇总（已自动修正）", "第 " + errorPositionNumWu + " 个：" + selectObj.name);
 
                 var wuOriginalVector3 = wuTrans.position;
                 for (var i = 0; i < selectObj.transform.childCount; i++)
@@ -318,42 +339,54 @@ public class ToolPro : CommonFun
             {
                 errorRotationNumWu++;
                 // 物件旋转问题，属于建模问题，这里只做记录，不做改动。
-                WriteToTxt(TxtDirPath, "物件《旋转错误》汇总", "第 " + errorRotationNumWu + " 个：" + selectObj.name);
+                WriteToTxt(TxtDirPath, "物件《旋转错误》汇总（仅记录）", "第 " + errorRotationNumWu + " 个：" + selectObj.name);
             }
 
             // 3：比例不为 1
             if (wuTrans.localScale != Vector3.one)
             {
                 errorScaleNumWu++;
-                WriteToTxt(TxtDirPath, "物件《比例错误》汇总", "第 " + errorScaleNumWu + " 个：" + selectObj.name);
+                WriteToTxt(TxtDirPath, "物件《比例错误》汇总（仅记录）", "第 " + errorScaleNumWu + " 个：" + selectObj.name);
             }
         }
         else
         {
             errorNoWuName++;
-            WriteToTxt(TxtDirPath, "物件《名称错误》汇总", "第 " + errorNoWuName + " 个：" + selectObj.name);
+            WriteToTxt(TxtDirPath, "物件《名称错误》汇总（仅记录）", "第 " + errorNoWuName + " 个：" + selectObj.name);
             WindowTips("有名称不是物件_1 的颗粒");
         }
     }
 
     /// <summary>
-    /// 《检查项三：处理关键部位》 1：比例。2：移除 MeshRenderer 和 MeshFilter 组件。
+    /// 《检查项三：处理关键部位》 1：旋转。2：移除 MeshRenderer 和 MeshFilter 组件。
+    /// 3：所有子物体的比例。
     /// </summary>
     /// <param name="selectObj">所选物体</param>
     public void CheckBuWei(GameObject selectObj)
     {
-        for (var i = 0; i < selectObj.transform.childCount; i++)
+        // 先对除物件之外的所有子物体进行一个比例判断,并直接修正，不做记录。
+        foreach (Transform child in selectObj.transform)
         {
-            // 获取到所有子物体(排除物件_1)
-            var childTrans = selectObj.transform.GetChild(i);
-            if (Equals(childTrans.name,"物件_1")) continue;
+            if (Equals(child.name, "物件_1")) continue;
+            if (child.localScale != Vector3.one) child.localScale = Vector3.one;
+        }
 
-            // 1：把所有子物体的 localScale 统一设置为 1
-            if (childTrans.localScale != Vector3.one) childTrans.localScale = Vector3.one;
+        // 获得所有的关键部位
+        var buWeiArr = selectObj.GetComponentsInChildren<GuanJianBuWei>();
 
-            // 2：移除掉除所有子物体上的 MeshRenderer 和 MeshFilter 组件
-            if (childTrans.GetComponent<MeshRenderer>()) Object.DestroyImmediate(childTrans.GetComponent<MeshRenderer>());
-            if (childTrans.GetComponent<MeshFilter>()) Object.DestroyImmediate(childTrans.GetComponent<MeshFilter>());
+        var index = 0;
+        foreach (var buWei in buWeiArr)
+        {
+            if (buWei.transform.localRotation != Quaternion.identity)
+            {
+                index++;
+                WriteToTxt(TxtDirPath, "关键部位《旋转错误》汇总（仅记录）", index == 1 ? 
+                    "第 " + (++errorBuWeiRotationNum) + " 个：" + selectObj.name + " 上的 " + buWei.name : buWei.name);
+            }
+
+            // 如果关键部位上存在 MeshRenderer 和 MeshFilter 组件，则移除。
+            if (buWei.transform.GetComponent<MeshRenderer>()) Object.DestroyImmediate(buWei.transform.GetComponent<MeshRenderer>());
+            if (buWei.transform.GetComponent<MeshFilter>()) Object.DestroyImmediate(buWei.transform.GetComponent<MeshFilter>());
         }
     }
 
@@ -476,8 +509,8 @@ public class ToolPro : CommonFun
                 // 如果关键部位上有碰撞盒
                 else
                 {
-                    errorBuWeiNum++;
-                    WriteToTxt(TxtDirPath, "关键部位上有碰撞盒的汇总", "第 " + errorBuWeiNum + " 个：" + selectObj.name + "上的 " + box.name);
+                    errorBuWeiBoxNum++;
+                    WriteToTxt(TxtDirPath, "关键部位上有碰撞盒的汇总", "第 " + errorBuWeiBoxNum + " 个：" + selectObj.name + "上的 " + box.name);
 
                     // 删除碰撞盒
                     Object.DestroyImmediate(box);
