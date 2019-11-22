@@ -585,7 +585,7 @@ public class SelfCollider : CommonFun
     /// </summary>
     public void RotateBoxCollider()
     {
-        var selectObj = Selection.activeGameObject;
+        var selectObj = Selection.gameObjects;
         if (selectObj == null)
         {
             WindowTips("所选物体不能为空");
@@ -613,19 +613,22 @@ public class SelfCollider : CommonFun
             default:
                 throw new ArgumentOutOfRangeException();
         }
+
+        // 所选名称括号内的数字下标(返回值无法自增，特用变量接收)
+        var nameIndex = GetBuWeiMaxNameIndex(selectObj);
         for (var i = 0; i < CustomBoxCollNum; i++)
         {
-            var cloneObj = Object.Instantiate(selectObj);
+            var cloneObj = Object.Instantiate(selectObj[0]);
             Undo.RegisterCreatedObjectUndo(cloneObj, "RotateBoxCollider");
-
-            cloneObj.name = "Bevel Box " + "(" + (i + 1) + ")";
+            // cloneObj.name = "Bevel Box " + "(" + (i + 1) + ")";
+            cloneObj.name = GetBuWeiChineseName(selectObj[0]) + " (" + (++nameIndex) + ")";
             // 克隆的角度
             var cloneAngle = i * (360f / CustomBoxCollNum);
 
             cloneObj.transform.RotateAround(SelfRoundPivotAxis, pivot, cloneAngle);
-            cloneObj.transform.SetParent(selectObj.transform.parent, true);
+            cloneObj.transform.SetParent(selectObj[0].transform.parent, true);
         }
-        Undo.DestroyObjectImmediate(selectObj);
+        Undo.DestroyObjectImmediate(selectObj[0]);
     }
 
 
@@ -651,7 +654,7 @@ public class SelfCollider : CommonFun
     /// </summary>
     public void PanBoxCollider()
     {
-        var selectObj = Selection.activeGameObject;
+        var selectObj = Selection.gameObjects;
         if (selectObj == null)
         {
             WindowTips("所选物体不能为空");
@@ -664,18 +667,18 @@ public class SelfCollider : CommonFun
         }
 
         // 记录被克隆物体的x,y,z
-        var selectObjX = selectObj.transform.localPosition.x;
-        var selectObjY = selectObj.transform.localPosition.y;
-        var selectObjZ = selectObj.transform.localPosition.z;
+        var selectObjX = selectObj[0].transform.localPosition.x;
+        var selectObjY = selectObj[0].transform.localPosition.y;
+        var selectObjZ = selectObj[0].transform.localPosition.z;
        
         // 所选名称括号内的数字下标(返回值无法自增，特用变量接收)
-        var nameIndex = GetBuWeiNameIndex(selectObj);
+        var nameIndex = GetBuWeiMaxNameIndex(selectObj);
 
         for (var i = 1; i <= CustomBoxCollNum; i++)
         {
-            var cloneObj = Object.Instantiate(selectObj);
+            var cloneObj = Object.Instantiate(selectObj[0]);
             Undo.RegisterCreatedObjectUndo(cloneObj, "PanBoxCollider");
-            cloneObj.name = GetBuWeiChineseName(selectObj) + " (" + (++nameIndex) + ")";
+            cloneObj.name = GetBuWeiChineseName(selectObj[0]) + " (" + (++nameIndex) + ")";
             switch (SelfPivotAxis)
             {
                 case SelfPivotAxis.X轴正方向:
@@ -700,7 +703,7 @@ public class SelfCollider : CommonFun
                     throw new ArgumentOutOfRangeException();
             }
 
-            cloneObj.transform.SetParent(selectObj.transform.parent);
+            cloneObj.transform.SetParent(selectObj[0].transform.parent);
         }
     }
 

@@ -446,8 +446,10 @@ public class SelfBuWei : CommonFun
 
         var selectBuWei = selectObj.GetComponent<GuanJianBuWei>();
         if (!selectBuWei) return;
-        // 取得所选关键部位后4位之前的名称
-        var buWeiName = selectObj.name.Substring(0, selectObj.name.Length - 4);
+        // 括号里的数字分为 A:1~9，B:10 以上，位数不一样，获取到的关键部位名称会不同
+        var buWeiName = Equals(selectObj.name.Substring(selectObj.name.Length - 3)[0].ToString(), "(")
+            ? selectObj.name.Substring(0, selectObj.name.Length - 4)
+            : selectObj.name.Substring(0, selectObj.name.Length - 5);
 
         var selectPosition = selectObj.transform.localPosition;
         for (var i = 1; i < 4; i++)

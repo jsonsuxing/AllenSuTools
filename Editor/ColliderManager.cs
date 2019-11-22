@@ -91,6 +91,8 @@ public class ColliderManager:EditorWindow
 
                 GUILayout.Label("二：自定义操作碰撞盒", TitleStyle());
                 GUILayout.Space(5);
+                GUILayout.Label(" Tips：该模式需先选中一个已有对象", SetGuiStyle(Color.black, 14));
+                GUILayout.Space(3);
                 GUILayout.Label(" A：旋转", SetGuiStyle(Color.red, 16));
                 GUILayout.Space(3);
 
@@ -194,7 +196,12 @@ public class ColliderManager:EditorWindow
 
                 #region 二：镜像克隆对象
 
+                // 第一组水平排版开始
+                EditorGUILayout.BeginHorizontal();
                 GUILayout.Label("二：镜像克隆对象", TitleStyle());
+                if (GUILayout.Button("碰撞盒 Center 转换")) ToolPro.Instance().CheckBoxCollider(Selection.activeGameObject);
+                EditorGUILayout.EndHorizontal();
+                // 第一组水平排版结束
                 GUILayout.Space(3);
 
                 // ------------ 一：开始垂直画盒子 ------------
@@ -237,7 +244,7 @@ public class ColliderManager:EditorWindow
                 if (GUILayout.Button("点击按钮，镜像克隆对象")) SelfTools.Instance().MirrorObj();
 
                 #endregion
-                GUILayout.Space(8);
+                GUILayout.Space(80);
 
                 #region 三：一键添加长方体类型的碰撞盒(如高一粒)
 
@@ -347,22 +354,9 @@ public class ColliderManager:EditorWindow
                 #endregion
                 GUILayout.Space(8);
 
-                #region 二：碰撞盒Center转换
+                #region 二：隐藏碰撞盒
 
-                GUILayout.Label("二：碰撞盒 Center 转换", TitleStyle());
-
-                // ------------ 一：开始垂直画盒子 ------------
-                GUILayout.BeginVertical("box");
-                if(GUILayout.Button("碰撞盒 Center 转换")) ToolPro.Instance().CheckBoxCollider(Selection.activeGameObject);
-                GUILayout.EndVertical();
-                // ------------ 一：结束垂直画盒子 ------------
-
-                #endregion
-                GUILayout.Space(8);
-
-                #region 三：隐藏碰撞盒
-
-                GUILayout.Label("三：隐藏,移除全部碰撞盒", TitleStyle());
+                GUILayout.Label("二：隐藏,移除全部碰撞盒", TitleStyle());
 
                 // ------------ 一：开始画盒子 ------------
                 GUILayout.BeginVertical("box");

@@ -5,9 +5,11 @@
 // 版 本：1.0
 // ========================================================
 
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using ChinarX.ExtensionMethods;
 using UnityEditor;
 using UnityEngine;
 
@@ -163,12 +165,17 @@ public class CommonFun
     /// <summary>
     /// 返回关键部位括号内的数字
     /// </summary>
-    /// <param name="selectObj"></param>
+    /// <param name="selectObjects"></param>
     /// <returns></returns>
-    public char GetBuWeiNameIndex(GameObject selectObj)
+    public char GetBuWeiMaxNameIndex(GameObject[] selectObjects)
     {
-        // 所选名称括号内的数字下标
-        var nameIndex = selectObj.name.Substring(selectObj.name.Length - 2)[0];
-        return nameIndex;
+        var nameIndexChar=new char[selectObjects.Length];
+        // 返回所选数组对象中最大的下标
+        for (var i = 0; i < selectObjects.Length; i++)
+        {
+            var nameIndex = selectObjects[i].name.Substring(selectObjects[i].name.Length - 2)[0];
+            nameIndexChar[i] = nameIndex;
+        }
+        return nameIndexChar.Max();
     }
 }

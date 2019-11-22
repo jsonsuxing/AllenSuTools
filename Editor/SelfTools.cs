@@ -301,15 +301,21 @@ public class SelfTools : CommonFun
         }
         else
         {
-            List<GameObject> cloneObjList = new List<GameObject>();
+            var cloneObjList = new List<GameObject>();
+            var maxIndex = int.Parse(GetBuWeiMaxNameIndex(gameObjects).ToString());
             foreach (var obj in gameObjects)
             {
-                var boxCollider = obj.GetComponent<BoxCollider>();
-                obj.transform.position = obj.transform.TransformPoint(boxCollider.center);
-                boxCollider.center = Vector3.zero;
+                if (obj.GetComponent<BoxCollider>())
+                {
+                    var boxCollider = obj.GetComponent<BoxCollider>();
+                    obj.transform.position = obj.transform.TransformPoint(boxCollider.center);
+                    boxCollider.center     = Vector3.zero;
+                }
+                
                 var newObject = Object.Instantiate(obj, obj.transform.parent);
                 Undo.RegisterCreatedObjectUndo(newObject,"MirrorObjects");
-                newObject.name = newObject.name.Replace("(Clone)", "(Mirror)");
+                // newObject.name = newObject.name.Replace("(Clone)", "(Mirror)");
+                newObject.name = GetBuWeiChineseName(obj) + " (" + (++maxIndex) + ")";
                 cloneObjList.Add(newObject);
             }
           
