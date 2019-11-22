@@ -25,6 +25,8 @@ public class CommonFun
 
     public string TxtDirPath = "D:/编辑器生成的txt文件汇总/";
 
+    public static GameObject Content = GameObject.Find("View/Canvas Assembling/Left Tool Panel/Granule Library/Viewport/Content");
+
     // 小颗粒类型汇总
     public string[] AllGranuleTypeGroup =
     {

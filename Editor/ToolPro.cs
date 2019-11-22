@@ -266,6 +266,7 @@ public class ToolPro : CommonFun
             || errorScaleNumWu != 0 || errorBuWeiBoxNum != 0 || errorNoWuName != 0 || errorBuWeiRotationNum != 0)
         {
             WindowTips("已检查出 "+ AllProblemCount +" 个问题，详见 《 D:/ 编辑器生成的txt文件汇总 》 文件夹");
+            System.Diagnostics.Process.Start(TxtDirPath); // 文件夹存在就直接打开
         }
         else if (errorPositionNumGranule == 0 && errorRotationNumGranule == 0 && errorPositionNumWu == 0 && errorRotationNumWu == 0
                  && errorScaleNumWu == 0 && errorBuWeiBoxNum == 0 && errorNoWuName == 0 && errorBuWeiRotationNum == 0)

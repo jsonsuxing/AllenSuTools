@@ -6,6 +6,7 @@
 // ========================================================
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using ChinarX;
@@ -49,6 +50,9 @@ public class SelfTools : CommonFun
     // 镜像克隆对象
     public string SetMirrorAxis = "y"; // 设置镜像克隆的对称轴
     public Vector3 MirrorPoint = Vector3.zero; // 指定对称中心
+
+    // 查询文件夹下的同名文件
+    public string FilePath = string.Empty; // 文件路径
 
     #endregion
 
@@ -344,6 +348,53 @@ public class SelfTools : CommonFun
 
             cloneObjList.Clear();
         }
+    }
+
+    #endregion
+
+    #region 查询文件夹下的同名文件
+
+    /// <summary>
+    /// 查询文件夹下的同名fbx文件
+    /// </summary>
+    public void SameNameFile()
+    {
+        if (Equals(FilePath, string.Empty))
+        {
+            WindowTips("文件路径不能为空");
+            return;
+        }
+
+        var ht = new Hashtable();
+        // 获取到所有 fbx 文件
+        var files = Directory.GetFiles(FilePath, "*.fbx", SearchOption.AllDirectories);
+        // 同名文件个数
+        var sameFileNum = 0;
+        for (var i = 0; i < files.Length; i++)
+        {
+            var fileName = Path.GetFileNameWithoutExtension(files[i]);
+            if (ht.ContainsValue(fileName))
+            {
+                WriteToTxt(TxtDirPath,"同名 fbx 文件","第 " + (++sameFileNum) +" 个："+fileName);
+            }
+            else
+            {
+                ht.Add(i,fileName);
+            }
+        }
+
+        if (sameFileNum == 0)
+        {
+            WindowTips("没有同名文件");
+        }
+        else
+        {
+            WindowTips("已查到 " + sameFileNum + " 个同名文件，详见 《 D:/ 编辑器生成的txt文件汇总 》 文件夹");
+            System.Diagnostics.Process.Start(TxtDirPath); // 文件夹存在就直接打开
+        }
+
+        FilePath = string.Empty;
+        sameFileNum = 0;
     }
 
     #endregion

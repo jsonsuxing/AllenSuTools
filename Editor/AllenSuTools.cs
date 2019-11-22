@@ -17,8 +17,15 @@ public class AllenSuTools : EditorWindow
 
     #region MenuItem
 
-    // 1--新建窗口
-    [UnityEditor.MenuItem("AllenSu/2、打开苏醒工程窗口", false, CommonFun.INDEXNUM)]
+    // 1--打开指定颗粒类
+    [UnityEditor.MenuItem("AllenSu/2、跳到层级面板方高类", false, CommonFun.INDEXNUM)]
+    static void JumpToGranuleType()
+    {
+        EditorGUIUtility.PingObject(CommonFun.Content.transform.Find("方高类"));
+    }
+
+    // 2--新建窗口
+    [UnityEditor.MenuItem("AllenSu/3、打开苏醒工程窗口", false, CommonFun.INDEXNUM)]
     static void ToolWindows()
     {
         var allenSuTools = GetWindow<AllenSuTools>(false, "苏醒工程窗口");
@@ -26,6 +33,7 @@ public class AllenSuTools : EditorWindow
         var colliderManager = GetWindow<ColliderManager>(false, "碰撞盒专用窗口");
         colliderManager.Show();
     }
+
     #endregion
 
     #region 字段声明
@@ -834,6 +842,26 @@ public class AllenSuTools : EditorWindow
 
                 GUILayout.EndVertical();
                 // ------------ 一：结束水平画盒子 ------------
+
+                #endregion
+                GUILayout.Space(8);
+
+                #region 三：查询文件夹下的同名fbx文件
+
+                GUILayout.Label("三：查询文件夹下的同名文件", TitleStyle());
+
+                // ------------ 一：开始垂直画盒子 ------------
+                GUILayout.BeginVertical("box");
+                GUILayout.Space(3);
+
+                GUILayout.Label("指定文件路径",SetGuiStyle(Color.black, 14));
+                GUILayout.Space(3);
+                SelfTools.Instance().FilePath = GUILayout.TextField(SelfTools.Instance().FilePath);
+                if(GUILayout.Button("查询重名文件")) SelfTools.Instance().SameNameFile();
+                GUILayout.Space(3);
+
+                GUILayout.EndVertical();
+                // ------------ 一：结束垂直画盒子 ------------
 
                 #endregion
                 GUILayout.Space(8);
