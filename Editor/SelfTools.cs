@@ -302,7 +302,7 @@ public class SelfTools : CommonFun
         else
         {
             var cloneObjList = new List<GameObject>();
-            var maxIndex = int.Parse(GetBuWeiMaxNameIndex(gameObjects).ToString());
+            var tempI = 0;
             foreach (var obj in gameObjects)
             {
                 if (obj.GetComponent<BoxCollider>())
@@ -314,8 +314,16 @@ public class SelfTools : CommonFun
                 
                 var newObject = Object.Instantiate(obj, obj.transform.parent);
                 Undo.RegisterCreatedObjectUndo(newObject,"MirrorObjects");
-                // newObject.name = newObject.name.Replace("(Clone)", "(Mirror)");
-                newObject.name = GetBuWeiChineseName(obj) + " (" + (++maxIndex) + ")";
+                if (obj.name.Contains("环形碰撞盒"))
+                {
+                    newObject.name = newObject.name.Replace("(Clone)", "(Mirror)");
+                }
+                else
+                {
+                    tempI++;
+                    var maxIndex =int.Parse(GetBuWeiMaxNameIndex(gameObjects).ToString())+tempI;
+                    newObject.name = GetBuWeiChineseName(obj) + " (" + maxIndex + ")";
+                }
                 cloneObjList.Add(newObject);
             }
           

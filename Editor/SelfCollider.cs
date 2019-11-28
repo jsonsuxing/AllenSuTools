@@ -196,7 +196,11 @@ public class SelfCollider : CommonFun
             var boxCollider = Undo.AddComponent<BoxCollider>(Selection.activeGameObject);
             // boxCollider.size      = size;
             boxCollider.size=new Vector3(size.x - DiffValue , size.y - DiffValue , size.z - DiffValue);
-            boxCollider.center    = center;
+            boxCollider.center = center;
+            // 生成完所需尺寸碰撞盒后，再转换其世界和局部的坐标
+            boxCollider.transform.position = boxCollider.transform.TransformPoint(boxCollider.center);
+            boxCollider.center=Vector3.zero;
+
             VertexList.Clear();
         }
     }
@@ -615,13 +619,13 @@ public class SelfCollider : CommonFun
         }
 
         // 所选名称括号内的数字下标(返回值无法自增，特用变量接收)
-        var nameIndex = GetBuWeiMaxNameIndex(selectObj);
+        // var nameIndex = GetBuWeiMaxNameIndex(selectObj);
         for (var i = 0; i < CustomBoxCollNum; i++)
         {
             var cloneObj = Object.Instantiate(selectObj[0]);
             Undo.RegisterCreatedObjectUndo(cloneObj, "RotateBoxCollider");
-            // cloneObj.name = "Bevel Box " + "(" + (i + 1) + ")";
-            cloneObj.name = GetBuWeiChineseName(selectObj[0]) + " (" + (++nameIndex) + ")";
+            cloneObj.name = "Bevel Box " + "(" + (i + 1) + ")";
+            // cloneObj.name = GetBuWeiChineseName(selectObj[0]) + " (" + (++nameIndex) + ")";
             // 克隆的角度
             var cloneAngle = i * (360f / CustomBoxCollNum);
 
