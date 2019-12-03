@@ -298,9 +298,9 @@ public class ToolPro : CommonFun
             WriteToTxt(TxtDirPath, "颗粒《旋转错误》汇总（仅记录）", "第 " + errorRotationNumGranule + " 个：" + selectObj.name);
         }
 
-        // 3：移除原来存在的 KeLiData 和 GranuleModel 脚本和刚体。
+        // 3：移除原来存在的 KeLiData 和 GranuleModel 脚本和刚体。GranuleModel 脚本已经删除
         if (selectObj.GetComponent<KeLiData>()) Object.DestroyImmediate(selectObj.GetComponent<KeLiData>());
-        if (selectObj.GetComponent<GranuleModel>()) Object.DestroyImmediate(selectObj.GetComponent<GranuleModel>());
+        // if (selectObj.GetComponent<GranuleModel>()) Object.DestroyImmediate(selectObj.GetComponent<GranuleModel>());
         if (selectObj.GetComponent<Rigidbody>()) Object.DestroyImmediate(selectObj.GetComponent<Rigidbody>());
     }
 

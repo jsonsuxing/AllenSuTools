@@ -332,6 +332,7 @@ public class SelfModel : CommonFun
     public void ReplaceMaterial2()
     {
         IsHaveReplace = !IsHaveReplace;
+
         var selectObj = Selection.activeGameObject;
         // 选择的是父物体还是物件
         var mrRenderer = selectObj.transform.childCount != 0 ?
