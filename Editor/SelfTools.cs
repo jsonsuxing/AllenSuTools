@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.IO;
 using ChinarX;
 using ChinarX.ExtensionMethods;
+using UI.ThreeDimensional;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
@@ -53,6 +54,24 @@ public class SelfTools : CommonFun
 
     // 查询文件夹下的同名文件
     public string FilePath = string.Empty; // 文件路径
+
+    // 零件库相关数据显示区
+    // 总数据区
+    public int AllGranuleTypeCount = 0; // 目前的总颗粒类数(包含中颗粒)
+    public int AllGranuleCount = 0; // 目前的总颗粒个数(包含中颗粒)
+    public int AllUndoneGranuleCount = 0; // 所有未完成的颗粒个数(含有"待定颗粒"标识的个数)
+    public int AllCompletedGranuleCount = 0; // 所有已完成的颗粒个数(不含有"待定颗粒"标识的个数)
+    // 初级零件库数据区
+    public int PrimaryTypeCount = 0; // 初级零件库颗粒大类个数
+    public int AllPrimaryGranuleCount = 0; // 初级零件库总颗粒个数
+    public int PrimaryUndoneGranuleCount = 0; // 初级零件库含有待定颗粒个数
+    public int PrimaryCompletedGranuleCount = 0; // 初级零件库已完成颗粒个数
+    // 中级零件库数据区
+    public int IntermediateTypeCount = 0; // 中级零件库颗粒大类个数
+    public int AllIntermediateGranuleCount = 0; // 中级零件库总颗粒个数
+    public int IntermediateUndoneGranuleCount = 0; // 中级零件库含有待定颗粒个数
+    public int IntermediateCompletedGranuleCount = 0; // 中级零件库已完成颗粒个数
+
 
     #endregion
 
@@ -409,6 +428,93 @@ public class SelfTools : CommonFun
 
         FilePath = string.Empty;
         sameFileNum = 0;
+    }
+
+    #endregion
+
+    #region 零件库相关数据显示区
+
+    /// <summary>
+    /// 零件库相关数据显示区
+    /// </summary>
+    public void ShowLibraryData()
+    {
+        // 如果 Content 对象存在
+        if (Content)
+        {
+            // 存储 Content 所有子物体的列表
+            var allChildObj = new List<GameObject>();
+            // 所有初级零件库大类（如：方高类）
+            var primaryTypeList =new List<GameObject>();
+            // 所有中级零件库大类（如：中颗粒泊类）
+            var intermediateTypeList = new List<GameObject>();
+            // 所有初级零件库颗粒（如：02.01.01.01.01.12&高一粒）
+            var primaryGranuleList = new List<GameObject>();
+            // 所有中级零件库颗粒（如：02.99.04.02.02.03&中颗粒泊2*4）
+            var intermediateGranuleList = new List<GameObject>();
+
+            // 初级、中级颗粒分割线下标
+            var splitLineIndex = 0;
+
+            for (var i = 0; i < Content.transform.childCount; i++)
+            {
+                allChildObj.Add(Content.transform.GetChild(i).gameObject);
+                if (Equals(allChildObj[i].name,"中颗粒泊类")) splitLineIndex = allChildObj[i].transform.GetSiblingIndex();
+            }
+
+            // 列表数据赋值区
+            foreach (var child in allChildObj)
+            {
+                if(child.GetComponent<PrimaryBlockType>()) primaryTypeList.Add(child);            // 为初级零件库大类赋值
+                if (child.GetComponent<IntermediateBlockType>()) intermediateTypeList.Add(child); // 为中级零件库大类赋值
+
+                if (child.GetComponent<UIObject3D>())
+                {
+                    // 为所有的待定颗粒个数、完成修改的颗粒个数赋值
+                    if (child.GetComponent<UIObject3D>().待定颗粒) AllUndoneGranuleCount++;
+                    else AllCompletedGranuleCount++;
+                }
+
+                if (child.transform.GetSiblingIndex() < splitLineIndex && child.GetComponent<UIObject3D>())
+                {
+                    primaryGranuleList.Add(child); // 为初级零件库颗粒赋值
+                }
+                if (child.transform.GetSiblingIndex() >= splitLineIndex && child.GetComponent<UIObject3D>())
+                {
+                    intermediateGranuleList.Add(child); // 为中级零件库颗粒赋值
+                }
+            }
+
+            // 初级数据处理区
+            foreach (var primaryChild in primaryGranuleList)
+            {
+                if (primaryChild.GetComponent<UIObject3D>().待定颗粒) PrimaryUndoneGranuleCount++;
+                else PrimaryCompletedGranuleCount++;
+            }
+            // 中级数据处理区
+            foreach (var intermediateChild in intermediateGranuleList)
+            {
+                if (intermediateChild.GetComponent<UIObject3D>().待定颗粒) IntermediateUndoneGranuleCount++;
+                else IntermediateCompletedGranuleCount++;
+            }
+
+            // 初级零件库数据传值
+             PrimaryTypeCount = primaryTypeList.Count; // 初级零件库颗粒大类个数
+             AllPrimaryGranuleCount = primaryGranuleList.Count; // 初级零件库颗粒总个数
+
+            // 中级零件库数据传值
+            IntermediateTypeCount = intermediateTypeList.Count; // 中级零件库颗粒大类个数
+            AllIntermediateGranuleCount = intermediateGranuleList.Count; // 中级零件库颗粒总个数
+
+            // 总数据传值
+            AllGranuleTypeCount = PrimaryTypeCount + IntermediateTypeCount;
+            AllGranuleCount = Content.transform.childCount - primaryTypeList.Count - intermediateTypeList.Count; // 目前的总颗粒个数(包含中颗粒)
+        }
+        else
+        {
+            WindowTips("Content 对象不存在 ！ ！ ！");
+        }
+
     }
 
     #endregion

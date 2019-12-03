@@ -941,6 +941,116 @@ public class AllenSuTools : EditorWindow
                 #endregion
                 GUILayout.Space(8);
 
+                #region 六：零件库相关数据显示区
+
+                GUILayout.Label("六：零件库相关数据显示区", TitleStyle());
+
+                // ------------ 一：开始垂直画盒子 ------------
+                GUILayout.BeginVertical("box");
+
+                #region ★、初级零件库
+
+                GUILayout.Label("★、初级零件库", SetGuiStyle(Color.red, 14));
+                GUILayout.Space(3);
+
+                // 第一组水平排版开始
+                EditorGUILayout.BeginHorizontal();
+                GUILayout.Label("1、总的类数：", SetGuiStyle(Color.black, 14));
+                SelfTools.Instance().PrimaryTypeCount = int.Parse(GUILayout.TextField(SelfTools.Instance().PrimaryTypeCount.ToString()));
+                GUILayout.Space(3);
+                GUILayout.Label("2、总的个数：", SetGuiStyle(Color.black, 14));
+                SelfTools.Instance().AllPrimaryGranuleCount = int.Parse(GUILayout.TextField(SelfTools.Instance().AllPrimaryGranuleCount.ToString()));
+                EditorGUILayout.EndHorizontal();
+                // 第一组水平排版结束
+                GUILayout.Space(3);
+
+                // 第二组水平排版开始
+                EditorGUILayout.BeginHorizontal();
+                GUILayout.Label("3、待定颗粒：", SetGuiStyle(Color.black, 14));
+                SelfTools.Instance().PrimaryUndoneGranuleCount = int.Parse(GUILayout.TextField(SelfTools.Instance().PrimaryUndoneGranuleCount.ToString()));
+                GUILayout.Space(3);
+                GUILayout.Label("4、完成颗粒：", SetGuiStyle(Color.black, 14));
+                SelfTools.Instance().PrimaryCompletedGranuleCount = int.Parse(GUILayout.TextField(SelfTools.Instance().PrimaryCompletedGranuleCount.ToString()));
+                EditorGUILayout.EndHorizontal();
+                // 第二组水平排版结束
+                GUILayout.Space(3);
+
+                #endregion
+
+                #region ★、中级零件库
+
+                GUILayout.Space(5);
+                GUILayout.Label("★、中级零件库", SetGuiStyle(Color.red, 14));
+                GUILayout.Space(3);
+
+                // 第一组水平排版开始
+                EditorGUILayout.BeginHorizontal();
+                GUILayout.Label("1、总的类数：", SetGuiStyle(Color.black, 14));
+                SelfTools.Instance().IntermediateTypeCount = int.Parse(GUILayout.TextField(SelfTools.Instance().IntermediateTypeCount.ToString()));
+                GUILayout.Space(3);
+                GUILayout.Label("2、总的个数：", SetGuiStyle(Color.black, 14));
+                SelfTools.Instance().AllIntermediateGranuleCount = int.Parse(GUILayout.TextField(SelfTools.Instance().AllIntermediateGranuleCount.ToString()));
+                EditorGUILayout.EndHorizontal();
+                // 第一组水平排版结束
+                GUILayout.Space(3);
+
+                // 第二组水平排版开始
+                EditorGUILayout.BeginHorizontal();
+                GUILayout.Label("3、待定颗粒：", SetGuiStyle(Color.black, 14));
+                SelfTools.Instance().IntermediateUndoneGranuleCount = int.Parse(GUILayout.TextField(SelfTools.Instance().IntermediateUndoneGranuleCount.ToString()));
+                GUILayout.Space(3);
+                GUILayout.Label("4、完成颗粒：", SetGuiStyle(Color.black, 14));
+                SelfTools.Instance().IntermediateCompletedGranuleCount = int.Parse(GUILayout.TextField(SelfTools.Instance().IntermediateCompletedGranuleCount.ToString()));
+                EditorGUILayout.EndHorizontal();
+                // 第二组水平排版结束
+                GUILayout.Space(3);
+
+                #endregion
+
+                #region ★、总数据区
+
+                GUILayout.Space(5);
+                GUILayout.Label("★、总数据区", SetGuiStyle(Color.red, 14));
+                GUILayout.Space(3);
+
+                // 第一组水平排版开始
+                EditorGUILayout.BeginHorizontal();
+                GUILayout.Label("1、总的类数：", SetGuiStyle(Color.black, 14));
+                SelfTools.Instance().AllGranuleTypeCount = int.Parse(GUILayout.TextField(SelfTools.Instance().AllGranuleTypeCount.ToString()));
+                GUILayout.Space(3);
+                GUILayout.Label("2、总的个数：", SetGuiStyle(Color.black, 14));
+                SelfTools.Instance().AllGranuleCount = int.Parse(GUILayout.TextField(SelfTools.Instance().AllGranuleCount.ToString()));
+                EditorGUILayout.EndHorizontal();
+                // 第一组水平排版结束
+                GUILayout.Space(3);
+
+                // 第二组水平排版开始
+                EditorGUILayout.BeginHorizontal();
+                GUILayout.Label("3、待定颗粒：", SetGuiStyle(Color.black, 14));
+                SelfTools.Instance().AllUndoneGranuleCount = int.Parse(GUILayout.TextField(SelfTools.Instance().AllUndoneGranuleCount.ToString()));
+                GUILayout.Space(3);
+                GUILayout.Label("4、完成颗粒：", SetGuiStyle(Color.black, 14));
+                SelfTools.Instance().AllCompletedGranuleCount = int.Parse(GUILayout.TextField(SelfTools.Instance().AllCompletedGranuleCount.ToString()));
+                EditorGUILayout.EndHorizontal();
+                // 第二组水平排版结束
+                GUILayout.Space(3);
+
+                // 第三组水平排版开始
+                EditorGUILayout.BeginHorizontal();
+               
+                EditorGUILayout.EndHorizontal();
+                // 第三组水平排版结束
+                GUILayout.Space(3);
+                #endregion
+
+                GUILayout.EndVertical();
+                // ------------ 一：结束垂直画盒子 ------------
+
+                if (GUILayout.Button("点击获取数据")) SelfTools.Instance().ShowLibraryData();
+
+                #endregion
+                GUILayout.Space(8);
+
                 #endregion
                 break;
             default:
