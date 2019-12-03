@@ -43,6 +43,9 @@ public class SelfModel : CommonFun
     public string ImportGranuleName = string.Empty; //单个导入的颗粒名称
     public bool   IsWrongDirectory;                 // 模型是否分配错了文件夹
 
+    // 临时更换材质_2
+    public bool IsHaveReplace = false; // 是否已经替换过，默认不替换
+
     // 其它
     public bool IsOpenGranuleToggle    = false; // 颗粒种类按钮是否打开
     public bool IsRememberGranuleType  = false; //是否记住颗粒大类路径
@@ -317,6 +320,26 @@ public class SelfModel : CommonFun
         CloneModelNum = 0;
 
         #endregion
+    }
+
+    #endregion
+
+    #region 四：临时更换材质_2
+
+    /// <summary>
+    /// 临时替换物件上的材质_2，解决正交视野太反光的情况
+    /// </summary>
+    public void ReplaceMaterial2()
+    {
+        IsHaveReplace = !IsHaveReplace;
+        var selectObj = Selection.activeGameObject;
+        // 选择的是父物体还是物件
+        var mrRenderer = selectObj.transform.childCount != 0 ?
+            selectObj.transform.GetChild(0).GetComponent<MeshRenderer>() : selectObj.GetComponent<MeshRenderer>();
+
+        if (mrRenderer) mrRenderer.material = IsHaveReplace ? Resources.Load<Material>("材质_2苏醒") : Resources.Load<Material>("Material/UseModelMat/材质_2");
+        else
+            WindowTips("不存在的材质");
     }
 
     #endregion

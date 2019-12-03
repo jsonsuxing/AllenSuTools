@@ -459,6 +459,26 @@ public class AllenSuTools : EditorWindow
                 #endregion
                 GUILayout.Space(8);
 
+                #region 功能二：临时更换物件上的材质_2
+
+                GUILayout.Label("二：临时更换材质_2", TitleStyle());
+
+                // ------------ 一：开始垂直画盒子 ------------
+                GUILayout.BeginVertical("box");
+
+                // 第一组垂直排版开始
+                EditorGUILayout.BeginVertical();
+                if(GUILayout.Button( SelfModel.Instance().IsHaveReplace ? "1、替换为《原材质_2》" : "2、替换为《临时材质》")) SelfModel.Instance().ReplaceMaterial2();
+                EditorGUILayout.EndVertical();
+                // 第一组垂直排版结束
+                GUILayout.Space(3);
+
+                GUILayout.EndVertical();
+                // ------------ 一：结束垂直画盒子 ------------
+
+                #endregion
+                GUILayout.Space(8);
+
                 #endregion
                 break;
             case 2:
