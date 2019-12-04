@@ -337,8 +337,11 @@ public class SelfModel : CommonFun
         // 选择的是父物体还是物件
         var mrRenderer = selectObj.transform.childCount != 0 ?
             selectObj.transform.GetChild(0).GetComponent<MeshRenderer>() : selectObj.GetComponent<MeshRenderer>();
+        // 增加这个判断是因为运行前先更换了材质，然后再导入新模型时 按钮显示的名称与材质名相反的问题
+        if (IsHaveReplace == false && mrRenderer.sharedMaterial.name == "材质_2") IsHaveReplace = true;
+        if (IsHaveReplace && mrRenderer.sharedMaterial.name == "材质_2苏醒") IsHaveReplace = false;
 
-        if (mrRenderer) mrRenderer.material = IsHaveReplace ? Resources.Load<Material>("材质_2苏醒") : Resources.Load<Material>("Material/UseModelMat/材质_2");
+        if (mrRenderer) mrRenderer.sharedMaterial = IsHaveReplace ? Resources.Load<Material>("材质_2苏醒") : Resources.Load<Material>("Material/UseModelMat/材质_2");
         else
             WindowTips("不存在的材质");
     }
