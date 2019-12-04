@@ -6,6 +6,7 @@
 // ========================================================
 
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -177,5 +178,16 @@ public class CommonFun
             nameIndexChar[i] = nameIndex;
         }
         return nameIndexChar.Max();
+    }
+
+    /// <summary>
+    /// 解决类似 90.00001 转 int 值的问题
+    /// </summary>
+    /// <returns></returns>
+    public int SpecialFloatToInt(float value)
+    {
+        var s = int.Parse(value.ToString(CultureInfo.InvariantCulture).Split('.')[0]);
+        // var returnValue = int.Parse(str.Substring(str.IndexOf('.')+1));
+        return s;
     }
 }

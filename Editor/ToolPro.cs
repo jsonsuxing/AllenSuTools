@@ -204,6 +204,10 @@ public class ToolPro : CommonFun
     /// </summary>
     public void CheckGranule()
     {
+        // var angles = Selection.activeGameObject.transform.rotation.eulerAngles;
+        // Debug.Log(angles.y);
+        // Debug.Log(SpecialFloatToInt(angles.y));
+
         // 检查项二：记录物件比例不为 1 的颗粒名称，并且删除关键部位上的 MeshRenderer 和 MeshFilter
         if (Selection.gameObjects.Length == 0)
         {
@@ -212,56 +216,56 @@ public class ToolPro : CommonFun
         }
         // 总进度显示
         var allCount = Selection.gameObjects.Length;
-
+        
         // 每次点击时重置标记数字
         errorPositionNumGranule = errorRotationNumGranule = 0;
         errorPositionNumWu = errorRotationNumWu = errorScaleNumWu = 0;
         errorBuWeiBoxNum = errorNoWuName = errorBuWeiRotationNum = 0;
         count = AllProblemCount = 0;
-
+        
         foreach (var selectObj in Selection.gameObjects)
         {
             //--------------------------------------- 检查区 ---------------------------------------
-
+        
             // 检查项一：处理 颗粒预设
             if (IsCheckBlockPrefab) CheckBlockPrefab(selectObj);
-
+        
             // 检查项二：处理 物件
             if (IsCheckWu) CheckWu(selectObj);
-
+        
             // 检查项三：处理 碰撞盒
             if (IsCheckBoxCollider) CheckBoxCollider(selectObj);
-
+        
             // 检查项四：处理 关键部位
             if(IsCheckBuWei) CheckBuWei(selectObj);
-
-
+        
+        
             // ------------------------------------ 一次性功能区 -------------------------------------
-
+        
             // 功能区一：将父物体上的碰撞盒移动到子物体，普通碰撞盒改成 Normal Box，倾斜碰撞盒改成 Bevel Box，
             if (IsRenameBoxCollider) ChangeColliderMode(selectObj);
-
+        
             // 功能区二：将含有小插销的颗粒，在同位置克隆一个 SonAoCao
             if(IsAddSoAoCao) AddSonAoCao(selectObj);
-
-
+        
+        
             count++;
             PrefabUtility.SaveAsPrefabAsset(selectObj, "Assets/Resources/Prefab/ModelPrefabs/" + selectObj.name+ ".prefab");
             if(IsHierarchy) Object.DestroyImmediate(selectObj);
-
+        
             //检测出来的问题个数
             AllProblemCount = errorPositionNumGranule + errorRotationNumGranule + errorPositionNumWu + errorRotationNumWu + errorScaleNumWu +
                               errorBuWeiBoxNum        + errorNoWuName           + errorBuWeiRotationNum;
-
+        
             // 显示修改进度
             var floatProgress = (float)count / allCount;
             EditorUtility.DisplayProgressBar("腾讯管家病毒检测", "已检查个数：" + count + " / " +" 未检查个数："+ Selection.gameObjects.Length
                 +" / " + "已检测出 "+ AllProblemCount + " 个病毒", floatProgress);
         }
-
+        
         // 清除进度条
         EditorUtility.ClearProgressBar();
-
+        
         if (errorPositionNumGranule != 0 || errorRotationNumGranule != 0 || errorPositionNumWu !=0 || errorRotationNumWu != 0
             || errorScaleNumWu != 0 || errorBuWeiBoxNum != 0 || errorNoWuName != 0 || errorBuWeiRotationNum != 0)
         {
@@ -288,14 +292,21 @@ public class ToolPro : CommonFun
         {
             selectObj.transform.position = Vector3.zero;
             errorPositionNumGranule++;
+
             WriteToTxt(TxtDirPath, "颗粒《位置错误》汇总（已自动修正）", "第 " + errorPositionNumGranule + " 个：" + selectObj.name);
         }
 
         // 2：如果旋转不为 0
         if (selectObj.transform.rotation != Quaternion.identity)
         {
-            errorRotationNumGranule++;
-            WriteToTxt(TxtDirPath, "颗粒《旋转错误》汇总（仅记录）", "第 " + errorRotationNumGranule + " 个：" + selectObj.name);
+            var angles = selectObj.transform.rotation.eulerAngles;
+            // Debug.Log(angles.y);
+            // Debug.Log(SpecialFloatToInt(angles.y));
+            if (SpecialFloatToInt(angles.x) % 90 != 0 || SpecialFloatToInt(angles.y) % 90 != 0 || SpecialFloatToInt(angles.z) % 90 != 0)
+            {
+                errorRotationNumGranule++;
+                WriteToTxt(TxtDirPath, "颗粒《旋转错误》汇总（仅记录）", "第 " + errorRotationNumGranule + " 个：" + selectObj.name);
+            }
         }
 
         // 3：移除原来存在的 KeLiData 和 GranuleModel 脚本和刚体。GranuleModel 脚本已经删除
@@ -316,7 +327,7 @@ public class ToolPro : CommonFun
         if (wuTrans)
         {
             // 1：位置不为 0
-            if (wuTrans.position != Vector3.zero)
+            if (wuTrans.localPosition != Vector3.zero)
             {
                 errorPositionNumWu++;
                 WriteToTxt(TxtDirPath, "物件《位置错误》汇总（已自动修正）", "第 " + errorPositionNumWu + " 个：" + selectObj.name);
@@ -336,7 +347,7 @@ public class ToolPro : CommonFun
             }
 
             // 2：旋转不为 0
-            if (wuTrans.rotation != Quaternion.identity)
+            if (wuTrans.localRotation != Quaternion.identity)
             {
                 errorRotationNumWu++;
                 // 物件旋转问题，属于建模问题，这里只做记录，不做改动。
