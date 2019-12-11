@@ -8,6 +8,8 @@ using System;
 using System.Windows.Forms;
 using UnityEditor;
 using UnityEngine;
+using MenuItem = System.Windows.Forms.MenuItem;
+
 
 /// <summary>
 /// 编辑器GUI控制类
@@ -33,6 +35,28 @@ public class AllenSuTools : EditorWindow
         var colliderManager = GetWindow<ColliderManager>(false, "碰撞盒专用窗口");
         colliderManager.Show();
     }
+
+
+    // [UnityEditor.MenuItem("AllenSu/4、根据复制名称跳转到场景颗粒 #B", false, CommonFun.INDEXNUM)]
+    // static void CopyNameJumpToScene()
+    // {
+    //     Debug.Log("调用了吗");
+    //     Debug.Log(Clipboard.GetText());
+    //     // if (Equals(Clipboard.GetText(),string.Empty))
+    //     // {
+    //     //     WindowTips("没有复制任何内容");
+    //     //     return;
+    //     // }
+    //     // else if (!Clipboard.GetText().Contains("&"))
+    //     // {
+    //     //     WindowTips("复制的不是颗粒名称");
+    //     //     return;
+    //     // }
+    //     // else
+    //     // {
+    //     //     EditorGUIUtility.PingObject(CommonFun.Content.transform.Find(Clipboard.GetText()));
+    //     // }
+    // }
 
     #endregion
 
@@ -276,6 +300,18 @@ public class AllenSuTools : EditorWindow
 
                 #endregion
                 GUILayout.Space(8);
+
+                #region 五：测试按钮
+
+                GUILayout.Label("五：测试按钮", TitleStyle());
+
+                // ------------ 一：开始垂直画盒子 ------------
+                GUILayout.BeginVertical("box");
+                if (GUILayout.Button("测试按钮")) SelfBuWei.Instance().JustTestBtn();
+                GUILayout.EndVertical();
+                // ------------ 一：结束垂直画盒子 ------------
+
+                #endregion
 
                 #endregion
                 break;

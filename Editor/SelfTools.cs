@@ -9,6 +9,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using ChinarX;
 using ChinarX.ExtensionMethods;
 using UI.ThreeDimensional;
@@ -71,6 +72,7 @@ public class SelfTools : CommonFun
     public int AllIntermediateGranuleCount = 0; // 中级零件库总颗粒个数
     public int IntermediateUndoneGranuleCount = 0; // 中级零件库含有待定颗粒个数
     public int IntermediateCompletedGranuleCount = 0; // 中级零件库已完成颗粒个数
+
 
 
     #endregion
@@ -178,6 +180,9 @@ public class SelfTools : CommonFun
     /// </summary>
     public void ChangeFileName()
     {
+        // ReadLddID();
+        // return;
+
         if (ChangeFileNamePath == string.Empty)
         {
             WindowTips("请输入要修改的文件路径");
@@ -442,31 +447,20 @@ public class SelfTools : CommonFun
         // 如果 Content 对象存在
         if (Content)
         {
-            // 存储 Content 所有子物体的列表
-            var allChildObj = new List<GameObject>();
-            // 所有初级零件库大类（如：方高类）
-            var primaryTypeList =new List<GameObject>();
-            // 所有中级零件库大类（如：中颗粒泊类）
-            var intermediateTypeList = new List<GameObject>();
-            // 所有初级零件库颗粒（如：02.01.01.01.01.12&高一粒）
-            var primaryGranuleList = new List<GameObject>();
-            // 所有中级零件库颗粒（如：02.99.04.02.02.03&中颗粒泊2*4）
-            var intermediateGranuleList = new List<GameObject>();
-
             // 初级、中级颗粒分割线下标
             var splitLineIndex = 0;
 
             for (var i = 0; i < Content.transform.childCount; i++)
             {
-                allChildObj.Add(Content.transform.GetChild(i).gameObject);
-                if (Equals(allChildObj[i].name,"中颗粒泊类")) splitLineIndex = allChildObj[i].transform.GetSiblingIndex();
+                AllChildObj.Add(Content.transform.GetChild(i).gameObject);
+                if (Equals(AllChildObj[i].name,"中颗粒泊类")) splitLineIndex = AllChildObj[i].transform.GetSiblingIndex();
             }
 
             // 列表数据赋值区
-            foreach (var child in allChildObj)
+            foreach (var child in AllChildObj)
             {
-                if(child.GetComponent<PrimaryBlockType>()) primaryTypeList.Add(child);            // 为初级零件库大类赋值
-                if (child.GetComponent<IntermediateBlockType>()) intermediateTypeList.Add(child); // 为中级零件库大类赋值
+                if(child.GetComponent<PrimaryBlockType>()) PrimaryTypeList.Add(child);            // 为初级零件库大类赋值
+                if (child.GetComponent<IntermediateBlockType>()) IntermediateTypeList.Add(child); // 为中级零件库大类赋值
 
                 if (child.GetComponent<UIObject3D>())
                 {
@@ -477,38 +471,38 @@ public class SelfTools : CommonFun
 
                 if (child.transform.GetSiblingIndex() < splitLineIndex && child.GetComponent<UIObject3D>())
                 {
-                    primaryGranuleList.Add(child); // 为初级零件库颗粒赋值
+                    PrimaryGranuleList.Add(child); // 为初级零件库颗粒赋值
                 }
                 if (child.transform.GetSiblingIndex() >= splitLineIndex && child.GetComponent<UIObject3D>())
                 {
-                    intermediateGranuleList.Add(child); // 为中级零件库颗粒赋值
+                    IntermediateGranuleList.Add(child); // 为中级零件库颗粒赋值
                 }
             }
 
             // 初级数据处理区
-            foreach (var primaryChild in primaryGranuleList)
+            foreach (var primaryChild in PrimaryGranuleList)
             {
                 if (primaryChild.GetComponent<UIObject3D>().待定颗粒) PrimaryUndoneGranuleCount++;
                 else PrimaryCompletedGranuleCount++;
             }
             // 中级数据处理区
-            foreach (var intermediateChild in intermediateGranuleList)
+            foreach (var intermediateChild in IntermediateGranuleList)
             {
                 if (intermediateChild.GetComponent<UIObject3D>().待定颗粒) IntermediateUndoneGranuleCount++;
                 else IntermediateCompletedGranuleCount++;
             }
 
             // 初级零件库数据传值
-             PrimaryTypeCount = primaryTypeList.Count; // 初级零件库颗粒大类个数
-             AllPrimaryGranuleCount = primaryGranuleList.Count; // 初级零件库颗粒总个数
+             PrimaryTypeCount = PrimaryTypeList.Count; // 初级零件库颗粒大类个数
+             AllPrimaryGranuleCount = PrimaryGranuleList.Count; // 初级零件库颗粒总个数
 
             // 中级零件库数据传值
-            IntermediateTypeCount = intermediateTypeList.Count; // 中级零件库颗粒大类个数
-            AllIntermediateGranuleCount = intermediateGranuleList.Count; // 中级零件库颗粒总个数
+            IntermediateTypeCount = IntermediateTypeList.Count; // 中级零件库颗粒大类个数
+            AllIntermediateGranuleCount = IntermediateGranuleList.Count; // 中级零件库颗粒总个数
 
             // 总数据传值
             AllGranuleTypeCount = PrimaryTypeCount + IntermediateTypeCount;
-            AllGranuleCount = Content.transform.childCount - primaryTypeList.Count - intermediateTypeList.Count; // 目前的总颗粒个数(包含中颗粒)
+            AllGranuleCount = Content.transform.childCount - PrimaryTypeList.Count - IntermediateTypeList.Count; // 目前的总颗粒个数(包含中颗粒)
         }
         else
         {
@@ -518,6 +512,143 @@ public class SelfTools : CommonFun
     }
 
     #endregion
+
+    /// <summary>
+    /// 检查资源文件夹下颗粒预设物和fbx模型名称中含有 X 的名称，并更改名称
+    /// </summary>
+    public void CheckPrefabAndFbxName()
+    {
+        var datas = Selection.GetFiltered(typeof(UnityEngine.Object), SelectionMode.DeepAssets).Where(_ => Path.GetExtension(AssetDatabase.GetAssetPath(_)) != "");
+
+         var dict= datas.DistinctBy(a =>Path.GetFileNameWithoutExtension(AssetDatabase.GetAssetPath(a))).ToDictionary(_ => Path.GetFileNameWithoutExtension(AssetDatabase.GetAssetPath(_)),AssetDatabase.GetAssetPath);
+
+         foreach (var o in dict)
+         {
+
+             var newName = o.Key.Replace("毋", "x");
+             // Debug.Log(o.Value.Replace(o.Key, newName));
+            AssetDatabase.RenameAsset(o.Value, newName);
+        }
+
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+        return;
+        Selection.GetFiltered(typeof(UnityEngine.Object), SelectionMode.DeepAssets).Where(_ => Path.GetExtension(AssetDatabase.GetAssetPath(_)) != "").ForEach(_ => AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath(_), AssetDatabase.GetAssetPath(_).Split('/').Last().Replace("X", "x")));
+        Selection.GetFiltered(typeof(UnityEngine.Object), SelectionMode.DeepAssets).Where(_ => Path.GetExtension(AssetDatabase.GetAssetPath(_)) != "").ForEach(_ =>
+        {
+
+
+            //
+            // var weName = Path.GetFileNameWithoutExtension(AssetDatabase.GetAssetPath(_));
+            // var allPath = AssetDatabase.GetAssetPath(_);
+            // var directoryName= Path.GetDirectoryName("D\\"+s);
+            //
+            // Debug.Log(s);
+            // Debug.Log(allPath);
+            // Debug.Log(directoryName);
+            // if (s != null)
+            // {
+            //     s = s.Replace("X", "毋");
+            // }
+
+            // AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath(_), AssetDatabase.GetAssetPath(_));
+
+        });
+        // AssetDatabase.SaveAssets();
+        // AssetDatabase.Refresh();
+
+        // bool isPrefabX = false;
+        // // 批量修改预设物的X
+        // var prefabFiles = Directory.GetFiles(PrefabPath, "*.prefab", SearchOption.AllDirectories);
+        // foreach (var file in prefabFiles)
+        // {
+        //     var fileName = Path.GetFileNameWithoutExtension(file);
+        //     if (fileName.Contains("X"))
+        //     {
+        //         isPrefabX = true;
+        //         WriteToTxt(TxtDirPath,"Prefab中含有X的颗粒名称",fileName);
+        //         //替换文件名
+        //         // var newName = fileName.Replace("X", "x");
+        //         // File.Move(file, Path.GetDirectoryName(file) + "\\" + newName + Path.GetExtension(file));
+        //     }
+        // }
+        // if (!isPrefabX)
+        // {
+        //     Debug.Log("预设物中已没有含X的颗粒名称");
+        // }
+        //
+        // bool isFbxX = false;
+        // // 批量修改fbx的X
+        // var fbxFiles = Directory.GetFiles(FbxPath, "*.fbx", SearchOption.AllDirectories);
+        // foreach (var file in fbxFiles)
+        // {
+        //     var fileName = Path.GetFileNameWithoutExtension(file);
+        //     if (fileName.Contains("X"))
+        //     {
+        //         isFbxX = true;
+        //         WriteToTxt(TxtDirPath, "Fbx中含有X的颗粒名称", fileName);
+        //         // //替换文件名
+        //         // var newName = fileName.Replace("X", "x");
+        //         // File.Move(file, Path.GetDirectoryName(file) + "\\" + newName + Path.GetExtension(file));
+        //     }
+        // }
+        // if (!isFbxX)
+        // {
+        //     Debug.Log("fbx中已没有含X的颗粒名称");
+        // }
+        //
+        // bool isEdgeX = false;
+        // // 批量修改预设物的X
+        // var edgeFiles = Directory.GetFiles(EdgePath, "*.dat", SearchOption.AllDirectories);
+        // foreach (var file in edgeFiles)
+        // {
+        //     var fileName = Path.GetFileNameWithoutExtension(file);
+        //     if (fileName.Contains("X"))
+        //     {
+        //         isEdgeX = true;
+        //         WriteToTxt(TxtDirPath, "边框中含有X的颗粒名称", fileName);
+        //         //替换文件名
+        //         // var newName = fileName.Replace("X", "x");
+        //         //
+        //         //
+        //         // AssetDatabase.RenameAsset(EdgePath+"/"+fileName, newName);
+        //         // Debug.Log(Path.GetDirectoryName(file));
+        //         // File.Move(file, Path.GetDirectoryName(file) + "\\" + newName + Path.GetExtension(file));
+        //     }
+        // }
+        // if (!isEdgeX)
+        // {
+        //     Debug.Log("边框中已没有含X的颗粒名称");
+        // }
+        //
+        // isPrefabX = false;
+        // isFbxX = false;
+        // isEdgeX = false;
+    }
+
+
+    public void CheckSameName()
+    {
+        int index = 0;
+        Dictionary<int,string> dictionary=new Dictionary<int, string>();
+        var prefabFiles = Directory.GetFiles(FbxPath, "*.fbx", SearchOption.AllDirectories);
+        foreach (var file in prefabFiles)
+        {
+            var fileName = Path.GetFileNameWithoutExtension(file);
+
+            if (!dictionary.ContainsValue(fileName))
+            {
+                dictionary.Add(index++, fileName);
+            }
+            else
+            {
+                WriteToTxt(TxtDirPath,"同名fbx文件",fileName);
+            }
+        }
+
+        index = 0;
+    }
+
 
     public static SelfTools Instance()
     {

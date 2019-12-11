@@ -34,6 +34,7 @@ public class ToolPro : CommonFun
     // 二：批量修改颗粒预设
     public int errorPositionNumGranule = 0; // 颗粒位置错误个数
     public int errorRotationNumGranule = 0; // 颗粒旋转位置错误个数
+    public int errorScaleNumGranule = 0; // 颗粒比例错误个数
     public int errorPositionNumWu = 0; // 物件位置错误个数
     public int errorRotationNumWu = 0; // 物件旋转位置错误个数
     public int errorScaleNumWu    = 0; // 物件比例错误个数
@@ -218,7 +219,7 @@ public class ToolPro : CommonFun
         var allCount = Selection.gameObjects.Length;
         
         // 每次点击时重置标记数字
-        errorPositionNumGranule = errorRotationNumGranule = 0;
+        errorPositionNumGranule = errorRotationNumGranule = errorScaleNumGranule = 0;
         errorPositionNumWu = errorRotationNumWu = errorScaleNumWu = 0;
         errorBuWeiBoxNum = errorNoWuName = errorBuWeiRotationNum = 0;
         count = AllProblemCount = 0;
@@ -254,8 +255,8 @@ public class ToolPro : CommonFun
             if(IsHierarchy) Object.DestroyImmediate(selectObj);
         
             //检测出来的问题个数
-            AllProblemCount = errorPositionNumGranule + errorRotationNumGranule + errorPositionNumWu + errorRotationNumWu + errorScaleNumWu +
-                              errorBuWeiBoxNum        + errorNoWuName           + errorBuWeiRotationNum;
+            AllProblemCount = errorPositionNumGranule + errorRotationNumGranule + errorScaleNumGranule + errorPositionNumWu + errorRotationNumWu 
+                              + errorScaleNumWu + errorBuWeiBoxNum + errorNoWuName + errorBuWeiRotationNum;
         
             // 显示修改进度
             var floatProgress = (float)count / allCount;
@@ -266,13 +267,13 @@ public class ToolPro : CommonFun
         // 清除进度条
         EditorUtility.ClearProgressBar();
         
-        if (errorPositionNumGranule != 0 || errorRotationNumGranule != 0 || errorPositionNumWu !=0 || errorRotationNumWu != 0
+        if (errorPositionNumGranule != 0 || errorRotationNumGranule != 0 || errorScaleNumGranule != 0 || errorPositionNumWu !=0 || errorRotationNumWu != 0
             || errorScaleNumWu != 0 || errorBuWeiBoxNum != 0 || errorNoWuName != 0 || errorBuWeiRotationNum != 0)
         {
             WindowTips("已检查出 "+ AllProblemCount +" 个问题，详见 《 D:/ 编辑器生成的txt文件汇总 》 文件夹");
             System.Diagnostics.Process.Start(TxtDirPath); // 文件夹存在就直接打开
         }
-        else if (errorPositionNumGranule == 0 && errorRotationNumGranule == 0 && errorPositionNumWu == 0 && errorRotationNumWu == 0
+        else if (errorPositionNumGranule == 0 && errorRotationNumGranule == 0 && errorScaleNumGranule == 0 && errorPositionNumWu == 0 && errorRotationNumWu == 0
                  && errorScaleNumWu == 0 && errorBuWeiBoxNum == 0 && errorNoWuName == 0 && errorBuWeiRotationNum == 0)
         {
             WindowTips("恭喜你，已经没有问题了！！！");
@@ -296,17 +297,22 @@ public class ToolPro : CommonFun
             WriteToTxt(TxtDirPath, "颗粒《位置错误》汇总（已自动修正）", "第 " + errorPositionNumGranule + " 个：" + selectObj.name);
         }
 
-        // 2：如果旋转不为 0
+        // 2：如果旋转不为 0（现在允许父物体出现带角度，但必须是 90 的倍数，所以需要特别处理）
         if (selectObj.transform.rotation != Quaternion.identity)
         {
             var angles = selectObj.transform.rotation.eulerAngles;
-            // Debug.Log(angles.y);
-            // Debug.Log(SpecialFloatToInt(angles.y));
             if (SpecialFloatToInt(angles.x) % 90 != 0 || SpecialFloatToInt(angles.y) % 90 != 0 || SpecialFloatToInt(angles.z) % 90 != 0)
             {
                 errorRotationNumGranule++;
                 WriteToTxt(TxtDirPath, "颗粒《旋转错误》汇总（仅记录）", "第 " + errorRotationNumGranule + " 个：" + selectObj.name);
             }
+        }
+
+        // 3：如果比例不为 1
+        if (selectObj.transform.localScale != Vector3.one)
+        {
+            errorScaleNumGranule++;
+            WriteToTxt(TxtDirPath, "颗粒《比例错误》汇总（仅记录）", "第 " + errorScaleNumGranule + " 个：" + selectObj.name);
         }
 
         // 3：移除原来存在的 KeLiData 和 GranuleModel 脚本和刚体。GranuleModel 脚本已经删除

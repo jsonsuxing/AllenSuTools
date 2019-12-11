@@ -6,6 +6,8 @@
 // ========================================================
 
 using System.Linq;
+using System.Windows.Forms;
+using ChinarX;
 using ChinarX.ExtensionMethods;
 using UnityEditor;
 using UnityEngine;
@@ -92,163 +94,163 @@ public class SelfBuWei : CommonFun
 
     #region Grid 栅格类型
 
-    [MenuItem("AllenSu/0、更改关键部位名字/----------栅格类型----------", false, INDEXNUM)]
+    [UnityEditor.MenuItem("AllenSu/0、更改关键部位名字/----------栅格类型----------", false, INDEXNUM)]
     public static void FlagTypeGrid() { }
 
     //0--凹槽
-    [MenuItem("AllenSu/0、更改关键部位名字/AoCao", false, INDEXNUM + 1)]
+    [UnityEditor.MenuItem("AllenSu/0、更改关键部位名字/AoCao", false, INDEXNUM + 1)]
     public static void Fun_AoCao() { ChangeKeyName(AoCao, GuanJianType.Grid, 0, 0); }
 
     //1--凸起
-    [MenuItem("AllenSu/0、更改关键部位名字/TuQi", false, INDEXNUM + 2)]
+    [UnityEditor.MenuItem("AllenSu/0、更改关键部位名字/TuQi", false, INDEXNUM + 2)]
     public static void Fun_TuQi() { ChangeKeyName(TuQi, GuanJianType.Grid, 1, 0); }
 
     //2--不能和 AoCao 重名
-    [MenuItem("AllenSu/0、更改关键部位名字/SonAoCao", false, INDEXNUM + 3)]
+    [UnityEditor.MenuItem("AllenSu/0、更改关键部位名字/SonAoCao", false, INDEXNUM + 3)]
     public static void Fun_SonTuQi() { ChangeKeyName(SonAoCao, GuanJianType.Grid, 0, 0); }
 
     #endregion
 
     #region Axle 轴洞类型
 
-    [MenuItem("AllenSu/0、更改关键部位名字/----------轴洞类型----------", false, INDEXNUM + 4)]
+    [UnityEditor.MenuItem("AllenSu/0、更改关键部位名字/----------轴洞类型----------", false, INDEXNUM + 4)]
     public static void FlagTypeAxle() { }
 
     //0--不穿透槽
-    [MenuItem("AllenSu/0、更改关键部位名字/BuChuanTouCao", false, INDEXNUM + 5)]
+    [UnityEditor.MenuItem("AllenSu/0、更改关键部位名字/BuChuanTouCao", false, INDEXNUM + 5)]
     public static void Fun_BuChuanTouCao() { ChangeKeyName(BuChuanTouCao, GuanJianType.Axle, 0, 0.17f); }
 
     //1--不穿透插
-    [MenuItem("AllenSu/0、更改关键部位名字/BuChuanTouCha", false, INDEXNUM + 6)]
+    [UnityEditor.MenuItem("AllenSu/0、更改关键部位名字/BuChuanTouCha", false, INDEXNUM + 6)]
     public static void Fun_BuChuanTouCha() { ChangeKeyName(BuChuanTouCha, GuanJianType.Axle, 1, 0.17f); }
   
     //2--小插槽
-    [MenuItem("AllenSu/0、更改关键部位名字/XiaoChaCao", false, INDEXNUM + 7)]
+    [UnityEditor.MenuItem("AllenSu/0、更改关键部位名字/XiaoChaCao", false, INDEXNUM + 7)]
     public static void Fun_XiaoChaCao() { ChangeKeyName(XiaoChaCao, GuanJianType.Axle, 2, 0.17f); }
 
     //3--小插销
-    [MenuItem("AllenSu/0、更改关键部位名字/XiaoChaXiao", false, INDEXNUM + 8)]
+    [UnityEditor.MenuItem("AllenSu/0、更改关键部位名字/XiaoChaXiao", false, INDEXNUM + 8)]
     public static void Fun_XiaoChaXiao() { ChangeKeyName(XiaoChaXiao, GuanJianType.Axle, 3, 0.8f); }
 
     //4--插槽
-    [MenuItem("AllenSu/0、更改关键部位名字/ChaCao", false, INDEXNUM + 9)]
+    [UnityEditor.MenuItem("AllenSu/0、更改关键部位名字/ChaCao", false, INDEXNUM + 9)]
     public static void Fun_ChaCao() { ChangeKeyName(ChaCao, GuanJianType.Axle, 4, 0.8f); }
 
     //5--插销
-    [MenuItem("AllenSu/0、更改关键部位名字/ChaXiao", false, INDEXNUM + 10)]
+    [UnityEditor.MenuItem("AllenSu/0、更改关键部位名字/ChaXiao", false, INDEXNUM + 10)]
     public static void Fun_ChaXiao() { ChangeKeyName(ChaXiao, GuanJianType.Axle, 5, 0.8f); }
 
     //6--插槽十字
-    [MenuItem("AllenSu/0、更改关键部位名字/ChaCaoShiZi", false, INDEXNUM + 11)]
+    [UnityEditor.MenuItem("AllenSu/0、更改关键部位名字/ChaCaoShiZi", false, INDEXNUM + 11)]
     public static void Fun_ChaCaoShiZi() { ChangeKeyName(ChaCaoShiZi, GuanJianType.Axle, 6, 0.8f); }
 
     //7-插销十字
-    [MenuItem("AllenSu/0、更改关键部位名字/ChaXiaoShiZi", false, INDEXNUM + 12)]
+    [UnityEditor.MenuItem("AllenSu/0、更改关键部位名字/ChaXiaoShiZi", false, INDEXNUM + 12)]
     public static void Fun_ChaXiaoShiZi() { ChangeKeyName(ChaXiaoShiZi, GuanJianType.Axle, 7, 0.8f); }
   
     //特殊-皮轮外
-    [MenuItem("AllenSu/0、更改关键部位名字/PiLunWai", false, INDEXNUM + 15)]
+    [UnityEditor.MenuItem("AllenSu/0、更改关键部位名字/PiLunWai", false, INDEXNUM + 15)]
     public static void Fun_PiLunWai() { ChangeKeyName(PiLunWai, GuanJianType.Axle, -2, 0); }
 
     //特殊-皮轮内
-    [MenuItem("AllenSu/0、更改关键部位名字/PiLunNei", false, INDEXNUM + 16)]
+    [UnityEditor.MenuItem("AllenSu/0、更改关键部位名字/PiLunNei", false, INDEXNUM + 16)]
     public static void Fun_PiLunNei() { ChangeKeyName(PiLunNei, GuanJianType.Axle, -3, 0); }
 
     #endregion
 
     #region Hinge 合页类型
 
-    [MenuItem("AllenSu/0、更改关键部位名字/----------合页类型----------", false, INDEXNUM + 17)]
+    [UnityEditor.MenuItem("AllenSu/0、更改关键部位名字/----------合页类型----------", false, INDEXNUM + 17)]
     public static void FlagTypeHinge() { }
 
     //0--插槽门窗
-    [MenuItem("AllenSu/0、更改关键部位名字/ChaCaoMenChuang", false, INDEXNUM + 18)]
+    [UnityEditor.MenuItem("AllenSu/0、更改关键部位名字/ChaCaoMenChuang", false, INDEXNUM + 18)]
     public static void Fun_ChaCaoMenChuang() { ChangeKeyName(ChaCaoMenChuang, GuanJianType.Hinge, 0, 0); }
   
     //1--插销门窗
-    [MenuItem("AllenSu/0、更改关键部位名字/ChaXiaoMenChuang", false, INDEXNUM + 19)]
+    [UnityEditor.MenuItem("AllenSu/0、更改关键部位名字/ChaXiaoMenChuang", false, INDEXNUM + 19)]
     public static void Fun_ChaXiaoMenChuang() { ChangeKeyName(ChaXiaoMenChuang, GuanJianType.Hinge, 1, 0); }
   
     //2--转牙插槽
-    [MenuItem("AllenSu/0、更改关键部位名字/ZhuanYaChaCao", false, INDEXNUM + 20)]
+    [UnityEditor.MenuItem("AllenSu/0、更改关键部位名字/ZhuanYaChaCao", false, INDEXNUM + 20)]
     public static void Fun_ZhuanYaChaCao() { ChangeKeyName(ZhuanYaChaCao, GuanJianType.Hinge, 2, 0); }
 
     //3--转牙插销
-    [MenuItem("AllenSu/0、更改关键部位名字/ZhuanYaChaxiao", false, INDEXNUM + 21)]
+    [UnityEditor.MenuItem("AllenSu/0、更改关键部位名字/ZhuanYaChaxiao", false, INDEXNUM + 21)]
     public static void Fun_ZhuanYaChaxiao() { ChangeKeyName(ZhuanYaChaxiao, GuanJianType.Hinge, 3, 0); }
 
     #endregion
 
     #region Sphere 球类型
 
-    [MenuItem("AllenSu/0、更改关键部位名字/----------球类型----------", false, INDEXNUM + 22)]
+    [UnityEditor.MenuItem("AllenSu/0、更改关键部位名字/----------球类型----------", false, INDEXNUM + 22)]
     public static void FlagTypeSphere() { }
 
     //0--圆球洞
-    [MenuItem("AllenSu/0、更改关键部位名字/YuanQiuDong", false, INDEXNUM + 23)]
+    [UnityEditor.MenuItem("AllenSu/0、更改关键部位名字/YuanQiuDong", false, INDEXNUM + 23)]
     public static void Fun_YuanQiuDong() { ChangeKeyName(YuanQiuDong, GuanJianType.Sphere, 0, 0); }
 
     //1--圆球珠
-    [MenuItem("AllenSu/0、更改关键部位名字/YuanQiuZhu", false, INDEXNUM + 24)]
+    [UnityEditor.MenuItem("AllenSu/0、更改关键部位名字/YuanQiuZhu", false, INDEXNUM + 24)]
     public static void Fun_YuanQiuZhu() { ChangeKeyName(YuanQiuZhu, GuanJianType.Sphere, 1, 0); }
 
     #endregion
 
     #region Fixure 固定类型
 
-    [MenuItem("AllenSu/0、更改关键部位名字/----------固定类型----------", false, INDEXNUM + 25)]
+    [UnityEditor.MenuItem("AllenSu/0、更改关键部位名字/----------固定类型----------", false, INDEXNUM + 25)]
     public static void FlagTypeFixure() { }
 
     //0--工具箱盖
-    [MenuItem("AllenSu/0、更改关键部位名字/GongJuxiangGai", false, INDEXNUM + 26)]
+    [UnityEditor.MenuItem("AllenSu/0、更改关键部位名字/GongJuxiangGai", false, INDEXNUM + 26)]
     public static void Fun_GongJuxiangGai() { ChangeKeyName(GongJuxiangGai, GuanJianType.Fixure, 0, 0); }
     
     //1--工具箱底
-    [MenuItem("AllenSu/0、更改关键部位名字/GongJuxiangDi", false, INDEXNUM + 27)]
+    [UnityEditor.MenuItem("AllenSu/0、更改关键部位名字/GongJuxiangDi", false, INDEXNUM + 27)]
     public static void Fun_GongJuxiangDi() { ChangeKeyName(GongJuxiangDi, GuanJianType.Fixure, 1, 0); }
 
     #endregion
 
     #region Slide 滑动类型
 
-    [MenuItem("AllenSu/0、更改关键部位名字/----------滑动类型----------", false, INDEXNUM + 28)]
+    [UnityEditor.MenuItem("AllenSu/0、更改关键部位名字/----------滑动类型----------", false, INDEXNUM + 28)]
     public static void FlagTypeSlide() { }
 
     //0--滑动槽
-    [MenuItem("AllenSu/0、更改关键部位名字/HuaDongCao", false, INDEXNUM + 29)]
+    [UnityEditor.MenuItem("AllenSu/0、更改关键部位名字/HuaDongCao", false, INDEXNUM + 29)]
     public static void Fun_HuaDongCao() { ChangeKeyName(HuaDongCao, GuanJianType.Slide, 0, 0); }
    
     //1--滑动销
-    [MenuItem("AllenSu/0、更改关键部位名字/HuaDongXiao", false, INDEXNUM + 30)]
+    [UnityEditor.MenuItem("AllenSu/0、更改关键部位名字/HuaDongXiao", false, INDEXNUM + 30)]
     public static void Fun_HuaDongXiao() { ChangeKeyName(HuaDongXiao, GuanJianType.Slide, 1, 0); }
 
     #endregion
 
     #region 管道类型
 
-    [MenuItem("AllenSu/0、更改关键部位名字/----------管道类型----------", false, INDEXNUM + 31)]
+    [UnityEditor.MenuItem("AllenSu/0、更改关键部位名字/----------管道类型----------", false, INDEXNUM + 31)]
     public static void FlagTypeGuanDao() { }
 
     //0--管道槽
-    [MenuItem("AllenSu/0、更改关键部位名字/GuanDaoCao", false, INDEXNUM + 32)]
+    [UnityEditor.MenuItem("AllenSu/0、更改关键部位名字/GuanDaoCao", false, INDEXNUM + 32)]
     public static void Fun_GuanDaoCao() { ChangeKeyName(GuanDaoCao, GuanJianType.Grid, 0, 0); }
 
     //1--管道销
-    [MenuItem("AllenSu/0、更改关键部位名字/GuanDaoXiao", false, INDEXNUM + 33)]
+    [UnityEditor.MenuItem("AllenSu/0、更改关键部位名字/GuanDaoXiao", false, INDEXNUM + 33)]
     public static void Fun_GuanDaoXiao() { ChangeKeyName(GuanDaoXiao, GuanJianType.Grid, 1, 0); }
 
     #endregion
 
     #region 更改碰撞盒名称
 
-    [MenuItem("AllenSu/1、更改碰撞盒名称/Normal Box", false, INDEXNUM)]
+    [UnityEditor.MenuItem("AllenSu/1、更改碰撞盒名称/Normal Box", false, INDEXNUM)]
     public static void NormalBox()
     {
         ISBevelBox = false;
         ChangeBoxName();
     }
 
-    [MenuItem("AllenSu/1、更改碰撞盒名称/Bevel Box", false, INDEXNUM)]
+    [UnityEditor.MenuItem("AllenSu/1、更改碰撞盒名称/Bevel Box", false, INDEXNUM)]
     public static void BevelBox()
     {
         ISBevelBox = true;
@@ -575,6 +577,59 @@ public class SelfBuWei : CommonFun
 
     #endregion
 
+    /// <summary>
+    /// 仅是测试按钮功能而用
+    /// </summary>
+    public void JustTestBtn()
+    {
+
+        // 检查fbx的同名文件
+        SelfTools.Instance().CheckSameName();
+
+        // 检查资源文件夹下颗粒预设物和fbx模型名称中含有 X 的名称，并更改名称
+        //SelfTools.Instance().CheckPrefabAndFbxName();
+
+        // 查询场景中含有大写 X 的颗粒名
+        // ReadCapitalName();
+
+        // 读取 LDDId
+        // ReadLddId(); 
+    }
+
+
+    #region 测试功能的函数区
+
+    // 查询场景中含有大写 X 的颗粒名
+    public void ReadCapitalName()
+    {
+        if (PrimaryGranuleList.Count == 0)
+        {
+            WindowTips("需先点击《一般工具》编辑器里的《零件库相关数据显示区》按钮为列表赋值");
+            return;
+        }
+        if (Content)
+        {
+            foreach (var granule in PrimaryGranuleList)
+            {
+                if (granule.name.Contains("X"))
+                {
+                    // WriteToTxt(TxtDirPath,"含有大写 X 的颗粒名称",granule.name);
+                    granule.name = granule.name.Replace("X", "x");
+                }
+            }
+        }
+
+        // 直接打开文件
+        // System.Diagnostics.Process.Start(TxtDirPath + "含有大写 X 的颗粒名称.txt");
+    }
+
+    // 读取 LDDId
+    public void ReadLddId()
+    {
+        var txtRoot = Chinar.ToObject<Root>(@"D:\Users\suxing\Desktop\LDDID.txt");
+    }
+
+    #endregion
 
     public static SelfBuWei Instance()
     {
