@@ -582,12 +582,11 @@ public class SelfBuWei : CommonFun
     /// </summary>
     public void JustTestBtn()
     {
-
         // 检查fbx的同名文件
         SelfTools.Instance().CheckSameName();
 
         // 检查资源文件夹下颗粒预设物和fbx模型名称中含有 X 的名称，并更改名称
-        //SelfTools.Instance().CheckPrefabAndFbxName();
+        // SelfTools.Instance().ToCheckBigXName();
 
         // 查询场景中含有大写 X 的颗粒名
         // ReadCapitalName();

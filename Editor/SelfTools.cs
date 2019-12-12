@@ -516,120 +516,73 @@ public class SelfTools : CommonFun
     /// <summary>
     /// 检查资源文件夹下颗粒预设物和fbx模型名称中含有 X 的名称，并更改名称
     /// </summary>
-    public void CheckPrefabAndFbxName()
+    public void ToCheckBigXName()
     {
-        var datas = Selection.GetFiltered(typeof(UnityEngine.Object), SelectionMode.DeepAssets).Where(_ => Path.GetExtension(AssetDatabase.GetAssetPath(_)) != "");
-
-         var dict= datas.DistinctBy(a =>Path.GetFileNameWithoutExtension(AssetDatabase.GetAssetPath(a))).ToDictionary(_ => Path.GetFileNameWithoutExtension(AssetDatabase.GetAssetPath(_)),AssetDatabase.GetAssetPath);
-
-         foreach (var o in dict)
-         {
-
-             var newName = o.Key.Replace("毋", "x");
-             // Debug.Log(o.Value.Replace(o.Key, newName));
-            AssetDatabase.RenameAsset(o.Value, newName);
-        }
-
-        AssetDatabase.SaveAssets();
-        AssetDatabase.Refresh();
-        return;
-        Selection.GetFiltered(typeof(UnityEngine.Object), SelectionMode.DeepAssets).Where(_ => Path.GetExtension(AssetDatabase.GetAssetPath(_)) != "").ForEach(_ => AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath(_), AssetDatabase.GetAssetPath(_).Split('/').Last().Replace("X", "x")));
-        Selection.GetFiltered(typeof(UnityEngine.Object), SelectionMode.DeepAssets).Where(_ => Path.GetExtension(AssetDatabase.GetAssetPath(_)) != "").ForEach(_ =>
-        {
+        // 检查 prefab 中是否含有 X 的文件
+        CheckBigXName(PrefabPath,"*.prefab","prefab 中含有 X 的文件名称","prefab 中已不存在含有 X 的文件");
+        // 检查 fbx 中是否含有 X 的文件
+        CheckBigXName(FbxPath, "*.fbx", "fbx 中含有 X 的文件名称", "fbx 中已不存在含有 X 的文件");
+        // 检查 边框文件 中是否含有 X 的文件
+        CheckBigXName(EdgePath, "*.dat", "边框文件 中含有 X 的文件名称", "边框文件 中已不存在含有 X 的文件");
 
 
-            //
-            // var weName = Path.GetFileNameWithoutExtension(AssetDatabase.GetAssetPath(_));
-            // var allPath = AssetDatabase.GetAssetPath(_);
-            // var directoryName= Path.GetDirectoryName("D\\"+s);
-            //
-            // Debug.Log(s);
-            // Debug.Log(allPath);
-            // Debug.Log(directoryName);
-            // if (s != null)
-            // {
-            //     s = s.Replace("X", "毋");
-            // }
+        #region 高华代码(已注释)
 
-            // AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath(_), AssetDatabase.GetAssetPath(_));
-
-        });
+        // var datas = Selection.GetFiltered(typeof(UnityEngine.Object), SelectionMode.DeepAssets).Where(_ => Path.GetExtension(AssetDatabase.GetAssetPath(_)) != "");
+        //
+        //  var dict= datas.DistinctBy(a =>Path.GetFileNameWithoutExtension(AssetDatabase.GetAssetPath(a))).ToDictionary(_ => Path.GetFileNameWithoutExtension(AssetDatabase.GetAssetPath(_)),AssetDatabase.GetAssetPath);
+        //
+        //  foreach (var o in dict)
+        //  {
+        //
+        //      var newName = o.Key.Replace("毋", "x");
+        //      // Debug.Log(o.Value.Replace(o.Key, newName));
+        //     AssetDatabase.RenameAsset(o.Value, newName);
+        // }
+        //
         // AssetDatabase.SaveAssets();
         // AssetDatabase.Refresh();
+        // return;
 
-        // bool isPrefabX = false;
-        // // 批量修改预设物的X
-        // var prefabFiles = Directory.GetFiles(PrefabPath, "*.prefab", SearchOption.AllDirectories);
-        // foreach (var file in prefabFiles)
-        // {
-        //     var fileName = Path.GetFileNameWithoutExtension(file);
-        //     if (fileName.Contains("X"))
-        //     {
-        //         isPrefabX = true;
-        //         WriteToTxt(TxtDirPath,"Prefab中含有X的颗粒名称",fileName);
-        //         //替换文件名
-        //         // var newName = fileName.Replace("X", "x");
-        //         // File.Move(file, Path.GetDirectoryName(file) + "\\" + newName + Path.GetExtension(file));
-        //     }
-        // }
-        // if (!isPrefabX)
-        // {
-        //     Debug.Log("预设物中已没有含X的颗粒名称");
-        // }
-        //
-        // bool isFbxX = false;
-        // // 批量修改fbx的X
-        // var fbxFiles = Directory.GetFiles(FbxPath, "*.fbx", SearchOption.AllDirectories);
-        // foreach (var file in fbxFiles)
-        // {
-        //     var fileName = Path.GetFileNameWithoutExtension(file);
-        //     if (fileName.Contains("X"))
-        //     {
-        //         isFbxX = true;
-        //         WriteToTxt(TxtDirPath, "Fbx中含有X的颗粒名称", fileName);
-        //         // //替换文件名
-        //         // var newName = fileName.Replace("X", "x");
-        //         // File.Move(file, Path.GetDirectoryName(file) + "\\" + newName + Path.GetExtension(file));
-        //     }
-        // }
-        // if (!isFbxX)
-        // {
-        //     Debug.Log("fbx中已没有含X的颗粒名称");
-        // }
-        //
-        // bool isEdgeX = false;
-        // // 批量修改预设物的X
-        // var edgeFiles = Directory.GetFiles(EdgePath, "*.dat", SearchOption.AllDirectories);
-        // foreach (var file in edgeFiles)
-        // {
-        //     var fileName = Path.GetFileNameWithoutExtension(file);
-        //     if (fileName.Contains("X"))
-        //     {
-        //         isEdgeX = true;
-        //         WriteToTxt(TxtDirPath, "边框中含有X的颗粒名称", fileName);
-        //         //替换文件名
-        //         // var newName = fileName.Replace("X", "x");
-        //         //
-        //         //
-        //         // AssetDatabase.RenameAsset(EdgePath+"/"+fileName, newName);
-        //         // Debug.Log(Path.GetDirectoryName(file));
-        //         // File.Move(file, Path.GetDirectoryName(file) + "\\" + newName + Path.GetExtension(file));
-        //     }
-        // }
-        // if (!isEdgeX)
-        // {
-        //     Debug.Log("边框中已没有含X的颗粒名称");
-        // }
-        //
-        // isPrefabX = false;
-        // isFbxX = false;
-        // isEdgeX = false;
+        #endregion
     }
 
-
-    public void CheckSameName()
+    /// <summary>
+    /// 检查资源文件夹下颗粒预设物、fbx模型、边框文件中含有 X 的名称，并写入txt
+    /// </summary>
+    /// <param name="dirPath">文件路径</param>
+    /// <param name="extension">扩展名</param>
+    /// <param name="txtFileName">要写入的txt文件名</param>
+    /// <param name="tips">提示信息</param>
+    /// <param name="isHave">名称中是否还含有X</param>
+    public void CheckBigXName(string dirPath,string extension,string txtFileName,string tips,bool isHave=false)
     {
-        int index = 0;
+        var files = Directory.GetFiles(dirPath, extension, SearchOption.AllDirectories);
+        foreach (var file in files)
+        {
+            if (file != null)
+            {
+                var fileName = Path.GetFileNameWithoutExtension(file);
+                if (fileName.Contains("X"))
+                {
+                    isHave = true;
+                    WriteToTxt(TxtDirPath,txtFileName, fileName);
+
+                    //替换文件名（可用，暂时注释）
+                    // var newName = fileName.Replace("X", "x");
+                    // File.Move(file, Path.GetDirectoryName(file) + "\\" + newName + Path.GetExtension(file));
+                }
+            }
+        }
+
+        if (!isHave) Debug.Log(tips);
+    }
+
+    /// <summary>
+    /// 检查是否含有同名的 fbx 文件
+    /// </summary>
+    public void CheckSameName(int index = 0)
+    {
         Dictionary<int,string> dictionary=new Dictionary<int, string>();
         var prefabFiles = Directory.GetFiles(FbxPath, "*.fbx", SearchOption.AllDirectories);
         foreach (var file in prefabFiles)
@@ -645,8 +598,6 @@ public class SelfTools : CommonFun
                 WriteToTxt(TxtDirPath,"同名fbx文件",fileName);
             }
         }
-
-        index = 0;
     }
 
 
