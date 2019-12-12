@@ -31,6 +31,7 @@ public class CommonFun
     public string PrefabPath = Application.dataPath + "/Resources/Prefab/ModelPrefabs"; // 预设物路径
     public string FbxPath = Application.dataPath + "/Other/InitialModels";  // 所有的fbx路径
     public string EdgePath= Application.dataPath + "/StreamingAssets/ModelEdgeDate"; // 边框路径
+    public string PrimaryJsonPath = "G:/MyGitHub/MyUsedFile/txt 文件/工作/初级颗粒数据.txt"; // 初级颗粒数据路径
 
     public static GameObject Content = GameObject.Find("View/Canvas Assembling/Left Tool Panel/Granule Library/Viewport/Content");
 
@@ -123,8 +124,6 @@ public class CommonFun
             fs.Write(arr, 0, arr.Length);
             fs.Close();
         }
-
-
     }
 
 

@@ -10,12 +10,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using ChinarX;
 using ChinarX.ExtensionMethods;
 using UI.ThreeDimensional;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UI;
+using LitJson;
 using Object = UnityEngine.Object;
 
 
@@ -528,9 +527,11 @@ public class SelfTools : CommonFun
 
         #region 高华代码(已注释)
 
-        // var datas = Selection.GetFiltered(typeof(UnityEngine.Object), SelectionMode.DeepAssets).Where(_ => Path.GetExtension(AssetDatabase.GetAssetPath(_)) != "");
+        // var datas = Selection.GetFiltered(typeof(UnityEngine.Object), SelectionMode.DeepAssets).
+        // Where(_ => Path.GetExtension(AssetDatabase.GetAssetPath(_)) != "");
         //
-        //  var dict= datas.DistinctBy(a =>Path.GetFileNameWithoutExtension(AssetDatabase.GetAssetPath(a))).ToDictionary(_ => Path.GetFileNameWithoutExtension(AssetDatabase.GetAssetPath(_)),AssetDatabase.GetAssetPath);
+        //  var dict= datas.DistinctBy(a =>Path.GetFileNameWithoutExtension(AssetDatabase.GetAssetPath(a))).
+        // ToDictionary(_ => Path.GetFileNameWithoutExtension(AssetDatabase.GetAssetPath(_)),AssetDatabase.GetAssetPath);
         //
         //  foreach (var o in dict)
         //  {
@@ -598,6 +599,46 @@ public class SelfTools : CommonFun
                 WriteToTxt(TxtDirPath,"同名fbx文件",fileName);
             }
         }
+    }
+
+    /// <summary>
+    /// 检查分配错颗粒大类文件夹的fbx文件
+    /// </summary>
+    public void CheckTypeError()
+    {
+        // 先从 json 中读取数据
+        using (TextReader tr =File.OpenText(PrimaryJsonPath))
+        {
+            var jsonRootData = JsonMapper.ToObject<RootData>(tr.ReadToEnd());
+            tr.Close();
+        }
+
+        var dirInfo =new DirectoryInfo(FbxPath);
+        // 获取fbx所在的文件夹名称，如高一粒在文件夹"方高类"
+        var allDirectory = dirInfo.GetDirectories();
+        // 存放获取到的所有文件夹名称
+        var allDirNameList = new List<string>();
+        foreach (var directory in allDirectory)
+        {
+            if (directory.Name.Contains("中颗粒") || directory.Name.Contains("生化机械类")) continue;
+            allDirNameList.Add(directory.Name);
+        }
+        
+        foreach (var dirName in allDirNameList)
+        {
+            // 获取到单个文件夹下的所有 fbx 文件
+            var files = Directory.GetFiles(FbxPath + "/"+dirName, "*.fbx", SearchOption.AllDirectories);
+            foreach (var file in files)
+            {
+                var fbxName = Path.GetFileNameWithoutExtension(file);
+            }
+            return;
+        }
+
+        // StreamReader sr = new FileInfo(PrimaryDataPath).OpenText();
+        // var jsonRootData = JsonMapper.ToObject<RootData>(sr.ReadToEnd());
+        // sr.Close();
+        // sr.Dispose();
     }
 
 

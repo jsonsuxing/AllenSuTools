@@ -582,8 +582,11 @@ public class SelfBuWei : CommonFun
     /// </summary>
     public void JustTestBtn()
     {
+        // 检查分配错颗粒大类文件夹的fbx文件
+        SelfTools.Instance().CheckTypeError();
+
         // 检查fbx的同名文件
-        SelfTools.Instance().CheckSameName();
+        // SelfTools.Instance().CheckSameName();
 
         // 检查资源文件夹下颗粒预设物和fbx模型名称中含有 X 的名称，并更改名称
         // SelfTools.Instance().ToCheckBigXName();
