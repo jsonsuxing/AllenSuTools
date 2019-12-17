@@ -10,10 +10,8 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
-using ChinarX.ExtensionMethods;
 using UnityEditor;
 using UnityEngine;
-using LitJson;
 
 
 /// <summary>
@@ -27,8 +25,8 @@ public class CommonFun
     public static string ShowGranuleType = string.Empty; // 颗粒所属类别
     public const  int    INDEXNUM        = -100;         // 暂时定右击鼠标面板的下标是100
 
-    public string TxtDirPath = "D:/编辑器生成的txt文件汇总/";
-
+    public string TxtDirPath = "D:/编辑器生成的txt文件汇总/"; // 编辑器生成的 txt 路径
+    public string jsonPath = Application.dataPath + "/AllenSuTools/Data/初级颗粒数据.txt"; // 自己的工程json路径
     public string PrefabPath = Application.dataPath + "/Resources/Prefab/ModelPrefabs"; // 预设物路径
     public string FbxPath = Application.dataPath + "/Other/InitialModels";  // 所有的fbx路径
     public string EdgePath= Application.dataPath + "/StreamingAssets/ModelEdgeDate"; // 边框路径

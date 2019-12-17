@@ -7,6 +7,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 using LitJson;
 
@@ -19,6 +20,12 @@ public class JustTest : CommonFun
     /// </summary>
     public void JustTestBtn()
     {
+        // 比较建模发了模型，但在编码表里搜索不到的颗粒名称
+        CompareWrongFbxName();
+
+        // 查询一下已经上架了零件库，但仍在表格标记X的颗粒名称
+        // FindGranuleType();
+
         // 检查分配错颗粒大类文件夹的fbx文件
         // CheckTypeError();
 
@@ -33,11 +40,72 @@ public class JustTest : CommonFun
     }
 
     /// <summary>
-    /// 比较建模发的不正确的模型名称，如 02.09.08.05.06.12-梳镜01 其实对应的是 02.90.06.05.10.12-餐具-铲
+    /// 查询一下已经上架了零件库，但仍在表格标记X的颗粒名称
+    /// </summary>
+    public void FindGranuleType()
+    {
+        string jsonPath = Application.dataPath + "/AllenSuTools/Data/是否已上架数据.txt";
+
+        // 先从 json 中读取数据
+        TextReader tr = File.OpenText(jsonPath);
+        var jsonRootData = JsonMapper.ToObject<Root>(tr.ReadToEnd());
+        tr.Dispose();
+        tr.Close();
+
+        var granuleNameDic = new Dictionary<string, string>();
+        foreach (var primaryData in jsonRootData.links)
+        {
+            // 获取到所有未上架的颗粒名称
+            if (Equals(primaryData.是否已上架,"2"))
+            {
+                granuleNameDic.Add(primaryData.总序,primaryData.全称);
+            }
+        }
+
+        foreach (var granule in PrimaryGranuleList)
+        {
+            if (granuleNameDic.ContainsValue(granule.name))
+            {
+                Debug.Log(granule.name);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 比较建模发了模型，但在编码表里搜索不到的颗粒名称
     /// </summary>
     public void CompareWrongFbxName()
     {
+        string jsonPath = Application.dataPath + "/AllenSuTools/Data/建模已发模型名称.txt";
 
+        // 先从 json 中读取数据
+        TextReader tr = File.OpenText(jsonPath);
+        var jsonRootData = JsonMapper.ToObject<JianMoRoot>(tr.ReadToEnd());
+        tr.Dispose();
+        tr.Close();
+
+        //初级颗粒数据
+        string jsonPath1 = Application.dataPath + "/AllenSuTools/Data/初级颗粒数据.txt";
+
+        // 先从 json 中读取数据
+        TextReader tr1 = File.OpenText(jsonPath1);
+        var jsonRootData1 = JsonMapper.ToObject<RootData>(tr1.ReadToEnd());
+        tr1.Dispose();
+        tr1.Close();
+
+        var tempDic = new Dictionary<string, string>();
+        foreach (var primaryData in jsonRootData1.primaryData)
+        {
+            tempDic.Add(primaryData.ID,primaryData.FullCode);
+        }
+
+        foreach (var rootData in jsonRootData.links)
+        {
+            if (!tempDic.ContainsValue(rootData.建模已发))
+            {
+                WriteToTxt(TxtDirPath,"建模发的模型中错误名称",rootData.建模已发);
+            }
+        }
     }
 
     /// <summary>
