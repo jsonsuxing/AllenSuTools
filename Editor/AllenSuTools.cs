@@ -307,7 +307,7 @@ public class AllenSuTools : EditorWindow
 
                 // ------------ 一：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
-                if (GUILayout.Button("测试按钮")) SelfBuWei.Instance().JustTestBtn();
+                if (GUILayout.Button("测试按钮")) JustTest.Instance().JustTestBtn();
                 GUILayout.EndVertical();
                 // ------------ 一：结束垂直画盒子 ------------
 

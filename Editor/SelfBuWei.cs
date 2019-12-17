@@ -577,62 +577,6 @@ public class SelfBuWei : CommonFun
 
     #endregion
 
-    /// <summary>
-    /// 仅是测试按钮功能而用
-    /// </summary>
-    public void JustTestBtn()
-    {
-        // 检查分配错颗粒大类文件夹的fbx文件
-        SelfTools.Instance().CheckTypeError();
-
-        // 检查fbx的同名文件
-        // SelfTools.Instance().CheckSameName();
-
-        // 检查资源文件夹下颗粒预设物和fbx模型名称中含有 X 的名称，并更改名称
-        // SelfTools.Instance().ToCheckBigXName();
-
-        // 查询场景中含有大写 X 的颗粒名
-        // ReadCapitalName();
-
-        // 读取 LDDId
-        // ReadLddId(); 
-    }
-
-
-    #region 测试功能的函数区
-
-    // 查询场景中含有大写 X 的颗粒名
-    public void ReadCapitalName()
-    {
-        if (PrimaryGranuleList.Count == 0)
-        {
-            WindowTips("需先点击《一般工具》编辑器里的《零件库相关数据显示区》按钮为列表赋值");
-            return;
-        }
-        if (Content)
-        {
-            foreach (var granule in PrimaryGranuleList)
-            {
-                if (granule.name.Contains("X"))
-                {
-                    // WriteToTxt(TxtDirPath,"含有大写 X 的颗粒名称",granule.name);
-                    granule.name = granule.name.Replace("X", "x");
-                }
-            }
-        }
-
-        // 直接打开文件
-        // System.Diagnostics.Process.Start(TxtDirPath + "含有大写 X 的颗粒名称.txt");
-    }
-
-    // 读取 LDDId
-    public void ReadLddId()
-    {
-        var txtRoot = Chinar.ToObject<Root>(@"D:\Users\suxing\Desktop\LDDID.txt");
-    }
-
-    #endregion
-
     public static SelfBuWei Instance()
     {
         return instance ?? (instance = new SelfBuWei());
