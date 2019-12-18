@@ -628,7 +628,29 @@ public class AllenSuTools : EditorWindow
                 // ------------ 一：结束垂直画盒子 ------------
 
                 #endregion
+
+                #endregion
                 GUILayout.Space(8);
+
+                #region 四：检查建模发过来的fbx名称的准确性
+
+                GUILayout.Label("四：检查建模发的 fbx", TitleStyle());
+                GUILayout.Space(3);
+
+                // ------------ 一：开始垂直画盒子 ------------
+                GUILayout.BeginVertical("box");
+
+                // 第一组垂直排版开始
+                EditorGUILayout.BeginVertical();
+                GUILayout.Label("1、要检查的文件夹路径", SetGuiStyle(Color.black, 14));
+                SelfTools.Instance().ModelingFbxPath = GUILayout.TextField(SelfTools.Instance().ModelingFbxPath);
+                if (GUILayout.Button("开始检查")) SelfTools.Instance().CheckModelingFbx();
+                EditorGUILayout.EndVertical();
+                // 第一组垂直排版结束
+                GUILayout.Space(3);
+
+                GUILayout.EndVertical();
+                // ------------ 一：结束垂直画盒子 ------------
 
                 #endregion
                 GUILayout.Space(8);

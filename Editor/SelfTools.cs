@@ -55,6 +55,9 @@ public class SelfTools : CommonFun
     // 查询文件夹下的同名文件
     public string FilePath = string.Empty; // 文件路径
 
+    // 检查建模发过来的fbx名称的准确性
+    public string ModelingFbxPath = string.Empty; // 文件路径
+
     // 零件库相关数据显示区
     // 总数据区
     public int AllGranuleTypeCount = 0; // 目前的总颗粒类数(包含中颗粒)
@@ -509,6 +512,69 @@ public class SelfTools : CommonFun
             WindowTips("Content 对象不存在 ！ ！ ！");
         }
 
+    }
+
+    #endregion
+
+    #region 检查建模发过来的fbx名称的准确性
+
+    public void CheckModelingFbx()
+    {
+        if (ModelingFbxPath == string.Empty)
+        {
+            WindowTips("文件夹路径不能为空");
+            return;
+        }
+        if (!Directory.Exists(ModelingFbxPath))
+        {
+            WindowTips("不存在此文件夹");
+            return;
+        }
+        if (!File.Exists(jsonPath))
+        {
+            WindowTips(jsonPath+" 下没有《初级颗粒数据》");
+            return;
+        }
+
+
+        TextReader tr = File.OpenText(jsonPath);
+        var data = JsonMapper.ToObject<RootData>(tr.ReadToEnd());
+        tr.Dispose();
+        tr.Close();
+
+        var primaryDic = new Dictionary<string,string>();
+        var isSame = false; // 是否有同名文件
+        var wrongNumber = 0; // 错误的文件个数
+        foreach (var granule in data.primaryData)
+        {
+            primaryDic.Add(granule.ID,granule.FullCode);
+        }
+        var files = Directory.GetFiles(ModelingFbxPath, "*.*", SearchOption.AllDirectories);
+        foreach (var file in files)
+        {
+            var fileExtension = Path.GetExtension(file);
+            if (Equals(fileExtension,".fbx") || Equals(fileExtension, ".obj"))
+            {
+                var fileName = Path.GetFileNameWithoutExtension(file);
+                if (!primaryDic.ContainsValue(fileName))
+                {
+                    isSame = true;
+                    wrongNumber++;
+                    WriteToTxt(TxtDirPath, "当前文件夹里不正确的颗粒名称",fileName);
+                }
+            }
+        }
+        if (isSame)
+        {
+            WindowTips("检查出 "+wrongNumber+" 个错误颗粒，点击确定按钮查看");
+            System.Diagnostics.Process.Start(TxtDirPath);
+            isSame = false;
+            wrongNumber = 0;
+        }
+        else
+        {
+            WindowTips("刺不刺激，意不意外，没有错的");
+        }
     }
 
     #endregion
