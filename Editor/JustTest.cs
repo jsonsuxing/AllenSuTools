@@ -21,10 +21,10 @@ public class JustTest : CommonFun
     public void JustTestBtn()
     {
         // 比较建模发了模型，但在编码表里搜索不到的颗粒名称
-        CompareWrongFbxName();
+        // CompareWrongFbxName();
 
         // 查询一下已经上架了零件库，但仍在表格标记X的颗粒名称
-        // FindGranuleType();
+        FindGranuleType();
 
         // 检查分配错颗粒大类文件夹的fbx文件
         // CheckTypeError();
@@ -44,31 +44,74 @@ public class JustTest : CommonFun
     /// </summary>
     public void FindGranuleType()
     {
-        string jsonPath = Application.dataPath + "/AllenSuTools/Data/是否已上架数据.txt";
+        // string jsonPath = Application.dataPath + "/AllenSuTools/Data/是否已上架数据.txt"; // 家用
+        string jsonPath = Application.dataPath + "/A-SuXing/AllenSuTools/Data/是否已上架数据.txt"; // 公用
 
         // 先从 json 中读取数据
         TextReader tr = File.OpenText(jsonPath);
-        var jsonRootData = JsonMapper.ToObject<Root>(tr.ReadToEnd());
+        var jsonRootData = JsonMapper.ToObject<RootX>(tr.ReadToEnd());
         tr.Dispose();
         tr.Close();
 
-        var granuleNameDic = new Dictionary<string, string>();
+        var granuleNameDic1 = new Dictionary<string, string>(); // 已上架的个数
+        var granuleNameDic2 = new Dictionary<string, string>(); // 未上架的个数
+        
         foreach (var primaryData in jsonRootData.links)
         {
-            // 获取到所有未上架的颗粒名称
-            if (Equals(primaryData.是否已上架,"2"))
+            // 获取到所有已上架的颗粒名称
+            if (Equals(primaryData.是否已上架, "1"))
             {
-                granuleNameDic.Add(primaryData.总序,primaryData.全称);
+                granuleNameDic1.Add(primaryData.总序, primaryData.全称);
+            }
+            // 获取到所有未上架的颗粒名称
+            else if (Equals(primaryData.是否已上架,"2"))
+            {
+                granuleNameDic2.Add(primaryData.总序, primaryData.全称);
+            }
+            else
+            {
+                Debug.Log("不属于上架和未上架的："+primaryData.全称);
             }
         }
 
+        Debug.Log("表格中显示已上架颗粒个数："+granuleNameDic1.Count);
+        Debug.Log("零件库未上架颗粒个数：" + granuleNameDic2.Count);
+        Debug.Log("零件库初级颗粒的个数：" + PrimaryGranuleList.Count);
+        var index = 0;
+        var primaryDic=new Dictionary<int,string>(); // 初级零件库的字典
         foreach (var granule in PrimaryGranuleList)
         {
-            if (granuleNameDic.ContainsValue(granule.name))
+            primaryDic.Add(index++,granule.name);
+        }
+        // 利用差集求两个字典的差值
+        // var s = granuleNameDic1.Values.ToList().Except(primaryDic.Values.ToList());
+        // foreach (var _ in s)
+        // {
+        //     Debug.Log(_);
+        // }
+        // 检测零件库有，但是表格没有的颗粒名称，检查出了零件库中的错误名称
+        foreach (var primary in granuleNameDic1)
+        {
+            WriteToTxt(TxtDirPath,"所有初级颗粒名称", primary.Value);
+            if (!granuleNameDic1.ContainsValue(primary.Value) && !primary.Value.Contains("组合"))
             {
-                Debug.Log(granule.name);
+                WriteToTxt(TxtDirPath,"零件库有，但是表格没有的颗粒名称",primary.Value);
+            }
+
+            if (granuleNameDic1.ContainsValue(primary.Value) && !primaryDic.ContainsValue(primary.Value))
+            {
+                Debug.Log("差的名称"+primary.Value);
             }
         }
+
+        // 检测已上架到零件库，但是在表格中依然显示 ×
+        // foreach (var granule in PrimaryGranuleList)
+        // {
+        //     if (granuleNameDic2.ContainsValue(granule.name))
+        //     {
+        //         Debug.Log(granule.name);
+        //     }
+        // }
     }
 
     /// <summary>
@@ -76,7 +119,8 @@ public class JustTest : CommonFun
     /// </summary>
     public void CompareWrongFbxName()
     {
-        string jsonPath = Application.dataPath + "/AllenSuTools/Data/建模已发模型名称.txt";
+        // string jsonPath = Application.dataPath + "/AllenSuTools/Data/建模已发模型名称.txt"; // 家用
+        var jsonPath = Application.dataPath + "/A-SuXing/AllenSuTools/Data/建模已发模型名称.txt"; // 公用
 
         // 先从 json 中读取数据
         TextReader tr = File.OpenText(jsonPath);
@@ -85,7 +129,8 @@ public class JustTest : CommonFun
         tr.Close();
 
         //初级颗粒数据
-        string jsonPath1 = Application.dataPath + "/AllenSuTools/Data/初级颗粒数据.txt";
+        // var jsonPath1 = Application.dataPath + "/AllenSuTools/Data/初级颗粒数据.txt"; // 家用
+        var jsonPath1 = Application.dataPath + "/A-SuXing/AllenSuTools/Data/初级颗粒数据.txt"; // 公用
 
         // 先从 json 中读取数据
         TextReader tr1 = File.OpenText(jsonPath1);

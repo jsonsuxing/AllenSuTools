@@ -452,9 +452,10 @@ public class SelfTools : CommonFun
             for (var i = 0; i < Content.transform.childCount; i++)
             {
                 AllChildObj.Add(Content.transform.GetChild(i).gameObject);
-                if (Equals(AllChildObj[i].name,"中颗粒泊类")) splitLineIndex = AllChildObj[i].transform.GetSiblingIndex();
+                if (Equals(AllChildObj[i].name, "中颗粒泊类")) splitLineIndex = AllChildObj[i].transform.GetSiblingIndex();
             }
-
+            Debug.Log("splitLineIndex="+ splitLineIndex);
+           
             // 列表数据赋值区
             foreach (var child in AllChildObj)
             {
@@ -468,11 +469,11 @@ public class SelfTools : CommonFun
                     else AllCompletedGranuleCount++;
                 }
 
-                if (child.transform.GetSiblingIndex() < splitLineIndex && child.GetComponent<UIObject3D>())
+                if (child.transform.GetSiblingIndex() <= splitLineIndex && child.GetComponent<UIObject3D>() && !child.transform.name.Contains("组合"))
                 {
                     PrimaryGranuleList.Add(child); // 为初级零件库颗粒赋值
                 }
-                if (child.transform.GetSiblingIndex() >= splitLineIndex && child.GetComponent<UIObject3D>())
+                if (child.transform.GetSiblingIndex() > splitLineIndex && child.GetComponent<UIObject3D>())
                 {
                     IntermediateGranuleList.Add(child); // 为中级零件库颗粒赋值
                 }
