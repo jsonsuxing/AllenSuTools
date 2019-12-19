@@ -301,9 +301,28 @@ public class AllenSuTools : EditorWindow
                 #endregion
                 GUILayout.Space(8);
 
-                #region 五：测试按钮
+                #region 临时：物体 y 坐标减去 0.005
 
-                GUILayout.Label("五：测试按钮", TitleStyle());
+                GUILayout.Label("临时：物体 y 坐标减去 0.005", TitleStyle());
+
+                // ------------ 一：开始垂直画盒子 ------------
+                GUILayout.BeginVertical("box");
+
+                // 第一组水平排版开始
+                EditorGUILayout.BeginHorizontal();
+                if (GUILayout.Button("点击按钮")) SelfBuWei.Instance().ReduceSelfValue();
+                EditorGUILayout.EndHorizontal();
+                // 第一组水平排版结束
+
+                GUILayout.EndVertical();
+                // ------------ 一：结束垂直画盒子 ------------
+
+                #endregion
+                GUILayout.Space(8);
+
+                #region 测试按钮
+
+                GUILayout.Label("测试按钮", TitleStyle());
 
                 // ------------ 一：开始垂直画盒子 ------------
                 GUILayout.BeginVertical("box");
@@ -312,6 +331,7 @@ public class AllenSuTools : EditorWindow
                 // ------------ 一：结束垂直画盒子 ------------
 
                 #endregion
+                GUILayout.Space(8);
 
                 #endregion
                 break;

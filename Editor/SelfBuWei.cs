@@ -577,6 +577,21 @@ public class SelfBuWei : CommonFun
 
     #endregion
 
+    #region 临时：物体 y 坐标减去 0.005
+
+    public void ReduceSelfValue()
+    {
+        foreach (var gameObject in Selection.gameObjects)
+        {
+            var pos = gameObject.transform.localPosition;
+            pos = new Vector3(pos.x,pos.y - 0.005f,pos.z);
+            gameObject.transform.localPosition = pos;
+        }
+    }
+
+
+    #endregion
+
     public static SelfBuWei Instance()
     {
         return instance ?? (instance = new SelfBuWei());

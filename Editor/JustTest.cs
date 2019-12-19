@@ -20,11 +20,14 @@ public class JustTest : CommonFun
     /// </summary>
     public void JustTestBtn()
     {
+        // 从《初级颗粒数据》json 中读取数据，希望处理的功能
+        AboutPrimaryData();
+
         // 比较建模发了模型，但在编码表里搜索不到的颗粒名称
         // CompareWrongFbxName();
 
-        // 查询一下已经上架了零件库，但仍在表格标记X的颗粒名称
-        FindGranuleType();
+        // 从《是否已上架数据》json 中读取数据，希望处理的功能
+        // AboutIsAlreadyShelves();
 
         // 检查分配错颗粒大类文件夹的fbx文件
         // CheckTypeError();
@@ -40,12 +43,47 @@ public class JustTest : CommonFun
     }
 
     /// <summary>
-    /// 查询一下已经上架了零件库，但仍在表格标记X的颗粒名称
+    /// 从《初级颗粒数据》json 中读取数据，希望处理的功能
     /// </summary>
-    public void FindGranuleType()
+    public void AboutPrimaryData()
     {
-        // string jsonPath = Application.dataPath + "/AllenSuTools/Data/是否已上架数据.txt"; // 家用
-        string jsonPath = Application.dataPath + "/A-SuXing/AllenSuTools/Data/是否已上架数据.txt"; // 公用
+        var jsonPath = Application.dataPath + "/AllenSuTools/Data/自己整理的表.txt";
+
+        // 先从 json 中读取数据
+        TextReader tr = File.OpenText(jsonPath);
+        var rootData = JsonMapper.ToObject<YuanBiaoRoot>(tr.ReadToEnd());
+        tr.Dispose();
+        tr.Close();
+
+        foreach (var yuanBiao in rootData.links)
+        {
+            if (yuanBiao.颗粒名称.IndexOf(" ")>=0)
+            {
+                Debug.Log(yuanBiao.颗粒名称);
+            }
+        }
+
+        // if (!File.Exists(jsonPath))
+        // {
+        //     WindowTips(jsonPath + " 下没有《初级颗粒数据》");
+        //     return;
+        // }
+        //
+        // // 先从 json 中读取数据
+        // TextReader tr       = File.OpenText(jsonPath);
+        // var        rootData = JsonMapper.ToObject<RootData>(tr.ReadToEnd());
+        // tr.Dispose();
+        // tr.Close();
+
+
+    }
+
+    /// <summary>
+    /// 从《是否已上架数据》json 中读取数据，希望处理的功能
+    /// </summary>
+    public void AboutIsAlreadyShelves()
+    {
+        string jsonPath = Application.dataPath + "/AllenSuTools/Data/是否已上架数据.txt";
 
         // 先从 json 中读取数据
         TextReader tr = File.OpenText(jsonPath);
@@ -59,59 +97,48 @@ public class JustTest : CommonFun
         foreach (var primaryData in jsonRootData.links)
         {
             // 获取到所有已上架的颗粒名称
-            if (Equals(primaryData.是否已上架, "1"))
-            {
-                granuleNameDic1.Add(primaryData.总序, primaryData.全称);
-            }
+            if (Equals(primaryData.是否已上架, "1")) granuleNameDic1.Add(primaryData.总序, primaryData.全称);
             // 获取到所有未上架的颗粒名称
-            else if (Equals(primaryData.是否已上架,"2"))
-            {
-                granuleNameDic2.Add(primaryData.总序, primaryData.全称);
-            }
-            else
-            {
-                Debug.Log("不属于上架和未上架的："+primaryData.全称);
-            }
+            else if (Equals(primaryData.是否已上架,"2")) granuleNameDic2.Add(primaryData.总序, primaryData.全称);
+            else Debug.Log("不属于上架和未上架的：" + primaryData.全称);
         }
 
         Debug.Log("表格中显示已上架颗粒个数："+granuleNameDic1.Count);
+        Debug.Log("零件库已上架颗粒个数：" + PrimaryGranuleList.Count);
         Debug.Log("零件库未上架颗粒个数：" + granuleNameDic2.Count);
-        Debug.Log("零件库初级颗粒的个数：" + PrimaryGranuleList.Count);
+
         var index = 0;
-        var primaryDic=new Dictionary<int,string>(); // 初级零件库的字典
+        var primaryDic = new Dictionary<int,string>(); // 初级零件库颗粒名称的字典
         foreach (var granule in PrimaryGranuleList)
         {
             primaryDic.Add(index++,granule.name);
         }
-        // 利用差集求两个字典的差值
+
+        // 保证零件库字典和已上架颗粒的字典数据要完全一致，之前有不一致的，利用差集求两个字典的差值
         // var s = granuleNameDic1.Values.ToList().Except(primaryDic.Values.ToList());
         // foreach (var _ in s)
         // {
         //     Debug.Log(_);
         // }
-        // 检测零件库有，但是表格没有的颗粒名称，检查出了零件库中的错误名称
-        foreach (var primary in granuleNameDic1)
-        {
-            WriteToTxt(TxtDirPath,"所有初级颗粒名称", primary.Value);
-            if (!granuleNameDic1.ContainsValue(primary.Value) && !primary.Value.Contains("组合"))
-            {
-                WriteToTxt(TxtDirPath,"零件库有，但是表格没有的颗粒名称",primary.Value);
-            }
 
-            if (granuleNameDic1.ContainsValue(primary.Value) && !primaryDic.ContainsValue(primary.Value))
+        // 对已上架的数据进行处理
+        foreach (var dic1 in granuleNameDic1)
+        {
+            // 检测零件库有(不包括组合颗粒)，但是表格没有的颗粒名称，也就是检查出了零件库中的错误名称
+            if (!granuleNameDic1.ContainsValue(dic1.Value) && !dic1.Value.Contains("组合"))
             {
-                Debug.Log("差的名称"+primary.Value);
+                WriteToTxt(TxtDirPath,"零件库有，但是表格没有的颗粒名称",dic1.Value);
             }
         }
 
-        // 检测已上架到零件库，但是在表格中依然显示 ×
-        // foreach (var granule in PrimaryGranuleList)
-        // {
-        //     if (granuleNameDic2.ContainsValue(granule.name))
-        //     {
-        //         Debug.Log(granule.name);
-        //     }
-        // }
+        // 功能二：检测已上架到零件库，但是在表格中依然显示 ×
+        foreach (var granule in PrimaryGranuleList)
+        {
+            if (granuleNameDic2.ContainsValue(granule.name))
+            {
+                Debug.Log("检测已上架到零件库，但是在表格中依然显示 × 的颗粒：" + granule.name);
+            }
+        }
     }
 
     /// <summary>
@@ -119,8 +146,7 @@ public class JustTest : CommonFun
     /// </summary>
     public void CompareWrongFbxName()
     {
-        // string jsonPath = Application.dataPath + "/AllenSuTools/Data/建模已发模型名称.txt"; // 家用
-        var jsonPath = Application.dataPath + "/A-SuXing/AllenSuTools/Data/建模已发模型名称.txt"; // 公用
+        var jsonPath = Application.dataPath + "/AllenSuTools/Data/建模已发模型名称.txt";
 
         // 先从 json 中读取数据
         TextReader tr = File.OpenText(jsonPath);
@@ -280,46 +306,6 @@ public class JustTest : CommonFun
         Debug.Log("不重名的有多少个："    + dictionary.Count);
         Debug.Log("重名的有多少个："     + tempCount);
         Debug.Log("总的文件个数（含重名）：" + allCount);
-    }
-
-    /// <summary>
-    /// 检查分配错颗粒大类文件夹的fbx文件
-    /// </summary>
-    public void CheckTypeError()
-    {
-        // 先从 json 中读取数据
-        using (TextReader tr = File.OpenText(PrimaryJsonPath))
-        {
-            var jsonRootData = JsonMapper.ToObject<RootData>(tr.ReadToEnd());
-            tr.Close();
-        }
-
-        var dirInfo = new DirectoryInfo(FbxPath);
-        // 获取fbx所在的文件夹名称，如高一粒在文件夹"方高类"
-        var allDirectory = dirInfo.GetDirectories();
-        // 存放获取到的所有文件夹名称
-        var allDirNameList = new List<string>();
-        foreach (var directory in allDirectory)
-        {
-            if (directory.Name.Contains("中颗粒") || directory.Name.Contains("生化机械类")) continue;
-            allDirNameList.Add(directory.Name);
-        }
-
-        foreach (var dirName in allDirNameList)
-        {
-            // 获取到单个文件夹下的所有 fbx 文件
-            var files = Directory.GetFiles(FbxPath + "/" + dirName, "*.fbx", SearchOption.AllDirectories);
-            foreach (var file in files)
-            {
-                var fbxName = Path.GetFileNameWithoutExtension(file);
-            }
-            return;
-        }
-
-        // StreamReader sr = new FileInfo(PrimaryDataPath).OpenText();
-        // var jsonRootData = JsonMapper.ToObject<RootData>(sr.ReadToEnd());
-        // sr.Close();
-        // sr.Dispose();
     }
 
     public static JustTest Instance()

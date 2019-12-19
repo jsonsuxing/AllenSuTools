@@ -579,7 +579,6 @@ public class SelfTools : CommonFun
 
     #endregion
 
-
     public static SelfTools Instance()
     {
         return instance ?? (instance = new SelfTools());

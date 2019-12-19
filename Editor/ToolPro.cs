@@ -560,12 +560,13 @@ public class ToolPro : CommonFun
         {
             if (t.name.Contains("XiaoChaXiao"))
             {
+                var tType = t.GetComponent<GuanJianBuWei>();
                 var sonAoCao = Object.Instantiate(t, selectTrans);
                 sonAoCao.name = "SonAoCao " + "(" + (number++) + ")";
                 var buWeiSonAoCao = sonAoCao.GetComponent<GuanJianBuWei>();
-                buWeiSonAoCao.type      = GuanJianType.Grid;
+                buWeiSonAoCao.type      = tType.type;
                 buWeiSonAoCao.size      = 0;
-                buWeiSonAoCao.dirVector = Vector3.zero;
+                buWeiSonAoCao.dirVector = tType.dirVector;
                 buWeiSonAoCao.length    = 0;
             }
         }
