@@ -47,21 +47,7 @@ public class JustTest : CommonFun
     /// </summary>
     public void AboutPrimaryData()
     {
-        var jsonPath = Application.dataPath + "/AllenSuTools/Data/自己整理的表.txt";
-
-        // 先从 json 中读取数据
-        TextReader tr = File.OpenText(jsonPath);
-        var rootData = JsonMapper.ToObject<YuanBiaoRoot>(tr.ReadToEnd());
-        tr.Dispose();
-        tr.Close();
-
-        foreach (var yuanBiao in rootData.links)
-        {
-            if (yuanBiao.颗粒名称.IndexOf(" ")>=0)
-            {
-                Debug.Log(yuanBiao.颗粒名称);
-            }
-        }
+        var jsonPath = Application.dataPath + "/AllenSuTools/Data/初级颗粒数据.txt";
 
         // if (!File.Exists(jsonPath))
         // {
@@ -74,8 +60,6 @@ public class JustTest : CommonFun
         // var        rootData = JsonMapper.ToObject<RootData>(tr.ReadToEnd());
         // tr.Dispose();
         // tr.Close();
-
-
     }
 
     /// <summary>
@@ -84,61 +68,60 @@ public class JustTest : CommonFun
     public void AboutIsAlreadyShelves()
     {
         string jsonPath = Application.dataPath + "/AllenSuTools/Data/是否已上架数据.txt";
-
-        // 先从 json 中读取数据
-        TextReader tr = File.OpenText(jsonPath);
-        var jsonRootData = JsonMapper.ToObject<RootX>(tr.ReadToEnd());
-        tr.Dispose();
-        tr.Close();
-
-        var granuleNameDic1 = new Dictionary<string, string>(); // 已上架的个数
-        var granuleNameDic2 = new Dictionary<string, string>(); // 未上架的个数
-        
-        foreach (var primaryData in jsonRootData.links)
-        {
-            // 获取到所有已上架的颗粒名称
-            if (Equals(primaryData.是否已上架, "1")) granuleNameDic1.Add(primaryData.总序, primaryData.全称);
-            // 获取到所有未上架的颗粒名称
-            else if (Equals(primaryData.是否已上架,"2")) granuleNameDic2.Add(primaryData.总序, primaryData.全称);
-            else Debug.Log("不属于上架和未上架的：" + primaryData.全称);
-        }
-
-        Debug.Log("表格中显示已上架颗粒个数："+granuleNameDic1.Count);
-        Debug.Log("零件库已上架颗粒个数：" + PrimaryGranuleList.Count);
-        Debug.Log("零件库未上架颗粒个数：" + granuleNameDic2.Count);
-
-        var index = 0;
-        var primaryDic = new Dictionary<int,string>(); // 初级零件库颗粒名称的字典
-        foreach (var granule in PrimaryGranuleList)
-        {
-            primaryDic.Add(index++,granule.name);
-        }
-
-        // 保证零件库字典和已上架颗粒的字典数据要完全一致，之前有不一致的，利用差集求两个字典的差值
-        // var s = granuleNameDic1.Values.ToList().Except(primaryDic.Values.ToList());
-        // foreach (var _ in s)
+        // // 先从 json 中读取数据
+        // TextReader tr = File.OpenText(jsonPath);
+        // var jsonRootData = JsonMapper.ToObject<RootX>(tr.ReadToEnd());
+        // tr.Dispose();
+        // tr.Close();
+        //
+        // var granuleNameDic1 = new Dictionary<string, string>(); // 已上架的个数
+        // var granuleNameDic2 = new Dictionary<string, string>(); // 未上架的个数
+        //
+        // foreach (var primaryData in jsonRootData.links)
         // {
-        //     Debug.Log(_);
+        //     // 获取到所有已上架的颗粒名称
+        //     if (Equals(primaryData.是否已上架, "1")) granuleNameDic1.Add(primaryData.总序, primaryData.全称);
+        //     // 获取到所有未上架的颗粒名称
+        //     else if (Equals(primaryData.是否已上架,"2")) granuleNameDic2.Add(primaryData.总序, primaryData.全称);
+        //     else Debug.Log("不属于上架和未上架的：" + primaryData.全称);
         // }
-
-        // 对已上架的数据进行处理
-        foreach (var dic1 in granuleNameDic1)
-        {
-            // 检测零件库有(不包括组合颗粒)，但是表格没有的颗粒名称，也就是检查出了零件库中的错误名称
-            if (!granuleNameDic1.ContainsValue(dic1.Value) && !dic1.Value.Contains("组合"))
-            {
-                WriteToTxt(TxtDirPath,"零件库有，但是表格没有的颗粒名称",dic1.Value);
-            }
-        }
-
-        // 功能二：检测已上架到零件库，但是在表格中依然显示 ×
-        foreach (var granule in PrimaryGranuleList)
-        {
-            if (granuleNameDic2.ContainsValue(granule.name))
-            {
-                Debug.Log("检测已上架到零件库，但是在表格中依然显示 × 的颗粒：" + granule.name);
-            }
-        }
+        //
+        // Debug.Log("表格中显示已上架颗粒个数："+granuleNameDic1.Count);
+        // Debug.Log("零件库已上架颗粒个数：" + PrimaryGranuleList.Count);
+        // Debug.Log("零件库未上架颗粒个数：" + granuleNameDic2.Count);
+        //
+        // var index = 0;
+        // var primaryDic = new Dictionary<int,string>(); // 初级零件库颗粒名称的字典
+        // foreach (var granule in PrimaryGranuleList)
+        // {
+        //     primaryDic.Add(index++,granule.name);
+        // }
+        //
+        // // 保证零件库字典和已上架颗粒的字典数据要完全一致，之前有不一致的，利用差集求两个字典的差值
+        // // var s = granuleNameDic1.Values.ToList().Except(primaryDic.Values.ToList());
+        // // foreach (var _ in s)
+        // // {
+        // //     Debug.Log(_);
+        // // }
+        //
+        // // 对已上架的数据进行处理
+        // foreach (var dic1 in granuleNameDic1)
+        // {
+        //     // 检测零件库有(不包括组合颗粒)，但是表格没有的颗粒名称，也就是检查出了零件库中的错误名称
+        //     if (!granuleNameDic1.ContainsValue(dic1.Value) && !dic1.Value.Contains("组合"))
+        //     {
+        //         WriteToTxt(TxtDirPath,"零件库有，但是表格没有的颗粒名称",dic1.Value);
+        //     }
+        // }
+        //
+        // // 功能二：检测已上架到零件库，但是在表格中依然显示 ×
+        // foreach (var granule in PrimaryGranuleList)
+        // {
+        //     if (granuleNameDic2.ContainsValue(granule.name))
+        //     {
+        //         Debug.Log("检测已上架到零件库，但是在表格中依然显示 × 的颗粒：" + granule.name);
+        //     }
+        // }
     }
 
     /// <summary>
