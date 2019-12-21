@@ -457,8 +457,7 @@ public class SelfTools : CommonFun
                 AllChildObj.Add(Content.transform.GetChild(i).gameObject);
                 if (Equals(AllChildObj[i].name, "中颗粒泊类")) splitLineIndex = AllChildObj[i].transform.GetSiblingIndex();
             }
-            Debug.Log("splitLineIndex="+ splitLineIndex);
-           
+
             // 列表数据赋值区
             foreach (var child in AllChildObj)
             {
@@ -538,16 +537,16 @@ public class SelfTools : CommonFun
 
 
         TextReader tr = File.OpenText(jsonPath);
-        var data = JsonMapper.ToObject<RootData>(tr.ReadToEnd());
+        var data = JsonMapper.ToObject<Primary>(tr.ReadToEnd());
         tr.Dispose();
         tr.Close();
 
         var primaryDic = new Dictionary<string,string>();
         var isSame = false; // 是否有同名文件
         var wrongNumber = 0; // 错误的文件个数
-        foreach (var granule in data.primaryData)
+        foreach (var granule in data.PrimaryData)
         {
-            primaryDic.Add(granule.ID,granule.FullCode);
+            primaryDic.Add(granule.总序,granule.全称);
         }
         var files = Directory.GetFiles(ModelingFbxPath, "*.*", SearchOption.AllDirectories);
         foreach (var file in files)

@@ -8,12 +8,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
+using ChinarX.ExtensionMethods;
 using UnityEngine;
 using LitJson;
 
 public class JustTest : CommonFun
 {
     private static JustTest instance;
+
 
     /// <summary>
     /// 仅是测试按钮功能而用
@@ -47,81 +50,61 @@ public class JustTest : CommonFun
     /// </summary>
     public void AboutPrimaryData()
     {
-        var jsonPath = Application.dataPath + "/AllenSuTools/Data/初级颗粒数据.txt";
+        if(granuleDic1.Count != 0) return;
 
-        // if (!File.Exists(jsonPath))
-        // {
-        //     WindowTips(jsonPath + " 下没有《初级颗粒数据》");
-        //     return;
-        // }
-        //
-        // // 先从 json 中读取数据
-        // TextReader tr       = File.OpenText(jsonPath);
-        // var        rootData = JsonMapper.ToObject<RootData>(tr.ReadToEnd());
-        // tr.Dispose();
-        // tr.Close();
-    }
+        SelfTools.Instance().ShowLibraryData(); // 为 PrimaryGranuleList 赋值
 
-    /// <summary>
-    /// 从《是否已上架数据》json 中读取数据，希望处理的功能
-    /// </summary>
-    public void AboutIsAlreadyShelves()
-    {
-        string jsonPath = Application.dataPath + "/AllenSuTools/Data/是否已上架数据.txt";
-        // // 先从 json 中读取数据
-        // TextReader tr = File.OpenText(jsonPath);
-        // var jsonRootData = JsonMapper.ToObject<RootX>(tr.ReadToEnd());
-        // tr.Dispose();
-        // tr.Close();
-        //
-        // var granuleNameDic1 = new Dictionary<string, string>(); // 已上架的个数
-        // var granuleNameDic2 = new Dictionary<string, string>(); // 未上架的个数
-        //
-        // foreach (var primaryData in jsonRootData.links)
-        // {
-        //     // 获取到所有已上架的颗粒名称
-        //     if (Equals(primaryData.是否已上架, "1")) granuleNameDic1.Add(primaryData.总序, primaryData.全称);
-        //     // 获取到所有未上架的颗粒名称
-        //     else if (Equals(primaryData.是否已上架,"2")) granuleNameDic2.Add(primaryData.总序, primaryData.全称);
-        //     else Debug.Log("不属于上架和未上架的：" + primaryData.全称);
-        // }
-        //
-        // Debug.Log("表格中显示已上架颗粒个数："+granuleNameDic1.Count);
-        // Debug.Log("零件库已上架颗粒个数：" + PrimaryGranuleList.Count);
-        // Debug.Log("零件库未上架颗粒个数：" + granuleNameDic2.Count);
-        //
-        // var index = 0;
-        // var primaryDic = new Dictionary<int,string>(); // 初级零件库颗粒名称的字典
-        // foreach (var granule in PrimaryGranuleList)
-        // {
-        //     primaryDic.Add(index++,granule.name);
-        // }
-        //
-        // // 保证零件库字典和已上架颗粒的字典数据要完全一致，之前有不一致的，利用差集求两个字典的差值
-        // // var s = granuleNameDic1.Values.ToList().Except(primaryDic.Values.ToList());
-        // // foreach (var _ in s)
-        // // {
-        // //     Debug.Log(_);
-        // // }
-        //
-        // // 对已上架的数据进行处理
-        // foreach (var dic1 in granuleNameDic1)
-        // {
-        //     // 检测零件库有(不包括组合颗粒)，但是表格没有的颗粒名称，也就是检查出了零件库中的错误名称
-        //     if (!granuleNameDic1.ContainsValue(dic1.Value) && !dic1.Value.Contains("组合"))
-        //     {
-        //         WriteToTxt(TxtDirPath,"零件库有，但是表格没有的颗粒名称",dic1.Value);
-        //     }
-        // }
-        //
-        // // 功能二：检测已上架到零件库，但是在表格中依然显示 ×
-        // foreach (var granule in PrimaryGranuleList)
-        // {
-        //     if (granuleNameDic2.ContainsValue(granule.name))
-        //     {
-        //         Debug.Log("检测已上架到零件库，但是在表格中依然显示 × 的颗粒：" + granule.name);
-        //     }
-        // }
+        // json 文件路径
+        var dataPath = Application.dataPath + "/AllenSuTools/Data/初级颗粒数据.txt";
+
+        if (!File.Exists(dataPath))
+        {
+            WindowTips("JSON 文件不存在！！！");
+            return;
+        }
+        
+        // 先从 json 中读取数据
+        TextReader tr = File.OpenText(dataPath);
+        var primary = JsonMapper.ToObject<Primary>(tr.ReadToEnd());
+        tr.Dispose();
+        tr.Close();
+
+        // 为未上架、已上架颗粒名称字典赋值
+        foreach (var primaryData in primary.PrimaryData)
+        {
+            if (Equals(primaryData.是否已上架, "0")) granuleDic0.Add(primaryData.总序, primaryData.全称);
+            else if (Equals(primaryData.是否已上架, "1")) granuleDic1.Add(primaryData.总序, primaryData.全称);
+            else Debug.Log("均不属于《未上架》和《已上架》颗粒的名称：" + primaryData.全称);
+        }
+
+        // 零件库中初级颗粒的名称字典
+        var primaryGranuleNameDic = new Dictionary<int,string>();
+        foreach (var granule in PrimaryGranuleList)
+        {
+            primaryGranuleNameDic.Add(granule.transform.GetSiblingIndex(), granule.name);
+        }
+       
+        // 检测功能一：《零件库名称字典》要和《已上架颗粒名称字典》的颗粒名称要一致，如果有不一样的，则利用差集求两个字典的差值
+        var diffNameGroup = granuleDic1.Values.ToList().Except(primaryGranuleNameDic.Values.ToList());
+        var granuleNames = diffNameGroup as string[] ?? diffNameGroup.ToArray();
+        if (granuleNames.Length != 0)
+        {
+            foreach (var granuleName in granuleNames)
+            {
+                Debug.Log("编码表有，但零件库没有的颗粒名称 " + granuleName);
+            }
+        }
+
+        // 检测功能二：零件库初级颗粒的相关处理
+        foreach (var granule in PrimaryGranuleList)
+        {
+            // 处理一：检查零件库中的错误名称(不包含组合颗粒)
+            if (!granuleDic1.ContainsValue(granule.name) && !granule.name.Contains("组合"))
+                Debug.Log("零件库错误编码的颗粒名称：" + granule.name);
+            // 处理二：零件库已上架，但在编码表中依然显示 0 的颗粒：
+            if (granuleDic0.ContainsValue(granule.name))
+                Debug.Log("零件库已上架，但在编码表中依然显示 0 的颗粒：" + granule.name);
+        }
     }
 
     /// <summary>
@@ -143,14 +126,14 @@ public class JustTest : CommonFun
 
         // 先从 json 中读取数据
         TextReader tr1 = File.OpenText(jsonPath1);
-        var jsonRootData1 = JsonMapper.ToObject<RootData>(tr1.ReadToEnd());
+        var jsonRootData1 = JsonMapper.ToObject<Primary>(tr1.ReadToEnd());
         tr1.Dispose();
         tr1.Close();
 
         var tempDic = new Dictionary<string, string>();
-        foreach (var primaryData in jsonRootData1.primaryData)
+        foreach (var primaryData in jsonRootData1.PrimaryData)
         {
-            tempDic.Add(primaryData.ID,primaryData.FullCode);
+            tempDic.Add(primaryData.总序,primaryData.全称);
         }
 
         foreach (var rootData in jsonRootData.links)

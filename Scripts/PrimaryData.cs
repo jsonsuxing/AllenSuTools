@@ -1,44 +1,47 @@
 // ========================================================
 // 描述：初级颗粒的基本数据
 // 作者：苏醒
-// 创建时间：2019-12-12 15:29:04
+// 创建时间：2019年12月21日15:18:51
 // ========================================================
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class PrimaryData
 {
     /// <summary>
-    /// 全编码，如：02.01.01.01.01.12高一粒
+    /// 颗粒类别，如：方高类
     /// </summary>
-    public string FullCode;
+    public string 类别;
 
     /// <summary>
-    /// 初级颗粒种类，如：方高类
+    /// 颗粒总序号
     /// </summary>
-    public string GranuleType;
+    public string 总序;
 
     /// <summary>
-    /// 每个颗粒对应的序号
+    /// 五位新编码，如：FG001
     /// </summary>
-    public string ID;
+    public string 新编码;
 
     /// <summary>
-    /// 乐高ID
+    /// 颗粒全称，如：02.01.01.01.01.12高一粒
     /// </summary>
-    public string LegoID;
+    public string 全称;
 
     /// <summary>
-    /// 新编码，如：FG001
+    /// 颗粒对应乐高ID
     /// </summary>
-    public string NewCode;
+    public string 乐高ID;
+
+    /// <summary>
+    /// 颗粒是否已上架，0 代表未上架，1 代表已上架
+    /// </summary>
+    public string 是否已上架;
 }
 
-public class RootData
+public class Primary
 {
     /// <summary>
-    /// 初级颗粒数据
+    /// 颗粒数据列表对象
     /// </summary>
-    public List<PrimaryData> primaryData;
+    public List<PrimaryData> PrimaryData;
 }

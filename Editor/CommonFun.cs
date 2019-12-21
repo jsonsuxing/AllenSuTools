@@ -58,6 +58,10 @@ public class CommonFun
     // 所有中级零件库颗粒（如：02.99.04.02.02.03&中颗粒泊2*4）
     public static List<GameObject> IntermediateGranuleList = new List<GameObject>();
 
+    // json 中的初级颗粒数据
+    public static Dictionary<string, string> granuleDic0 = new Dictionary<string, string>(); // 未上架颗粒名称的字典
+    public static Dictionary<string, string> granuleDic1 = new Dictionary<string, string>(); // 已上架颗粒名称的字典
+
     #endregion
 
 
