@@ -126,13 +126,13 @@ public class JustTest : CommonFun
         CompareDaiDingGranule();
 
         // 输出模型已发，但我这边还未做的颗粒名称
-        foreach (var granuleName in DaiDingDic.Values)
-        {
-            if (ModelPersonHadSendDic.ContainsValue(granuleName))
-            {
-                WriteToTxt(TxtDirPath,"模型已发，但我这边还未做的颗粒名称",granuleName);
-            }
-        }
+        //        foreach (var granuleName in DaiDingDic.Values)
+        //        {
+        //            if (ModelPersonHadSendDic.ContainsValue(granuleName))
+        //            {
+        //                WriteToTxt(TxtDirPath,"模型已发，但我这边还未做的颗粒名称",granuleName);
+        //            }
+        //        }
 
         System.Diagnostics.Process.Start(TxtDirPath);
     }
@@ -174,12 +174,12 @@ public class JustTest : CommonFun
         else Debug.Log("待定颗粒个数没有发生改变");
 
         // 排查待定颗粒标识中建模已发但我未做的颗粒名称
-        var path = Application.dataPath + "/AllenSuTools/Data/建模已发模型名称.txt";
+        // var path = Application.dataPath + "/AllenSuTools/Data/建模已发模型名称.txt";
         // 先从 json 中读取数据
-        TextReader tr1           = File.OpenText(path);
-        var        jsonRootData = JsonMapper.ToObject<JianMoRoot>(tr1.ReadToEnd());
-        tr1.Dispose();
-        tr1.Close();
+        // TextReader tr1           = File.OpenText(path);
+        // var        jsonRootData = JsonMapper.ToObject<JianMoRoot>(tr1.ReadToEnd());
+        // tr1.Dispose();
+        // tr1.Close();
 
         // 检查模型已发但我未做的颗粒名称
         // var MoDic = new Dictionary<string,string>();
