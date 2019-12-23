@@ -17,7 +17,6 @@ public class JustTest : CommonFun
 {
     private static JustTest instance;
 
-
     /// <summary>
     /// 仅是测试按钮功能而用
     /// </summary>
@@ -69,12 +68,24 @@ public class JustTest : CommonFun
         tr.Dispose();
         tr.Close();
 
-        // 为未上架、已上架颗粒名称字典赋值
+        // 为相关字典赋值
         foreach (var primaryData in primary.PrimaryData)
         {
-            if (Equals(primaryData.是否已上架, "0")) granuleDic0.Add(primaryData.总序, primaryData.全称);
-            else if (Equals(primaryData.是否已上架, "1")) granuleDic1.Add(primaryData.总序, primaryData.全称);
-            else Debug.Log("均不属于《未上架》和《已上架》颗粒的名称：" + primaryData.全称);
+            if (Equals(primaryData.是否已上架, "0")) granuleDic0.Add(primaryData.总序, primaryData.全称); // 未上架颗粒名称字典
+            else if (Equals(primaryData.是否已上架, "1")) granuleDic1.Add(primaryData.总序, primaryData.全称); // 已上架颗粒名称字典
+            else
+            {
+                Debug.Log("均不属于《未上架》和《已上架》颗粒的名称：" + primaryData.全称);
+            }
+            // 建模没法的（不包含未上架的以及名称是"未记录该颗粒"）
+            // if (Equals(primaryData.建模是否已发,"0") && (!Equals(primaryData.是否已上架, "0")))
+            // {
+            //     if (!Equals(primaryData.全称, "未记录该颗粒"))
+            //     {
+            //         WriteToTxt(TxtDirPath, "建模尚未发的颗粒名称", primaryData.全称);
+            //     }
+            // }
+            if (Equals(primaryData.建模是否已发, "1")) ModelPersonHadSendDic.Add(primaryData.总序,primaryData.全称); // 建模已发模型名称字典
         }
 
         // 零件库中初级颗粒的名称字典
@@ -100,11 +111,91 @@ public class JustTest : CommonFun
         {
             // 处理一：检查零件库中的错误名称(不包含组合颗粒)
             if (!granuleDic1.ContainsValue(granule.name) && !granule.name.Contains("组合"))
+            {
                 Debug.Log("零件库错误编码的颗粒名称：" + granule.name);
+            }
+
             // 处理二：零件库已上架，但在编码表中依然显示 0 的颗粒：
             if (granuleDic0.ContainsValue(granule.name))
+            {
                 Debug.Log("零件库已上架，但在编码表中依然显示 0 的颗粒：" + granule.name);
+            }
         }
+
+        // 比较上次与本次待定颗粒的差值名称
+        CompareDaiDingGranule();
+
+        // 输出模型已发，但我这边还未做的颗粒名称
+        foreach (var granuleName in DaiDingDic.Values)
+        {
+            if (ModelPersonHadSendDic.ContainsValue(granuleName))
+            {
+                WriteToTxt(TxtDirPath,"模型已发，但我这边还未做的颗粒名称",granuleName);
+            }
+        }
+
+        System.Diagnostics.Process.Start(TxtDirPath);
+    }
+
+    /// <summary>
+    /// 比较上次与本次待定颗粒的差值名称
+    /// </summary>
+    public void CompareDaiDingGranule()
+    {
+        // json 文件路径 
+        var dataPath = Application.dataPath + "/AllenSuTools/Data/待定颗粒数据.txt";
+
+        TextReader tr      = File.OpenText(dataPath);
+        var        daiDing = JsonMapper.ToObject<DaiDing>(tr.ReadToEnd());
+        tr.Dispose();
+        tr.Close();
+
+        foreach (var daiDingData in daiDing.DaiDingList)
+        {
+            DaiDingDic.Add(daiDingData.序号,daiDingData.待定颗粒名称);
+        }
+
+        // 零件库中初级颗粒的名称字典
+        var primaryGranuleDaiDingNameDic = new Dictionary<int, string>();
+        foreach (var granule in PrimaryDaiDingList)
+        {
+            primaryGranuleDaiDingNameDic.Add(granule.transform.GetSiblingIndex(), granule.name);
+        }
+
+        var diffNameGroup = DaiDingDic.Values.ToList().Except(primaryGranuleDaiDingNameDic.Values.ToList());
+        var granuleNames  = diffNameGroup as string[] ?? diffNameGroup.ToArray();
+        if (granuleNames.Length != 0)
+        {
+            foreach (var granuleName in granuleNames)
+            {
+                WriteToTxt(TxtDirPath, "新取消的待定颗粒名称",granuleName);
+            }
+        }
+        else Debug.Log("待定颗粒个数没有发生改变");
+
+        // 排查待定颗粒标识中建模已发但我未做的颗粒名称
+        var path = Application.dataPath + "/AllenSuTools/Data/建模已发模型名称.txt";
+        // 先从 json 中读取数据
+        TextReader tr1           = File.OpenText(path);
+        var        jsonRootData = JsonMapper.ToObject<JianMoRoot>(tr1.ReadToEnd());
+        tr1.Dispose();
+        tr1.Close();
+
+        // 检查模型已发但我未做的颗粒名称
+        // var MoDic = new Dictionary<string,string>();
+        // foreach (var rootData in jsonRootData.links)
+        // {
+        //     MoDic.Add(rootData.序号,rootData.建模已发);
+        // }
+        //
+        // foreach (var granuleName in DaiDingDic.Values)
+        // {
+        //     if (MoDic.ContainsValue(granuleName))
+        //     {
+        //         WriteToTxt(TxtDirPath,"模型已发但我未做的颗粒名称",granuleName);
+        //     }
+        // }
+
     }
 
     /// <summary>

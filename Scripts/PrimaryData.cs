@@ -36,6 +36,11 @@ public class PrimaryData
     /// 颗粒是否已上架，0 代表未上架，1 代表已上架
     /// </summary>
     public string 是否已上架;
+
+    /// <summary>
+    /// 建模是否已发，0 代表未发，1 代表已发
+    /// </summary>
+    public string 建模是否已发;
 }
 
 public class Primary

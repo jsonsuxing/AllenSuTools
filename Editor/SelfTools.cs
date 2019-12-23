@@ -484,8 +484,16 @@ public class SelfTools : CommonFun
             // 初级数据处理区
             foreach (var primaryChild in PrimaryGranuleList)
             {
-                if (primaryChild.GetComponent<UIObject3D>().待定颗粒) PrimaryUndoneGranuleCount++;
-                else PrimaryCompletedGranuleCount++;
+                if (primaryChild.GetComponent<UIObject3D>().待定颗粒)
+                {
+                    PrimaryUndoneGranuleCount++;
+                    PrimaryDaiDingList.Add(primaryChild);
+                }
+                else
+                {
+                    PrimaryCompletedGranuleCount++;
+                    PrimaryHadDoneList.Add(primaryChild);
+                }
             }
             // 中级数据处理区
             foreach (var intermediateChild in IntermediateGranuleList)
@@ -497,6 +505,8 @@ public class SelfTools : CommonFun
             // 初级零件库数据传值
              PrimaryTypeCount = PrimaryTypeList.Count; // 初级零件库颗粒大类个数
              AllPrimaryGranuleCount = PrimaryGranuleList.Count; // 初级零件库颗粒总个数
+
+
 
             // 中级零件库数据传值
             IntermediateTypeCount = IntermediateTypeList.Count; // 中级零件库颗粒大类个数
@@ -511,6 +521,15 @@ public class SelfTools : CommonFun
             WindowTips("Content 对象不存在 ！ ！ ！");
         }
 
+        // foreach (var gameObject in PrimaryDaiDingList)
+        // {
+        //     WriteToTxt(TxtDirPath,"待定颗粒名称",gameObject.name);
+        // }
+        //
+        // foreach (var gameObject in PrimaryHadDoneList)
+        // {
+        //     WriteToTxt(TxtDirPath, "已做颗粒名称", gameObject.name);
+        // }
     }
 
     #endregion

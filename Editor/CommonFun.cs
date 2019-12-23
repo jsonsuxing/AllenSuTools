@@ -47,20 +47,58 @@ public class CommonFun
     public string[] FirstPinYin = {"B", "C", "D", "F", "G", "H", "J", "L", "M", "N", "P", "Q", "R", "S", "T", "W", "X", "Y", "Z",};
 
     // 注意：需先点击《一般工具》编辑器里的"零件库相关数据显示区"按钮为列表赋值
-    // 存储 Content 所有子物体的列表
-    public static List<GameObject> AllChildObj = new List<GameObject>();
-    // 所有初级零件库大类（如：方高类）
+    // ************************************************************************************
+    /// <summary>
+    /// 存储 Content 下的所有子物体
+    /// </summary>
+    public static List<GameObject> AllChildObj = new List<GameObject>(); // 存储 Content 所有子物体的列表
+
+    /// <summary>
+    /// 初级颗粒大类（如：方高类）
+    /// </summary>
     public static List<GameObject> PrimaryTypeList = new List<GameObject>();
-    // 所有中级零件库大类（如：中颗粒泊类）
-    public static List<GameObject> IntermediateTypeList = new List<GameObject>();
-    // 所有初级零件库颗粒（如：02.01.01.01.01.12&高一粒）
+    /// <summary>
+    /// 初级颗粒（如：02.01.01.01.01.12高一粒）
+    /// </summary>
     public static List<GameObject> PrimaryGranuleList = new List<GameObject>();
-    // 所有中级零件库颗粒（如：02.99.04.02.02.03&中颗粒泊2*4）
+    /// <summary>
+    /// 初级待定颗粒（如：02.10.01.01.40.12竖齿）
+    /// </summary>
+    public static List<GameObject> PrimaryDaiDingList=new List<GameObject>();
+    /// <summary>
+    /// 初级已做颗粒（如：02.02.02.01.01.12泊二粒）
+    /// </summary>
+    public static List<GameObject> PrimaryHadDoneList = new List<GameObject>();
+
+
+    /// <summary>
+    ///  中级颗粒大类（如：中颗粒泊类）
+    /// </summary>
+    public static List<GameObject> IntermediateTypeList = new List<GameObject>();
+    /// <summary>
+    /// 中级颗粒（如：02.99.04.02.02.03中颗粒泊2x4）
+    /// </summary>
     public static List<GameObject> IntermediateGranuleList = new List<GameObject>();
+    // ************************************************************************************
+
 
     // json 中的初级颗粒数据
-    public static Dictionary<string, string> granuleDic0 = new Dictionary<string, string>(); // 未上架颗粒名称的字典
-    public static Dictionary<string, string> granuleDic1 = new Dictionary<string, string>(); // 已上架颗粒名称的字典
+    /// <summary>
+    /// 未上架颗粒名称的字典
+    /// </summary>
+    public static Dictionary<string, string> granuleDic0 = new Dictionary<string, string>();
+    /// <summary>
+    /// 已上架颗粒名称的字典
+    /// </summary>
+    public static Dictionary<string, string> granuleDic1 = new Dictionary<string, string>();
+    /// <summary>
+    /// 待定颗粒名称字典
+    /// </summary>
+    public static Dictionary<string, string> DaiDingDic = new Dictionary<string, string>();
+    /// <summary>
+    /// 模型师已发的颗粒名称字典
+    /// </summary>
+    public static Dictionary<string, string> ModelPersonHadSendDic = new Dictionary<string, string>();
 
     #endregion
 
