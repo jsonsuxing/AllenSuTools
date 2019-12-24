@@ -133,8 +133,6 @@ public class JustTest : CommonFun
         //                WriteToTxt(TxtDirPath,"模型已发，但我这边还未做的颗粒名称",granuleName);
         //            }
         //        }
-
-        System.Diagnostics.Process.Start(TxtDirPath);
     }
 
     /// <summary>
@@ -170,6 +168,7 @@ public class JustTest : CommonFun
             {
                 WriteToTxt(TxtDirPath, "新取消的待定颗粒名称",granuleName);
             }
+            System.Diagnostics.Process.Start(TxtDirPath);
         }
         else Debug.Log("待定颗粒个数没有发生改变");
 
@@ -195,7 +194,6 @@ public class JustTest : CommonFun
         //         WriteToTxt(TxtDirPath,"模型已发但我未做的颗粒名称",granuleName);
         //     }
         // }
-
     }
 
     /// <summary>

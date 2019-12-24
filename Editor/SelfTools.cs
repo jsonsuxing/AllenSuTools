@@ -86,7 +86,7 @@ public class SelfTools : CommonFun
     /// </summary>
     public void GetLength()
     {
-        IfSelectionIsNull("没有选中关键部位");
+        IfSelectionIsNull("没有选中任何对象");
         GetLengthValue(Selection.activeGameObject, SetAxis);
     }
 
@@ -99,12 +99,6 @@ public class SelfTools : CommonFun
     public void GetLengthValue(GameObject selectObj, string axle)
     {
         var buWei = selectObj.GetComponent<GuanJianBuWei>();
-        if (!buWei)
-        {
-            WindowTips("关键部位上没有 GuanJianBuWei 脚本");
-            return;
-        }
-
         var objPos = selectObj.transform.position;
 
         if (ClickTime == 1)
