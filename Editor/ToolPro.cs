@@ -289,24 +289,24 @@ public class ToolPro : CommonFun
     public void CheckBlockPrefab(GameObject selectObj)
     {
         // 1：如果位置不为 0
-        if (selectObj.transform.position != Vector3.zero)
+        if (selectObj.transform.localPosition != Vector3.zero)
         {
-            selectObj.transform.position = Vector3.zero;
+            selectObj.transform.localPosition = Vector3.zero;
             errorPositionNumGranule++;
 
-            WriteToTxt(TxtDirPath, "颗粒《位置错误》汇总（已自动修正）", "第 " + errorPositionNumGranule + " 个：" + selectObj.name);
+            WriteToTxt(TxtDirPath, "颗粒《位置错误》汇总（仅记录）", "第 " + errorPositionNumGranule + " 个：" + selectObj.name);
         }
 
         // 2：如果旋转不为 0（现在允许父物体出现带角度，但必须是 90 的倍数，所以需要特别处理）
-        if (selectObj.transform.rotation != Quaternion.identity)
-        {
-            var angles = selectObj.transform.rotation.eulerAngles;
-            if (SpecialFloatToInt(angles.x) % 90 != 0 || SpecialFloatToInt(angles.y) % 90 != 0 || SpecialFloatToInt(angles.z) % 90 != 0)
-            {
-                errorRotationNumGranule++;
-                WriteToTxt(TxtDirPath, "颗粒《旋转错误》汇总（仅记录）", "第 " + errorRotationNumGranule + " 个：" + selectObj.name);
-            }
-        }
+        // if (selectObj.transform.rotation != Quaternion.identity)
+        // {
+        //     var angles = selectObj.transform.rotation.eulerAngles;
+        //     if (SpecialFloatToInt(angles.x) % 90 != 0 || SpecialFloatToInt(angles.y) % 90 != 0 || SpecialFloatToInt(angles.z) % 90 != 0)
+        //     {
+        //         errorRotationNumGranule++;
+        //         WriteToTxt(TxtDirPath, "颗粒《旋转错误》汇总（仅记录）", "第 " + errorRotationNumGranule + " 个：" + selectObj.name);
+        //     }
+        // }
 
         // 3：如果比例不为 1
         if (selectObj.transform.localScale != Vector3.one)
@@ -336,7 +336,7 @@ public class ToolPro : CommonFun
             if (wuTrans.localPosition != Vector3.zero)
             {
                 errorPositionNumWu++;
-                WriteToTxt(TxtDirPath, "物件《位置错误》汇总（已自动修正）", "第 " + errorPositionNumWu + " 个：" + selectObj.name);
+                WriteToTxt(TxtDirPath, "物件《位置错误》汇总（仅记录）", "第 " + errorPositionNumWu + " 个：" + selectObj.name);
 
                 var wuOriginalVector3 = wuTrans.position;
                 for (var i = 0; i < selectObj.transform.childCount; i++)
