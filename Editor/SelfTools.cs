@@ -409,7 +409,7 @@ public class SelfTools : CommonFun
             var fileName = Path.GetFileNameWithoutExtension(files[i]);
             if (ht.ContainsValue(fileName))
             {
-                WriteToTxt(TxtDirPath,"同名 fbx 文件","第 " + (++sameFileNum) +" 个："+fileName);
+                WriteToTxt(TxtDirPath,"同名 fbx或者obj 文件","第 " + (++sameFileNum) +" 个："+fileName);
             }
             else
             {

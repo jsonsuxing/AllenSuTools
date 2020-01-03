@@ -136,17 +136,10 @@ public class SelfModel : CommonFun
         // 更换旧模型
         else
         {
-            var extension = "";
             // 要导入的工程路径
             string projectModelPath = Application.dataPath + "/Other/InitialModels/" + ShowGranuleType + "/";
 
-            // 获得外部需要导入的具体模型文件全路径
-            string outFileName = ModelFolderPath + "/" + ImportGranuleName + ".fbx";
-            if (!File.Exists(outFileName))
-            {
-                WindowTips("外部模型文件夹里没有 " + ImportGranuleName + ".fbx " + "这个文件");
-                return;
-            }
+            var extension = ""; // 文件后缀名
 
             // 导入前先把原来的模型给删除掉
             if (File.Exists(projectModelPath + ImportGranuleName + ".fbx"))
@@ -163,6 +156,14 @@ public class SelfModel : CommonFun
             {
                 // 如果指定的文件夹没有该模型，那就是原来模型分配错了文件夹或者不存在
                 IsWrongDirectory = true;
+            }
+
+            // 获得外部需要导入的具体模型文件全路径
+            string outFileName = ModelFolderPath + "/" + ImportGranuleName + extension;
+            if (!File.Exists(outFileName))
+            {
+                WindowTips("外部模型文件夹里没有 " + ImportGranuleName + extension + "这个文件");
+                return;
             }
 
             // 把指定模型文件移动到对应工程文件路径
