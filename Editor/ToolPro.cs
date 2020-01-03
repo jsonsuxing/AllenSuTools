@@ -117,7 +117,7 @@ public class ToolPro : CommonFun
 
     #endregion
 
-    #region 二：复制 fbx 到指定文件夹
+    #region 二：复制 fbx或者obj 到指定文件夹
 
     /// <summary>
     /// 复制 fbx 到指定文件夹
@@ -144,7 +144,7 @@ public class ToolPro : CommonFun
         var isSameTxt = false; // 是否有相同颗粒
         var sameNumber = 0;     // 相同颗粒个数
         var successNumber = 0;     // 复制了多少个文件
-        var files = Directory.GetFiles(ModelPath, "*.fbx", SearchOption.AllDirectories);
+        var files = Directory.GetFiles(ModelPath, "*.*", SearchOption.AllDirectories).Where(s=>s.EndsWith(".fbx") || s.EndsWith(".obj"));
         foreach (var file in files)
         {
             foreach (var strTxt in StrContent)
@@ -152,8 +152,9 @@ public class ToolPro : CommonFun
                 // 文件名相同
                 if (Equals(Path.GetFileNameWithoutExtension(file), strTxt))
                 {
+                    var extension = Path.GetExtension(file);
                     // 如果有同名 fbx 文件
-                    if (File.Exists(OutFbxPath + "\\" + strTxt + ".fbx"))
+                    if (File.Exists(OutFbxPath + "\\" + strTxt + extension))
                     {
                         WriteToTxt("D:/", "出现了相同颗粒名称", strTxt);
                         isSameTxt = true;
@@ -164,7 +165,7 @@ public class ToolPro : CommonFun
                     else
                     {
                         successNumber++;
-                        File.Copy(file, OutFbxPath + "\\" + strTxt + ".fbx");
+                        File.Copy(file, OutFbxPath + "\\" + strTxt + extension);
                     }
                 }
             }

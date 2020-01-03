@@ -67,8 +67,9 @@ public class SelfModel : CommonFun
         }
 
         // 获取外部模型文件夹里的所有文件
-        var modelFiles = Directory.GetFiles(ModelFolderPath, "*.*", SearchOption.AllDirectories);
-        if (modelFiles.Length == 0)
+        var modelFiles = Directory.GetFiles(ModelFolderPath, "*.*", SearchOption.AllDirectories).Where(s => s.EndsWith(".fbx") || s.EndsWith(".obj"));
+        var enumerable = modelFiles as string[] ?? modelFiles.ToArray();
+        if (!enumerable.Any())
         {
             WindowTips("外部模型为 空 文件夹");
             return;
@@ -82,7 +83,7 @@ public class SelfModel : CommonFun
             CreateNewDirectory(importKeLiPath);
 
             // 导入外部模型文件到工程文件
-            foreach (var modelFile in modelFiles)
+            foreach (var modelFile in enumerable)
             {
                 string extension = Path.GetExtension(modelFile);
 
@@ -120,12 +121,12 @@ public class SelfModel : CommonFun
 
             if (NoSignNum == 0)
             {
-                WindowTips("导入模型成功：外部模型文件有 " + modelFiles.Length + " 个，此次导入模型 " + ImportModelNum + " 个");
+                WindowTips("导入模型成功：外部模型文件有 " + enumerable.Length + " 个，此次导入模型 " + ImportModelNum + " 个");
                 ImportModelNum = 0;
             }
             else
             {
-                WindowTips("导入模型成功：外部模型文件有 " + modelFiles.Length    + " 个，此次导入模型 " +
+                WindowTips("导入模型成功：外部模型文件有 " + enumerable.Length    + " 个，此次导入模型 " +
                            ImportModelNum    + " 个，外部模型不含标志符号的文件有 " + NoSignNum    + " 个，" +
                            "详见：D/suxing/不含有&符号的颗粒名称.txt 文件");
                 ImportModelNum = 0;
@@ -135,6 +136,7 @@ public class SelfModel : CommonFun
         // 更换旧模型
         else
         {
+            var extension = "";
             // 要导入的工程路径
             string projectModelPath = Application.dataPath + "/Other/InitialModels/" + ShowGranuleType + "/";
 
@@ -150,6 +152,12 @@ public class SelfModel : CommonFun
             if (File.Exists(projectModelPath + ImportGranuleName + ".fbx"))
             {
                 File.Delete(projectModelPath + ImportGranuleName + ".fbx");
+                extension = ".fbx";
+            }
+            else if (File.Exists(projectModelPath + ImportGranuleName + ".obj"))
+            {
+                File.Delete(projectModelPath + ImportGranuleName + ".obj");
+                extension = ".obj";
             }
             else
             {
