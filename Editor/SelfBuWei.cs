@@ -248,6 +248,8 @@ public class SelfBuWei : CommonFun
     {
         ISBevelBox = false;
         ChangeBoxName();
+        // 不知为何，将下行代码放到 ChangeBoxName() 函数内部最后却无法执行，单独写出来却可以执行，不知道为啥
+        ToolPro.Instance().CheckBoxCollider(Selection.gameObjects[0].transform.parent.gameObject);
     }
 
     [UnityEditor.MenuItem("AllenSu/1、更改碰撞盒名称/Bevel Box", false, INDEXNUM)]
@@ -255,6 +257,7 @@ public class SelfBuWei : CommonFun
     {
         ISBevelBox = true;
         ChangeBoxName();
+        ToolPro.Instance().CheckBoxCollider(Selection.gameObjects[0].transform.parent.gameObject);
     }
 
     #endregion
