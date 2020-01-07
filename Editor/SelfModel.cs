@@ -484,28 +484,38 @@ public class SelfModel : CommonFun
     /// </summary>
     public void CheckModelQuestion()
     {
-        if (GUILayout.Button(new GUIContent("检查模型问题", "选中文件夹，检查其中所有模型的问题"), GUI.skin.button, GUILayout.Width(200), GUILayout.Height(40)))
+        var objects = Selection.GetFiltered<UnityEngine.Object>(SelectionMode.DeepAssets).Where(_ => Path.GetExtension(AssetDatabase.GetAssetPath(_)) != "");
+        int count   = 1;
+        int length  = objects.Count();
+        int wrongNumber = 0;
+        foreach (var o in objects)
         {
-            var objects = Selection.GetFiltered<UnityEngine.Object>(SelectionMode.DeepAssets).Where(_ => Path.GetExtension(AssetDatabase.GetAssetPath(_)) != "");
-            int count   = 1;
-            int length  = objects.Count();
-            foreach (var o in objects)
+            var iclone = Object.Instantiate(o) as GameObject;
+            var t      = iclone.GetComponentInChildren<Transform>();
+            if (t.position.x != 0 || t.position.y != 0 || t.position.z != 0 || t.localScale != Vector3.one || t.rotation.eulerAngles != Vector3.zero)
             {
-                var iclone = Object.Instantiate(o) as GameObject;
-                var t      = iclone.GetComponentInChildren<Transform>();
-                if (t.position.x != 0 || t.position.y != 0 || t.position.z != 0 || t.localScale != Vector3.one || t.rotation.eulerAngles != Vector3.zero)
-                {
-                    WriteToTxt(TxtDirPath,"未归零模型", o.name);
-                }
-
-                EditorUtility.DisplayProgressBar("修改进度", count + "/" + length + "进度：", (float)count / length);
-                count++;
-                Object.DestroyImmediate(iclone);
+                WriteToTxt(TxtDirPath, "未归零模型++++++++++++++", o.name);
+                wrongNumber++;
             }
 
-            EditorUtility.ClearProgressBar();
-            Debug.Log("完成");
+            EditorUtility.DisplayProgressBar("修改进度", count + "/" + length + "进度：", (float)count / length);
+            count++;
+            Object.DestroyImmediate(iclone);
         }
+        EditorUtility.ClearProgressBar();
+
+        if (wrongNumber!=0)
+        {
+            WindowTips("错了 "+wrongNumber+" 个");
+            // System.Diagnostics.Process.Start(TxtDirPath+ "未归零模型.txt");
+        }
+        else
+        {
+            WindowTips("完全正确！！！");
+        }
+
+        wrongNumber = 0;
+
     }
 
     #endregion
