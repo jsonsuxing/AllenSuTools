@@ -383,12 +383,17 @@ public class ColliderManager:EditorWindow
                 #endregion
                 GUILayout.Space(8);
 
-                #region 临时测试
+                #region 临时功能
 
-                //if (GUILayout.Button("测试"))
-                //{
-                //    SelfCollider.Instance().TestInspector();
-                //}
+                GUILayout.Label("临时功能", TitleStyle());
+
+                // ------------ 一：开始垂直画盒子 ------------
+                GUILayout.BeginVertical("box");
+                if (GUILayout.Button("选中模型，检测问题")) SelfModel.Instance().CheckModelQuestion();
+                GUILayout.Space(3);
+
+                GUILayout.EndVertical();
+                // ------------ 一：结束垂直画盒子 ------------
 
                 #endregion
                 GUILayout.Space(8);
