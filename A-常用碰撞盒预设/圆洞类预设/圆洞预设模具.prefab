@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3912225075365032153}
   - component: {fileID: 7765483672155062078}
   m_Layer: 0
-  m_Name: Normal Box (2)
+  m_Name: Normal Box (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -29,7 +29,7 @@ Transform:
   m_LocalScale: {x: 0.79343224, y: 0.069598556, z: 0.79841435}
   m_Children: []
   m_Father: {fileID: 9193297122432785946}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &7765483672155062078
 BoxCollider:
@@ -71,8 +71,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 6714456945582058213}
   - {fileID: 3912225075365032153}
+  - {fileID: 6714456945582058213}
   - {fileID: 4070380052493824520}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -102,7 +102,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7204196592338417994}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -0.4, y: 0.2605373, z: -0.000493155}
+  m_LocalPosition: {x: -0.4, y: 0.268, z: -0}
   m_LocalScale: {x: 0.12653035, y: 0.63679653, z: 0.048925444}
   m_Children: []
   m_Father: {fileID: 9193297122432785946}
@@ -132,7 +132,7 @@ GameObject:
   - component: {fileID: 6714456945582058213}
   - component: {fileID: 1969453364252441519}
   m_Layer: 0
-  m_Name: Normal Box (1)
+  m_Name: Normal Box (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -150,7 +150,7 @@ Transform:
   m_LocalScale: {x: 0.19744845, y: 0.7365915, z: 0.79}
   m_Children: []
   m_Father: {fileID: 9193297122432785946}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1969453364252441519
 BoxCollider:
