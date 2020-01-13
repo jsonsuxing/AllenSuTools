@@ -406,7 +406,20 @@ public class ToolPro : CommonFun
             // 如果关键部位上存在 MeshRenderer 和 MeshFilter 组件，则移除。
             if (buWei.transform.GetComponent<MeshRenderer>()) Object.DestroyImmediate(buWei.transform.GetComponent<MeshRenderer>());
             if (buWei.transform.GetComponent<MeshFilter>()) Object.DestroyImmediate(buWei.transform.GetComponent<MeshFilter>());
+
+            // 检测 length 不为 0.08 倍数的颗粒名称
+            if (buWei.name.Contains("ChaCao") || buWei.name.Contains("ChaXiao"))
+            {
+                Debug.Log("长度"+buWei.length);
+                Debug.Log(buWei.length % 0.08);
+                if ((buWei.length*1000) % 80 == 0)
+                {
+                    WriteToTxt(TxtDirPath,"length 不是 0.08 倍数的颗粒名称",buWei.transform.parent.name);
+                }
+            }
         }
+
+        System.Diagnostics.Process.Start(TxtDirPath);
     }
 
     /// <summary>
