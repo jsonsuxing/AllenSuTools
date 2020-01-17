@@ -23,7 +23,7 @@ public class JustTest : CommonFun
     public void JustTestBtn()
     {
         // 从《初级颗粒数据》json 中读取数据，希望处理的功能
-        AboutPrimaryData();
+        // AboutPrimaryData();
 
         // 比较建模发了模型，但在编码表里搜索不到的颗粒名称
         // CompareWrongFbxName();
@@ -362,6 +362,7 @@ public class JustTest : CommonFun
         Debug.Log("重名的有多少个："     + tempCount);
         Debug.Log("总的文件个数（含重名）：" + allCount);
     }
+
 
     public static JustTest Instance()
     {

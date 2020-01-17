@@ -228,7 +228,9 @@ public class ToolPro : CommonFun
         foreach (var selectObj in Selection.gameObjects)
         {
             //--------------------------------------- 检查区 ---------------------------------------
-        
+
+            if (selectObj.transform.name.Contains("组合")) continue;
+
             // 检查项一：处理 颗粒预设
             if (IsCheckBlockPrefab) CheckBlockPrefab(selectObj);
         
@@ -289,6 +291,8 @@ public class ToolPro : CommonFun
     /// <param name="selectObj">所选对象</param>
     public void CheckBlockPrefab(GameObject selectObj)
     {
+        
+
         // 1：如果位置不为 0
         if (selectObj.transform.localPosition != Vector3.zero)
         {
@@ -316,10 +320,12 @@ public class ToolPro : CommonFun
             WriteToTxt(TxtDirPath, "颗粒《比例错误》汇总（仅记录）", "第 " + errorScaleNumGranule + " 个：" + selectObj.name);
         }
 
-        // 3：移除原来存在的 KeLiData 和 GranuleModel 脚本和刚体。GranuleModel 脚本已经删除
-        if (selectObj.GetComponent<KeLiData>()) Object.DestroyImmediate(selectObj.GetComponent<KeLiData>());
+        // 4：移除预设上的"子物体"
+        // if (selectObj.GetComponent<KeLiData>()) Object.DestroyImmediate(selectObj.GetComponent<KeLiData>());
         // if (selectObj.GetComponent<GranuleModel>()) Object.DestroyImmediate(selectObj.GetComponent<GranuleModel>());
-        if (selectObj.GetComponent<Rigidbody>()) Object.DestroyImmediate(selectObj.GetComponent<Rigidbody>());
+        // if (selectObj.GetComponent<Rigidbody>()) Object.DestroyImmediate(selectObj.GetComponent<Rigidbody>());
+        if (selectObj.GetComponent<ChinarGizmosPrefab>()) Object.DestroyImmediate(selectObj.GetComponent<ChinarGizmosPrefab>());
+        WriteToTxt(TxtDirPath, "颗粒《含有ChinarGizmosPrefab脚本》汇总（仅记录）", selectObj.name);
     }
 
     /// <summary>
@@ -387,7 +393,25 @@ public class ToolPro : CommonFun
         foreach (Transform child in selectObj.transform)
         {
             if (Equals(child.name, "物件_1")) continue;
-            if (child.localScale != Vector3.one) child.localScale = Vector3.one;
+            if (child.localScale != Vector3.one)
+            {
+                child.localScale = Vector3.one;
+                WriteToTxt(TxtDirPath, "关键部位《比例错误》汇总（仅记录）",child.name);
+            }
+
+            // 没有执行 clear mark 的后续检查操作
+            if (child.transform.childCount != 0)
+            {
+                for (int i = 0; i < child.transform.childCount; i++)
+                {
+                    Object.DestroyImmediate(child.transform.GetChild(0).gameObject);
+                }
+                WriteToTxt(TxtDirPath, "关键部位《有子物体》汇总（仅记录）", child.name);
+            }
+            if (child.name.Contains("Chinar")) Object.DestroyImmediate(child.gameObject);
+            WriteToTxt(TxtDirPath, "关键部位《含有chinar》汇总（仅记录）", child.transform.parent.name);
+
+            if (child.transform.name.Contains("环形碰撞盒")) WriteToTxt(TxtDirPath, "子物体名称《含有环形碰撞盒》汇总（仅记录）", child.transform.parent.name);
         }
 
         // 获得所有的关键部位
@@ -408,18 +432,18 @@ public class ToolPro : CommonFun
             if (buWei.transform.GetComponent<MeshFilter>()) Object.DestroyImmediate(buWei.transform.GetComponent<MeshFilter>());
 
             // 检测 length 不为 0.08 倍数的颗粒名称
-            if (buWei.name.Contains("ChaCao") || buWei.name.Contains("ChaXiao"))
-            {
-                Debug.Log("长度"+buWei.length);
-                Debug.Log(buWei.length % 0.08);
-                if ((buWei.length*1000) % 80 == 0)
-                {
-                    WriteToTxt(TxtDirPath,"length 不是 0.08 倍数的颗粒名称",buWei.transform.parent.name);
-                }
-            }
+            // if (buWei.name.Contains("ChaCao") || buWei.name.Contains("ChaXiao"))
+            // {
+            //     Debug.Log("长度"+buWei.length);
+            //     Debug.Log(buWei.length % 0.08);
+            //     if ((buWei.length*1000) % 80 == 0)
+            //     {
+            //         WriteToTxt(TxtDirPath,"length 不是 0.08 倍数的颗粒名称",buWei.transform.parent.name);
+            //     }
+            // }
         }
 
-        System.Diagnostics.Process.Start(TxtDirPath);
+        // System.Diagnostics.Process.Start(TxtDirPath);
     }
 
     /// <summary>
