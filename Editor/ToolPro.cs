@@ -324,8 +324,11 @@ public class ToolPro : CommonFun
         // if (selectObj.GetComponent<KeLiData>()) Object.DestroyImmediate(selectObj.GetComponent<KeLiData>());
         // if (selectObj.GetComponent<GranuleModel>()) Object.DestroyImmediate(selectObj.GetComponent<GranuleModel>());
         // if (selectObj.GetComponent<Rigidbody>()) Object.DestroyImmediate(selectObj.GetComponent<Rigidbody>());
-        if (selectObj.GetComponent<ChinarGizmosPrefab>()) Object.DestroyImmediate(selectObj.GetComponent<ChinarGizmosPrefab>());
-        WriteToTxt(TxtDirPath, "颗粒《含有ChinarGizmosPrefab脚本》汇总（仅记录）", selectObj.name);
+        if (selectObj.GetComponent<ChinarGizmosPrefab>())
+        {
+            Object.DestroyImmediate(selectObj.GetComponent<ChinarGizmosPrefab>());
+            WriteToTxt(TxtDirPath, "颗粒《含有ChinarGizmosPrefab脚本》汇总（仅记录）", selectObj.name);
+        }
     }
 
     /// <summary>
@@ -389,6 +392,7 @@ public class ToolPro : CommonFun
     /// <param name="selectObj">所选物体</param>
     public void CheckBuWei(GameObject selectObj)
     {
+        var temp = 0;
         // 先对除物件之外的所有子物体进行一个比例判断,并直接修正，不做记录。
         foreach (Transform child in selectObj.transform)
         {
@@ -399,19 +403,37 @@ public class ToolPro : CommonFun
                 WriteToTxt(TxtDirPath, "关键部位《比例错误》汇总（仅记录）",child.name);
             }
 
+
             // 没有执行 clear mark 的后续检查操作
-            if (child.transform.childCount != 0)
+            if (child.transform.childCount != 0 && child.transform.GetComponent<GuanJianBuWei>())
             {
                 for (int i = 0; i < child.transform.childCount; i++)
                 {
                     Object.DestroyImmediate(child.transform.GetChild(0).gameObject);
                 }
-                WriteToTxt(TxtDirPath, "关键部位《有子物体》汇总（仅记录）", child.name);
+                WriteToTxt(TxtDirPath, "关键部位《有子物体》汇总（仅记录）", child.transform.parent.name);
             }
-            if (child.name.Contains("Chinar")) Object.DestroyImmediate(child.gameObject);
-            WriteToTxt(TxtDirPath, "关键部位《含有chinar》汇总（仅记录）", child.transform.parent.name);
 
-            if (child.transform.name.Contains("环形碰撞盒")) WriteToTxt(TxtDirPath, "子物体名称《含有环形碰撞盒》汇总（仅记录）", child.transform.parent.name);
+            // if (!child.transform.GetComponent<GuanJianBuWei>())
+            // {
+            //     
+            // }
+
+            if (child.transform.name.Contains("环形碰撞盒"))
+            {
+                temp++;
+                if (temp == 1)
+                {
+                    WriteToTxt(TxtDirPath, "子物体名称《含有环形碰撞盒》汇总（仅记录）", child.transform.parent.name);
+                }
+            }
+
+            // 下面的不是关键部位，而是检测除关键部位之外的子物体，并删除
+            if (child.name.Contains("Chinar"))
+            {
+                WriteToTxt(TxtDirPath, "关键部位《含有chinar》汇总（仅记录）", child.transform.parent.name);
+                Object.DestroyImmediate(child.gameObject);
+            }
         }
 
         // 获得所有的关键部位
@@ -442,7 +464,6 @@ public class ToolPro : CommonFun
             //     }
             // }
         }
-
         // System.Diagnostics.Process.Start(TxtDirPath);
     }
 
