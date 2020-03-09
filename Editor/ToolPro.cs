@@ -291,8 +291,6 @@ public class ToolPro : CommonFun
     /// <param name="selectObj">所选对象</param>
     public void CheckBlockPrefab(GameObject selectObj)
     {
-        
-
         // 1：如果位置不为 0
         if (selectObj.transform.localPosition != Vector3.zero)
         {
@@ -392,56 +390,20 @@ public class ToolPro : CommonFun
     /// <param name="selectObj">所选物体</param>
     public void CheckBuWei(GameObject selectObj)
     {
-        var temp = 0;
-        // 先对除物件之外的所有子物体进行一个比例判断,并直接修正，不做记录。
-        foreach (Transform child in selectObj.transform)
-        {
-            if (Equals(child.name, "物件_1")) continue;
-            if (child.localScale != Vector3.one)
-            {
-                child.localScale = Vector3.one;
-                WriteToTxt(TxtDirPath, "关键部位《比例错误》汇总（仅记录）",child.name);
-            }
-
-
-            // 没有执行 clear mark 的后续检查操作
-            if (child.transform.childCount != 0 && child.transform.GetComponent<GuanJianBuWei>())
-            {
-                for (int i = 0; i < child.transform.childCount; i++)
-                {
-                    Object.DestroyImmediate(child.transform.GetChild(0).gameObject);
-                }
-                WriteToTxt(TxtDirPath, "关键部位《有子物体》汇总（仅记录）", child.transform.parent.name);
-            }
-
-            // if (!child.transform.GetComponent<GuanJianBuWei>())
-            // {
-            //     
-            // }
-
-            if (child.transform.name.Contains("环形碰撞盒"))
-            {
-                temp++;
-                if (temp == 1)
-                {
-                    WriteToTxt(TxtDirPath, "子物体名称《含有环形碰撞盒》汇总（仅记录）", child.transform.parent.name);
-                }
-            }
-
-            // 下面的不是关键部位，而是检测除关键部位之外的子物体，并删除
-            if (child.name.Contains("Chinar"))
-            {
-                WriteToTxt(TxtDirPath, "关键部位《含有chinar》汇总（仅记录）", child.transform.parent.name);
-                Object.DestroyImmediate(child.gameObject);
-            }
-        }
-
         // 获得所有的关键部位
         var buWeiArr = selectObj.GetComponentsInChildren<GuanJianBuWei>();
 
         var index = 0;
+        var willDelChildList = new List<GameObject>();
         foreach (var buWei in buWeiArr)
         {
+            // 如果关键部位上有子物体
+            if (buWei.transform.childCount != 0)
+            {
+                willDelChildList.Add(buWei.gameObject);
+                WriteToTxt(TxtDirPath, "关键部位《有子物体》汇总（仅记录）", buWei.transform.parent.name+" 上的 "+buWei.name);
+            }
+
             if (buWei.transform.localRotation != Quaternion.identity)
             {
                 index++;
@@ -464,7 +426,21 @@ public class ToolPro : CommonFun
             //     }
             // }
         }
+
+        if (willDelChildList.Count != 0)
+        {
+            for (int i = 0; i < willDelChildList.Count; i++)
+            {
+                for (int j = 0; j < willDelChildList[i].transform.childCount; j++)
+                {
+                    Object.DestroyImmediate(willDelChildList[i].transform.GetChild(0).gameObject);
+                }
+            }
+        }
         // System.Diagnostics.Process.Start(TxtDirPath);
+
+        // 在该函数直接调用otherChild的函数
+        CheckOtherChild(selectObj);
     }
 
     /// <summary>
@@ -492,6 +468,48 @@ public class ToolPro : CommonFun
              * 拼接代码里要求碰撞盒的 Center 为默认值 Vector3.zero ，但因为修改颗粒预设时会改动碰撞盒，导致碰撞盒 Center 不为 0，
              * 从而引起一些拼搭问题，所以需要用该函数将碰撞盒的 Center 与父物体的 Position 转换一下。
              */
+        }
+    }
+
+    /// <summary>
+    /// 检查除关键部位，物件_1之外的所有子物体
+    /// </summary>
+    /// <param name="selectObj">所选对象</param>
+    public void CheckOtherChild(GameObject selectObj)
+    {
+        // 排除物件_1和关键部位，碰撞盒(Box,Sphere)后，所有的子物体
+        var allOtherChildList = new List<Transform>();
+        
+        foreach (Transform child in selectObj.transform)
+        {
+            // 获取所有子物体，
+            if (Equals(child.name, "物件_1") || child.GetComponent<GuanJianBuWei>() || 
+                child.GetComponent<BoxCollider>() || child.GetComponent<SphereCollider>()) continue;
+            allOtherChildList.Add(child);
+        }
+
+        var temp = 0;
+        // 没有执行 clear mark 的后续检查操作
+        foreach (var child in allOtherChildList)
+        {
+            if (child.transform.name.Contains("环形碰撞盒"))
+            {
+                temp++;
+                if (temp == 1)
+                {
+                    WriteToTxt(TxtDirPath, "子物体名称《含有环形碰撞盒》汇总（仅记录）", child.transform.parent.name);
+                }
+            }
+            // 删除可能含有 Chinar 名称的子物体
+            else if (child.name.Contains("Chinar"))
+            {
+                WriteToTxt(TxtDirPath, "《含有chinar名称的子物体》汇总（已删除）", child.transform.parent.name);
+                Object.DestroyImmediate(child.gameObject);
+            }
+            else
+            {
+                WriteToTxt(TxtDirPath,"特殊子物体名称",child.parent.name+" 上的 "+child.name);
+            }
         }
     }
 
