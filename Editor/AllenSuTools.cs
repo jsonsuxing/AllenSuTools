@@ -8,7 +8,6 @@ using System;
 using System.Windows.Forms;
 using UnityEditor;
 using UnityEngine;
-using MenuItem = System.Windows.Forms.MenuItem;
 
 
 /// <summary>
@@ -16,7 +15,6 @@ using MenuItem = System.Windows.Forms.MenuItem;
 /// </summary>
 public class AllenSuTools : EditorWindow
 {
-
     #region MenuItem
 
     // 1--打开指定颗粒类
@@ -36,28 +34,6 @@ public class AllenSuTools : EditorWindow
         colliderManager.Show();
     }
 
-
-    // [UnityEditor.MenuItem("AllenSu/4、根据复制名称跳转到场景颗粒 #B", false, CommonFun.INDEXNUM)]
-    // static void CopyNameJumpToScene()
-    // {
-    //     Debug.Log("调用了吗");
-    //     Debug.Log(Clipboard.GetText());
-    //     // if (Equals(Clipboard.GetText(),string.Empty))
-    //     // {
-    //     //     WindowTips("没有复制任何内容");
-    //     //     return;
-    //     // }
-    //     // else if (!Clipboard.GetText().Contains("&"))
-    //     // {
-    //     //     WindowTips("复制的不是颗粒名称");
-    //     //     return;
-    //     // }
-    //     // else
-    //     // {
-    //     //     EditorGUIUtility.PingObject(CommonFun.Content.transform.Find(Clipboard.GetText()));
-    //     // }
-    // }
-
     #endregion
 
     #region 字段声明
@@ -66,7 +42,7 @@ public class AllenSuTools : EditorWindow
     private readonly string[] _topInfoType = { "关键部位","模型相关", "常用工具" , "ToolPro", "一般工具"};
     private          int      whichOneSelect; // 选中哪一个
 
-    private Vector2 scrowPos=Vector2.zero;
+    private Vector2 scrowPos = Vector2.zero;
 
     #endregion
 
@@ -292,25 +268,6 @@ public class AllenSuTools : EditorWindow
                 EditorGUILayout.BeginHorizontal();
                 if (GUILayout.Button("1：GameObject")) SelfBuWei.Instance().CreateDefaultObj();
                 if (GUILayout.Button("2：Normal Box")) SelfBuWei.Instance().CreateDefaultNormalBox();
-                EditorGUILayout.EndHorizontal();
-                // 第一组水平排版结束
-
-                GUILayout.EndVertical();
-                // ------------ 一：结束垂直画盒子 ------------
-
-                #endregion
-                GUILayout.Space(8);
-
-                #region 临时：物体 y 坐标减去 0.005
-
-                GUILayout.Label("临时：物体 y 坐标减去 0.005", TitleStyle());
-
-                // ------------ 一：开始垂直画盒子 ------------
-                GUILayout.BeginVertical("box");
-
-                // 第一组水平排版开始
-                EditorGUILayout.BeginHorizontal();
-                if (GUILayout.Button("点击按钮")) SelfBuWei.Instance().ReduceSelfValue();
                 EditorGUILayout.EndHorizontal();
                 // 第一组水平排版结束
 
